@@ -40,7 +40,6 @@ def main() -> None:
         default="checkpoints",
         help="Where to save the checkpoints",
     )
-    # parser.add_argument("--num_timesteps", type=int, default=300000000)
     parser.add_argument("--num_timesteps", type=int, default=150000000)
     parser.add_argument("--env", type=str, default="joystick", help="env")
     parser.add_argument("--task", type=str, default="flat_terrain", help="Task to run")
@@ -50,13 +49,32 @@ def main() -> None:
         default=None,
         help="Resume training from this checkpoint",
     )
-    # parser.add_argument(
-    #     "--debug", action="store_true", help="Run in debug mode with minimal parameters"
-    # )
+    parser.add_argument(
+        "--export_onnx", 
+        action="store_true",
+        help="Export model to ONNX format (may cause GPU memory issues)",
+    )
+    parser.add_argument(
+        "--onnx_export_frequency",
+        type=int,
+        default=10, 
+        help="Export ONNX model every N evaluations",
+    )
+    parser.add_argument(
+        "--checkpoint_frequency",
+        type=int,
+        default=1,
+        help="Save checkpoint every N evaluations",
+    )
+    parser.add_argument(
+        "--eval_step_interval",
+        type=int,
+        default=1,
+        help="Interval between evaluations in millions of steps (default: 1M steps)",
+    )
     args = parser.parse_args()
 
     runner = OpenDuckMiniV2Runner(args)
-
     runner.train()
 
 
