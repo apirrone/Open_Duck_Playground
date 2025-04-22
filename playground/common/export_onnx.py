@@ -147,7 +147,21 @@ def export_onnx(
 
         print("Weights transferred successfully.")
 
-    transfer_weights(params[1].policy["params"], tf_policy_network)
+    net_params = params[1]
+    # try attribute‐style .policy
+    if hasattr(net_params, "policy"):
+        policy_tree = net_params.policy
+    # try dict‐style ["policy"]
+    elif isinstance(net_params, dict) and "policy" in net_params:
+        policy_tree = net_params["policy"]
+    # fallback to Flax FrozenDict { "params": … }
+    elif isinstance(net_params, dict) and "params" in net_params:
+        policy_tree = net_params["params"]
+    else:
+        raise KeyError(f"Cannot locate policy params in {type(net_params)}; keys = {list(net_params.keys())}")
+
+    # policy_tree is now the dict of weight arrays
+    transfer_weights(policy_tree, tf_policy_network)
 
     # Example inputs for the model
     test_input = [np.ones((1, obs_size), dtype=np.float32)]
