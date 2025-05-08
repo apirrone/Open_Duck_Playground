@@ -147,7 +147,7 @@ def export_onnx(
 
         print("Weights transferred successfully.")
 
-    transfer_weights(params[1].policy["params"], tf_policy_network)
+    transfer_weights(params[1]["params"], tf_policy_network)
 
     # Example inputs for the model
     test_input = [np.ones((1, obs_size), dtype=np.float32)]

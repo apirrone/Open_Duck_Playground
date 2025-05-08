@@ -47,6 +47,47 @@ USE_IMITATION_REWARD = True
 USE_MOTOR_SPEED_LIMITS = True
 
 
+def quat_to_rot_matrix(q: jp.array):
+    """Assumes input quaternion is [w, x, y, z]"""
+    w, x, y, z = q
+
+    # Normalize quaternion to ensure proper rotation matrix
+    norm = jp.sqrt(w**2 + x**2 + y**2 + z**2)
+    w, x, y, z = w / norm, x / norm, y / norm, z / norm
+
+    return jp.array([
+        [1 - 2*y**2 - 2*z**2,     2*x*y - 2*z*w,     2*x*z + 2*y*w],
+        [2*x*y + 2*z*w,     1 - 2*x**2 - 2*z**2,     2*y*z - 2*x*w],
+        [2*x*z - 2*y*w,     2*y*z + 2*x*w,     1 - 2*x**2 - 2*y**2]
+    ])
+
+def axis_angle_to_rotation(axis_angle: jp.ndarray) -> jp.ndarray:
+    """
+    Converts an axis-angle vector to a rotation matrix using Rodrigues' formula.
+    
+    Args:
+        axis_angle: jp.ndarray of shape (3,), representing axis * angle
+    
+    Returns:
+        A 3x3 rotation matrix as a jnp.ndarray
+    """
+    theta = jp.linalg.norm(axis_angle)
+    def zero_rotation():
+        return jp.eye(3)
+
+    def nonzero_rotation():
+        axis = axis_angle / theta
+        x, y, z = axis
+        K = jp.array([[  0, -z,  y],
+                       [  z,  0, -x],
+                       [ -y,  x,  0]])
+        I = jp.eye(3)
+        R = I + jp.sin(theta) * K + (1 - jp.cos(theta)) * (K @ K)
+        return R
+
+    return jax.lax.cond(theta < 1e-6, zero_rotation, nonzero_rotation)
+
+
 def default_config() -> config_dict.ConfigDict:
     return config_dict.create(
         ctrl_dt=0.02,
@@ -76,6 +117,7 @@ def default_config() -> config_dict.ConfigDict:
                 linvel=0.1,
                 gyro=0.1,
                 accelerometer=0.05,
+                rotation = np.pi/12,
             ),
         ),
         reward_config=config_dict.create(
@@ -207,6 +249,19 @@ class Joystick(open_duck_mini_v2_base.OpenDuckMiniV2Env):
         # self.action_filter = LowPassActionFilter(
         #     1 / self._config.ctrl_dt, cutoff_frequency=37.5
         # )
+        self.imu_id = self._mj_model.body("imu").id
+        self.feet_ids = {
+            0: self._mj_model.body("foot_assembly").id,
+            1: self._mj_model.body("foot_assembly_2").id,
+        }
+
+    def get_pose_from_id(self, data, id: str) -> jp.ndarray:
+        pos = data.xpos[id]
+        quat = data.xquat[id]
+        pose = jp.eye(4)
+        pose = pose.at[:3, :3].set(quat_to_rot_matrix(quat))
+        pose = pose.at[:3, 3].set(pos)
+        return pose
 
     def reset(self, rng: jax.Array) -> mjx_env.State:
         qpos = self._init_q  # the complete qpos
@@ -598,11 +653,40 @@ class Joystick(open_duck_mini_v2_base.OpenDuckMiniV2Env):
         #     * self._config.noise_config.scales.linvel
         # )
 
+        # TODO add noise.
+        imu_pose_world = self.get_pose_from_id(data, self.imu_id)
+        rotation_world = imu_pose_world[0:3, 0:3]
+        translation_world = imu_pose_world[0:3, 3]
+
+        info["rng"], noise_rng = jax.random.split(info["rng"])
+        rotation_noise = (
+            (2.0 * jax.random.uniform(noise_rng, shape=(3,)) - 1.0)
+            * self._config.noise_config.level
+            * self._config.noise_config.scales.rotation
+        )
+
+        noisy_rotation_world = axis_angle_to_rotation(rotation_noise) @ rotation_world
+        noisy_rotation_world_6d = noisy_rotation_world[:, 0:2].flatten()
+
+        floating_base_vel_world = data.qvel[self._floating_base_qvel_addr:self._floating_base_qvel_addr + 6]
+        floating_base_vel_body = rotation_world.T @ floating_base_vel_world[0:3]
+
+        info["rng"], noise_rng = jax.random.split(info["rng"])
+        noisy_floating_base_vel_body = (
+            floating_base_vel_body
+            + (2.0 * jax.random.uniform(noise_rng, shape=jp.shape(floating_base_vel_body)) - 1.0) 
+            * self._config.noise_config.level
+            * self._config.noise_config.scales.linvel
+        )
+
         state = jp.hstack(
             [
                 # noisy_linvel,  # 3
                 # noisy_gyro,  # 3
                 # noisy_gravity,  # 3
+                noisy_rotation_world_6d,
+                # translation_world,
+                noisy_floating_base_vel_body,
                 noisy_gyro,  # 3
                 noisy_accelerometer,  # 3
                 info["command"],  # 7
@@ -663,10 +747,17 @@ class Joystick(open_duck_mini_v2_base.OpenDuckMiniV2Env):
     ) -> dict[str, jax.Array]:
         del metrics  # Unused.
 
+        # Used to get linvel. lin vel sensor is not accurate.
+        imu_pose_world = self.get_pose_from_id(data, self.imu_id)
+        rotation_world = imu_pose_world[0:3, 0:3]
+        floating_base_vel_world = self.get_floating_base_qvel(data.qvel)
+        floating_base_vel_body = rotation_world.T @ floating_base_vel_world[0:3]
+
         ret = {
             "tracking_lin_vel": reward_tracking_lin_vel(
                 info["command"],
-                self.get_local_linvel(data),
+                # self.get_local_linvel(data),
+                floating_base_vel_body,
                 self._config.reward_config.tracking_sigma,
             ),
             "tracking_ang_vel": reward_tracking_ang_vel(

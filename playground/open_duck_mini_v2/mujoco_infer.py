@@ -6,6 +6,7 @@ import mujoco.viewer
 import time
 import argparse
 from etils import epath
+from scipy.spatial.transform import Rotation as sp_R
 from playground.common.onnx_infer import OnnxInfer
 from playground.common.poly_reference_motion_numpy import PolyReferenceMotion
 from playground.common.utils import LowPassActionFilter
@@ -13,12 +14,19 @@ from playground.common.utils import LowPassActionFilter
 # from playground.open_duck_mini_v2 import constants
 from playground.open_duck_mini_v2 import base
 
+from playground.common.contact_aided_invariant_ekf.contact_aided_invariant_ekf import (
+    RightInEKF,
+)
+from playground.common.contact_aided_invariant_ekf.robot_state import RobotState
+from playground.common.contact_aided_invariant_ekf.noise_params import NoiseParams
+from playground.common.contact_aided_invariant_ekf.drake_kinematics import DrakeKinematics
+
 USE_MOTOR_SPEED_LIMITS = True
 
 
 class MjInfer:
     def __init__(
-        self, model_path: str, reference_data: str, onnx_model_path: str, standing: bool
+        self, model_path: str, reference_data: str, onnx_model_path: str, standing: bool, urdf_model_path: str
     ):
         self.model = mujoco.MjModel.from_xml_string(
             epath.Path(model_path).read_text(), assets=base.get_assets()
@@ -105,6 +113,10 @@ class MjInfer:
             0
         ]  # Assuming there is only one floating base! the jnt_type==0 is a floating joint. 3 is a hinge
 
+        self.actuator_name_to_idx_map = {
+            n: self.get_joint_addr_from_name(n) for n in self.actuator_names
+        }
+
         self._floating_base_id = self.model.joint(self.floating_base_name).id
 
         # self.all_joint_no_backlash_ids=np.zeros(7+self.model.nu)
@@ -186,6 +198,65 @@ class MjInfer:
         print(f"actuator names: {self.actuator_names}")
         print(f"backlash joint names: {self.backlash_joint_names}")
         # print(f"actual joints idx: {self.get_actual_joints_idx()}")
+
+        # Gather body and feet id
+        self.imu_id = self.data.body("imu").id
+        self.feet_ids = {
+            0: self.data.body("foot_assembly").id,
+            1: self.data.body("foot_assembly_2").id,
+        }
+
+        # If unknown, set to identity.
+        initial_pose = self.get_pose_from_id(self.data, self.imu_id)
+
+        # Convert to rotation matrix
+        body_rotation_matrix = initial_pose[0:3, 0:3]
+        self.ekf_noise_params = NoiseParams() # TODO: put in real
+        # self.ekf_noise_params.set_gyroscope_bias_noise(1e-6)
+        # ekf_noise_params.set_contact_noise(0.5)
+        ekf_robot_state = RobotState()
+        ekf_robot_state.set_position(initial_pose[0:3, 3])
+        ekf_robot_state.set_rotation(body_rotation_matrix)
+        ekf_robot_state.set_velocity(np.zeros(3))
+        self._ekf = RightInEKF(ekf_robot_state, self.ekf_noise_params)
+
+        # Define the forward kinematics source.
+        self.drake_kinematics = DrakeKinematics(
+            imu_frame_name="imu",
+            urdf_model_path=urdf_model_path,
+            end_effector_frame_name_to_id_map={
+                "foot_assembly": 0,
+                "foot_assembly_2": 1,
+            },
+            # From URDF assembly to foot. And then add additional padding from foot link to bottom of foot.
+            end_effector_offset_map={
+                "foot_assembly": [0.0005, -0.036225 - 0.008, 0.01955],
+                "foot_assembly_2": [0.0005, -0.036225 - 0.008, 0.01955],
+            },
+        )
+
+        # Define the mapping from mujoco index to drake index
+        self.mask = np.zeros(
+            len(self.drake_kinematics.joint_name_to_idx_map), dtype=int
+        )
+        for name, idx in self.drake_kinematics.joint_name_to_idx_map.items():
+            self.mask[idx] = self.actuator_name_to_idx_map[name]
+
+        covariance_scaling_factor = 10.0 # Just using a random scaling term to sample initial biases. Then these covariances are used to do a random walk.
+        self.gyro_bias = np.random.multivariate_normal(np.zeros(3), covariance_scaling_factor*self.ekf_noise_params.get_gyroscope_bias_cov())
+        self.accelerometer_bias = np.random.multivariate_normal(np.zeros(3), covariance_scaling_factor*self.ekf_noise_params.get_accelerometer_bias_cov())
+
+        # grab initial sim time
+        self.prev_sim_time = self.data.time
+        self.ekf_imu_measurement_prev = np.zeros(6)
+    
+    def get_pose_from_id(self, data, id: str) -> np.ndarray:
+        pos = data.xpos[id]
+        quat = data.xquat[id]
+        pose = np.eye(4)
+        pose[:3, :3] = sp_R.from_quat(quat, scalar_first=True).as_matrix()
+        pose[:3, 3] = pos
+        return pose
 
     def get_actuator_id_from_name(self, name: str) -> int:
         """Return the id of a specified actuator"""
@@ -341,6 +412,8 @@ class MjInfer:
         self,
         data,
         command,  # , qvel_history, qpos_error_history, gravity_history
+        use_ekf: bool = False,
+        correct_kin: bool = False
     ):
         gyro = self.get_gyro(data)
         accelerometer = self.get_accelerometer(data)
@@ -355,8 +428,56 @@ class MjInfer:
         # if not self.standing:
         # ref = self.PRM.get_reference_motion(*command[:3], self.imitation_i)
 
+        ekf_imu_measurement = np.zeros(6)
+        ekf_imu_measurement[0:3] = gyro
+        ekf_imu_measurement[3:6] = accelerometer
+
+        current_sim_time = data.time
+        elapsed_sim_time = current_sim_time - self.prev_sim_time
+        self._ekf.propagate(
+            self.ekf_imu_measurement_prev,  # use previous measurement.
+            dt=elapsed_sim_time,
+        )
+
+        # Update prev sim time
+        self.prev_sim_time = current_sim_time
+
+        self.ekf_imu_measurement_prev = ekf_imu_measurement.copy()
+
+        ekf_contact_measurement = [(idx, contacts[idx]) for idx in range(len(contacts))]
+        self._ekf.set_contacts(ekf_contact_measurement)
+        joint_uncertainty = 1e-3
+        feet_to_kinematics_map = self.drake_kinematics.compute_kinematics(
+            data.qpos[self.mask],
+            joint_uncertainty * np.eye(len(joint_angles)),
+        )
+
+        if correct_kin:
+            self._ekf.correct_kinematics(
+                measured_kinematics=list(feet_to_kinematics_map.values())
+            )
+
+        estimated_state = self._ekf.get_state()
+
+        if not use_ekf:
+            imu_pose_world = self.get_pose_from_id(data, self.imu_id)
+            rotation_world = imu_pose_world[0:3, 0:3]
+            translation_world = imu_pose_world[0:3, 3]
+            floating_base_vel_world = data.qvel[self._floating_base_qvel_addr:self._floating_base_qvel_addr + 6]
+        else:
+            rotation_world = estimated_state.get_rotation()
+            translation_world = estimated_state.get_position()
+            floating_base_vel_world = estimated_state.get_velocity()
+
+
+        rotation_world_6d = rotation_world[:,0:2].flatten()
+        floating_base_vel_body = rotation_world.T @ floating_base_vel_world[0:3]
+
         obs = np.concatenate(
-            [
+            [   
+                rotation_world_6d,
+                # translation_world,
+                floating_base_vel_body,
                 gyro,
                 accelerometer,
                 # gravity,
@@ -474,10 +595,12 @@ class MjInfer:
                         obs = self.get_obs(
                             self.data,
                             self.commands,
+                            use_ekf=True,
+                            correct_kin=True
                         )
-
-                        self.obs_history = np.roll(self.obs_history, 45)
-                        self.obs_history[:45] = obs
+                        magic_number = 45 + 6 + 3 # 6d pose, lin vel
+                        self.obs_history = np.roll(self.obs_history, magic_number)
+                        self.obs_history[:magic_number] = obs
                         obs = self.obs_history
 
                         self.saved_obs.append(obs)
@@ -537,11 +660,16 @@ if __name__ == "__main__":
         type=str,
         default="playground/open_duck_mini_v2/xmls/scene_flat_terrain.xml",
     )
+    parser.add_argument(
+        "--urdf_model_path",
+        type=str,
+        required=True
+    )
     parser.add_argument("--standing", action="store_true", default=False)
 
     args = parser.parse_args()
 
     mjinfer = MjInfer(
-        args.model_path, args.reference_data, args.onnx_model_path, args.standing
+        args.model_path, args.reference_data, args.onnx_model_path, args.standing, urdf_model_path = args.urdf_model_path
     )
     mjinfer.run()

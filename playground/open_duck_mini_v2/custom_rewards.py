@@ -138,7 +138,7 @@ def reward_imitation(
         lin_vel_xy_rew
         + lin_vel_z_rew
         + ang_vel_xy_rew
-        + ang_vel_z_rew
+        # + ang_vel_z_rew
         + joint_pos_rew
         + joint_vel_rew
         + contact_rew

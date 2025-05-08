@@ -59,7 +59,9 @@
     <body name="base" pos="0 0 0.22">
       <!-- <freejoint name="trunk_assembly_freejoint"/> -->
       <freejoint name="floating_base"/>
-      <site name="imu" pos="-0.08 -0.0 0.05"/>
+      <body name="imu" pos="-0.08 -0.0 0.05" childclass="open_duck_mini_v2">
+        <site name="imu" pos="0.0 0.0 0.0"/>
+      </body>
       <!-- Link trunk_assembly -->
       <body name="trunk_assembly" pos="0 0 0.0" quat="1 0 0 0" childclass="open_duck_mini_v2">
         <inertial pos="-0.0483259 -9.97823e-05 0.0384971" mass="0.698526"
