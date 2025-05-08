@@ -174,14 +174,15 @@ if __name__ == "__main__":
         "playground/open_duck_mini_v2/data/polynomial_coefficients.pkl"
     )
     vals = []
-    select_dim = -1
-    for i in range(PRM.nb_steps_in_period):
-        vals.append(PRM.get_reference_motion(0.0, -0.05, -0.1, i)[select_dim])
+    total = 10 * PRM.nb_steps_in_period
+    # select_dim = 
+    for i in range(total):
+        vals.append(PRM.get_reference_motion(-0.05, -0.0, -0.0, i)[34]) # 32
 
     # plot
     import matplotlib.pyplot as plt
     import numpy as np
 
-    ts = np.arange(0, PRM.nb_steps_in_period)
+    ts = np.arange(0, total)
     plt.plot(ts, vals)
     plt.show()
