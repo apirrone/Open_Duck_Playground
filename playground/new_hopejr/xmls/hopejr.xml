@@ -19,8 +19,8 @@
   <default>
     <default class="cybergear">
       <geom contype="0" conaffinity="0"/>
-      <joint damping="0.5" frictionloss="0.1" armature="0.005"/>
-      <position kp="50"/>
+      <joint damping="1.0" frictionloss="0.01" armature="0.005" range="-2 2"/>
+      <position kp="100"/>
     </default>
   </default>
   <!-- Additional sensors.xml -->
@@ -539,33 +539,33 @@
     <material name="hl_fore_arm_02c_part_01j__2_material" rgba="0.647059 0.647059 0.647059 1"/>
   </asset>
   <actuator>
-    <position class="cybergear" name="torso_yaw" joint="torso_yaw"/>
-    <position class="cybergear" name="torso_roll" joint="torso_roll"/>
-    <position class="cybergear" name="torso_pitch" joint="torso_pitch"/>
-    <position class="cybergear" name="right_hip_pitch" joint="right_hip_pitch"/>
-    <position class="cybergear" name="right_hip_roll" joint="right_hip_roll"/>
-    <position class="cybergear" name="right_hip_yaw" joint="right_hip_yaw"/>
-    <position class="cybergear" name="right_knee" joint="right_knee"/>
-    <position class="cybergear" name="right_ankle_pitch" joint="right_ankle_pitch"/>
-    <position class="cybergear" name="right_ankle_roll" joint="right_ankle_roll"/>
-    <position class="cybergear" name="right_toe" joint="right_toe"/>
-    <position class="cybergear" name="left_hip_pitch" joint="left_hip_pitch"/>
-    <position class="cybergear" name="left_hip_roll" joint="left_hip_roll"/>
-    <position class="cybergear" name="left_hip_yaw" joint="left_hip_yaw"/>
-    <position class="cybergear" name="left_knee" joint="left_knee"/>
-    <position class="cybergear" name="left_ankle_pitch" joint="left_ankle_pitch"/>
-    <position class="cybergear" name="left_ankle_roll" joint="left_ankle_roll"/>
-    <position class="cybergear" name="left_toe" joint="left_toe"/>
-    <position class="cybergear" name="right_shoulder_pitch" joint="right_shoulder_pitch"/>
-    <position class="cybergear" name="right_shoulder_roll" joint="right_shoulder_roll"/>
-    <position class="cybergear" name="right_elbow_yaw" joint="right_elbow_yaw"/>
-    <position class="cybergear" name="right_elbow_pitch" joint="right_elbow_pitch"/>
-    <position class="cybergear" name="right_forearm_yaw" joint="right_forearm_yaw"/>
-    <position class="cybergear" name="left_shoulder_pitch" joint="left_shoulder_pitch"/>
-    <position class="cybergear" name="left_shoulder_roll" joint="left_shoulder_roll"/>
-    <position class="cybergear" name="left_elbow_yaw" joint="left_elbow_yaw"/>
-    <position class="cybergear" name="left_elbow_pitch" joint="left_elbow_pitch"/>
-    <position class="cybergear" name="left_forearm_yaw" joint="left_forearm_yaw"/>
+    <position inheritrange="1" class="cybergear" name="torso_yaw" joint="torso_yaw"/>
+    <position inheritrange="1" class="cybergear" name="torso_roll" joint="torso_roll"/>
+    <position inheritrange="1" class="cybergear" name="torso_pitch" joint="torso_pitch"/>
+    <position inheritrange="1" class="cybergear" name="right_hip_pitch" joint="right_hip_pitch"/>
+    <position inheritrange="1" class="cybergear" name="right_hip_roll" joint="right_hip_roll"/>
+    <position inheritrange="1" class="cybergear" name="right_hip_yaw" joint="right_hip_yaw"/>
+    <position inheritrange="1" class="cybergear" name="right_knee" joint="right_knee"/>
+    <position inheritrange="1" class="cybergear" name="right_ankle_pitch" joint="right_ankle_pitch"/>
+    <position inheritrange="1" class="cybergear" name="right_ankle_roll" joint="right_ankle_roll"/>
+    <position inheritrange="1" class="cybergear" name="right_toe" joint="right_toe"/>
+    <position inheritrange="1" class="cybergear" name="left_hip_pitch" joint="left_hip_pitch"/>
+    <position inheritrange="1" class="cybergear" name="left_hip_roll" joint="left_hip_roll"/>
+    <position inheritrange="1" class="cybergear" name="left_hip_yaw" joint="left_hip_yaw"/>
+    <position inheritrange="1" class="cybergear" name="left_knee" joint="left_knee"/>
+    <position inheritrange="1" class="cybergear" name="left_ankle_pitch" joint="left_ankle_pitch"/>
+    <position inheritrange="1" class="cybergear" name="left_ankle_roll" joint="left_ankle_roll"/>
+    <position inheritrange="1" class="cybergear" name="left_toe" joint="left_toe"/>
+    <position inheritrange="1" class="cybergear" name="right_shoulder_pitch" joint="right_shoulder_pitch"/>
+    <position inheritrange="1" class="cybergear" name="right_shoulder_roll" joint="right_shoulder_roll"/>
+    <position inheritrange="1" class="cybergear" name="right_elbow_yaw" joint="right_elbow_yaw"/>
+    <position inheritrange="1" class="cybergear" name="right_elbow_pitch" joint="right_elbow_pitch"/>
+    <position inheritrange="1" class="cybergear" name="right_forearm_yaw" joint="right_forearm_yaw"/>
+    <position inheritrange="1" class="cybergear" name="left_shoulder_pitch" joint="left_shoulder_pitch"/>
+    <position inheritrange="1" class="cybergear" name="left_shoulder_roll" joint="left_shoulder_roll"/>
+    <position inheritrange="1" class="cybergear" name="left_elbow_yaw" joint="left_elbow_yaw"/>
+    <position inheritrange="1" class="cybergear" name="left_elbow_pitch" joint="left_elbow_pitch"/>
+    <position inheritrange="1" class="cybergear" name="left_forearm_yaw" joint="left_forearm_yaw"/>
   </actuator>
   <equality/>
 </mujoco>
