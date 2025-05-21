@@ -39,10 +39,10 @@ from playground.common.rewards import (
     cost_stand_still,
     reward_alive,
 )
-# from playground.open_duck_mini_v2.custom_rewards import reward_imitation
+from playground.new_hopejr.custom_rewards import reward_imitation
 
 # if set to false, won't require the reference data to be present and won't compute the reference motions polynoms for nothing
-USE_IMITATION_REWARD = False
+USE_IMITATION_REWARD = True
 USE_MOTOR_SPEED_LIMITS = False
 
 
@@ -122,7 +122,7 @@ class Joystick(hopejr_base.HopeJREnv):
 
         if USE_IMITATION_REWARD:
             self.PRM = PolyReferenceMotion(
-                "playground/open_duck_mini_v2/data/polynomial_coefficients.pkl"
+                "playground/new_hopejr/data/polynomial_coefficients.pkl"
             )
 
         # Note: First joint is freejoint.
@@ -624,16 +624,16 @@ class Joystick(hopejr_base.HopeJREnv):
             "torques": cost_torques(data.actuator_force),
             "action_rate": cost_action_rate(action, info["last_act"]),
             "alive": reward_alive(),
-            # "imitation": reward_imitation(  # FIXME, this reward is so adhoc...
-            #     self.get_floating_base_qpos(data.qpos),  # floating base qpos
-            #     self.get_floating_base_qvel(data.qvel),  # floating base qvel
-            #     self.get_actuator_joints_qpos(data.qpos),
-            #     self.get_actuator_joints_qvel(data.qvel),
-            #     contact,
-            #     info["current_reference_motion"],
-            #     info["command"],
-            #     USE_IMITATION_REWARD,
-            # ),
+            "imitation": reward_imitation(  # FIXME, this reward is so adhoc...
+                self.get_floating_base_qpos(data.qpos),  # floating base qpos
+                self.get_floating_base_qvel(data.qvel),  # floating base qvel
+                self.get_actuator_joints_qpos(data.qpos),
+                self.get_actuator_joints_qvel(data.qvel),
+                contact,
+                info["current_reference_motion"],
+                info["command"],
+                USE_IMITATION_REWARD,
+            ),
             "stand_still": cost_stand_still(
                 # info["command"], data.qpos[7:], data.qvel[6:], self._default_pose
                 info["command"],
