@@ -1,0 +1,571 @@
+<?xml version="1.0" ?>
+<!-- Generated using onshape-to-robot -->
+<!-- Onshape https://cad.onshape.com/documents/95619c5a3c37ea0971576814/w/26610785af7f329813cd57b4/e/6cae43dcd495e7a1a823b044 -->
+<mujoco model="hopejr">
+  <compiler angle="radian" meshdir="assets" autolimits="true"/>
+  <default>
+    <default class="hopejr">
+      <joint frictionloss="0.1" armature="0.005"/>
+      <position kp="50" dampratio="1"/>
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/>
+      </default>
+      <default class="collision">
+        <geom group="3"/>
+      </default>
+    </default>
+  </default>
+  <!-- Additional joints_properties.xml -->
+  <default>
+    <default class="cybergear">
+      <geom contype="0" conaffinity="0"/>
+      <joint damping="0.5" frictionloss="0.1" armature="0.005"/>
+      <position kp="50"/>
+    </default>
+  </default>
+  <!-- Additional sensors.xml -->
+  <sensor>
+    <gyro site="imu" name="gyro"/>
+    <velocimeter site="imu" name="local_linvel"/>
+    <accelerometer site="imu" name="accelerometer"/>
+    <framezaxis objtype="site" objname="imu" name="upvector"/>
+    <framexaxis objtype="site" objname="imu" name="forwardvector"/>
+    <framelinvel objtype="site" objname="imu" name="global_linvel"/>
+    <frameangvel objtype="site" objname="imu" name="global_angvel"/>
+    <framepos objtype="site" objname="imu" name="position"/>
+    <framequat objtype="site" objname="imu" name="orientation"/>
+    <framelinvel objtype="site" objname="right_foot" name="right_foot_global_linvel"/>
+    <framelinvel objtype="site" objname="left_foot" name="left_foot_global_linvel"/>
+    <framexaxis objtype="site" objname="left_foot" name="left_foot_upvector"/>
+    <framexaxis objtype="site" objname="right_foot" name="right_foot_upvector"/>
+    <framepos objtype="site" objname="left_foot" name="left_foot_pos"/>
+    <framepos objtype="site" objname="right_foot" name="right_foot_pos"/>
+  </sensor>
+  <worldbody>
+    <!-- Link thorax_02d -->
+    <body name="thorax_02d" pos="0 0 1.15" quat="1 0 0 0" childclass="hopejr">
+      <freejoint name="thorax_02d_freejoint"/>
+      <inertial pos="0.00407148 -6.96142e-06 0.0378596" mass="2.96528" fullinertia="0.0726612 0.0560882 0.031721 0.000120496 -0.00295857 -1.92068e-05"/>
+      <!-- Part mirrorchest_03 -->
+      <geom type="mesh" class="visual" pos="0.00225538 0.126191 -0.0258308" quat="0.671925 0 2.498e-16 -0.740619" mesh="mirrorchest_03" material="mirrorchest_03_material"/>
+      <!-- Part head_mock_up_01g -->
+      <geom type="mesh" class="visual" pos="0.0278313 0.000209681 0.223922" quat="0.707102 0.707102 0.00266361 0.00266361" mesh="head_mock_up_01g" material="head_mock_up_01g_material"/>
+      <!-- Part thorax_02d -->
+      <geom type="mesh" class="visual" pos="9.37011e-19 -4.16241e-17 -0.07" quat="0.704438 -0 -2.22045e-16 0.709765" mesh="thorax_02d" material="thorax_02d_material"/>
+      <!-- Part chest_03 -->
+      <geom type="mesh" class="visual" pos="0.00415646 -0.126143 -0.0258308" quat="1.84713e-23 0.666326 0.74566 2.62339e-23" mesh="chest_03" material="chest_03_material"/>
+      <!-- Part mirrormantle_01f -->
+      <geom type="mesh" class="visual" pos="0.00225538 0.126191 -0.0258308" quat="5.82802e-16 0.671925 -0.740619 -6.42385e-16" mesh="mirrormantle_01f" material="mirrormantle_01f_material"/>
+      <!-- Part mantle_01f -->
+      <geom type="mesh" class="visual" pos="0.00415646 -0.126143 -0.0258308" quat="0.666326 4.80901e-16 6.66134e-16 0.74566" mesh="mantle_01f" material="mantle_01f_material"/>
+      <!-- Frame imu -->
+      <site group="3" name="imu" pos="-0.0674981 -0.00050853 0.0961692" quat="0.999993 -0 0 0.00376691"/>
+      <!-- Link waist_04d -->
+      <body name="waist_04d" pos="9.37011e-19 -4.16241e-17 -0.015" quat="2.13049e-24 -0.704438 -0.709765 -7.81598e-24">
+        <!-- Joint from thorax_02d to waist_04d -->
+        <joint axis="0 0 1" name="torso_yaw" type="hinge" class="cybergear"/>
+        <inertial pos="-2.06113e-05 -0.0190493 0.128965" mass="1.05048" fullinertia="0.0126444 0.0105285 0.00422168 1.94178e-05 -7.73776e-06 0.000992709"/>
+        <!-- Part waist_04d -->
+        <geom type="mesh" class="visual" pos="9.71918e-17 -7.14389e-18 0.296" quat="0.498113 -0.498113 -0.50188 0.50188" mesh="waist_04d" material="waist_04d_material"/>
+        <!-- Link torso_pitch_yaw_03 -->
+        <body name="torso_pitch_yaw_03" pos="-0.000527364 0.069998 0.296" quat="0.498113 -0.50188 0.498113 0.50188">
+          <!-- Joint from waist_04d to torso_pitch_yaw_03 -->
+          <joint axis="0 0 1" name="torso_roll" type="hinge" class="cybergear"/>
+          <inertial pos="0.0530911 -0.0187022 -0.0786225" mass="0.439769" fullinertia="0.0010388 0.00167533 0.00124827 0.000155504 -0.000249465 7.29288e-05"/>
+          <!-- Part torso_pitch_yaw_03 -->
+          <geom type="mesh" class="visual" pos="5.55112e-16 -1.22189e-17 -0.068" quat="0.707107 -1.3251e-16 -2.22045e-16 -0.707107" mesh="torso_pitch_yaw_03" material="torso_pitch_yaw_03_material"/>
+          <!-- Link pelvis_08 -->
+          <body name="pelvis_08" pos="6.10623e-16 -1.22189e-17 -0.068" quat="0.707107 -0.707107 0 2.31797e-17">
+            <!-- Joint from torso_pitch_yaw_03 to pelvis_08 -->
+            <joint axis="0 0 1" name="torso_pitch" type="hinge" class="cybergear"/>
+            <inertial pos="-0.0734106 3.81385e-06 0" mass="0.749221" fullinertia="0.00112457 0.00298368 0.00262983 -1.56701e-20 1.5992e-18 -1.77544e-07"/>
+            <!-- Part pelvis_08 -->
+            <geom type="mesh" class="visual" pos="0 0 6.16298e-33" quat="0.5 -0.5 -0.5 -0.5" mesh="pelvis_08" material="pelvis_08_material"/>
+            <!-- Part pelvis_08_2 -->
+            <geom type="mesh" class="visual" pos="0 7.62771e-06 -8.46846e-22" quat="0.5 0.5 0.5 -0.5" mesh="pelvis_08" material="pelvis_08_material"/>
+            <!-- Link m5_80_pulley_03h_52 -->
+            <body name="m5_80_pulley_03h_52" pos="-0.126943 7.62771e-06 0.0499415" quat="0.0308436 0.706434 -0.706434 -0.0308436">
+              <!-- Joint from pelvis_08 to m5_80_pulley_03h_52 -->
+              <joint axis="0 0 1" name="right_hip_pitch" type="hinge" class="cybergear"/>
+              <inertial pos="0.0365809 -0.0178295 -0.0552817" mass="0.278929" fullinertia="0.00073759 0.000438867 0.000456455 -8.41197e-05 6.9547e-06 -5.50361e-05"/>
+              <!-- Part m5_80_pulley_03h_52 -->
+              <geom type="mesh" class="visual" pos="0 -5.55112e-17 -0.00442511" quat="0 1 0 0" mesh="m5_80_pulley_03h_52" material="m5_80_pulley_03h_52_material"/>
+              <!-- Link cybergear_02b -->
+              <body name="cybergear_02b" pos="0.061 0 -0.0794251" quat="0.5 0.5 -0.5 -0.5">
+                <!-- Joint from m5_80_pulley_03h_52 to cybergear_02b -->
+                <joint axis="0 0 1" name="right_hip_roll" type="hinge" class="cybergear"/>
+                <inertial pos="-0.067085 0.00607879 0.0591296" mass="0.615535" fullinertia="0.000490498 0.000570176 0.000521906 9.42627e-06 4.965e-05 -4.55443e-06"/>
+                <!-- Part sea_spring_mount_05i_hip_yaw -->
+                <geom type="mesh" class="visual" pos="3.88578e-16 4.53804e-15 0.0608" quat="0.477714 -0.521334 -0.477714 -0.521334" mesh="sea_spring_mount_05i_hip_yaw" material="sea_spring_mount_05i_hip_yaw_material"/>
+                <!-- Part cybergear_02b -->
+                <geom type="mesh" class="visual" pos="-0.0627528 0.00557574 0.0606759" quat="0.521334 -0.477714 0.521334 0.477714" mesh="cybergear_02b" material="cybergear_02b_material"/>
+                <!-- Part sea_spring_mount_05i_hip_yaw_2 -->
+                <geom type="mesh" class="visual" pos="0 1.38778e-17 0.0608" quat="0.477714 -0.521334 -0.477714 -0.521334" mesh="sea_spring_mount_05i_hip_yaw__2" material="sea_spring_mount_05i_hip_yaw__2_material"/>
+                <!-- Link sea_humeral_01ka_femoral -->
+                <body name="sea_humeral_01ka_femoral" pos="-0.0958265 0.00846931 0.0606759" quat="0.706434 0.0308436 0.706434 -0.0308436">
+                  <!-- Joint from cybergear_02b to sea_humeral_01ka_femoral -->
+                  <joint axis="0 0 1" name="right_hip_yaw" type="hinge" class="cybergear"/>
+                  <inertial pos="0.0051361 0.0239822 -0.135017" mass="0.603133" fullinertia="0.00238729 0.0025162 0.000658941 0.000100328 0.000213836 -6.29989e-05"/>
+                  <!-- Part sea_humeral_01ka_femoral -->
+                  <geom type="mesh" class="visual" pos="-0.01 0.0019 -0.2169" quat="0.5 0.5 0.5 0.5" mesh="sea_humeral_01ka_femoral" material="sea_humeral_01ka_femoral_material"/>
+                  <!-- Part sea_spring_mount_05i_arm_rotation -->
+                  <geom type="mesh" class="visual" pos="0 -2.77556e-17 -0.0393" quat="3.96737e-09 0.707107 -3.96737e-09 0.707107" mesh="sea_spring_mount_05i_arm_rotation" material="sea_spring_mount_05i_arm_rotation_material"/>
+                  <!-- Link sea_ankle_02e -->
+                  <body name="sea_ankle_02e" pos="-0.01 0.0586 -0.2169" quat="0.5 0.5 -0.5 0.5">
+                    <!-- Joint from sea_humeral_01ka_femoral to sea_ankle_02e -->
+                    <joint axis="0 0 1" name="right_knee" type="hinge" class="cybergear"/>
+                    <inertial pos="-0.152143 0.00248448 0.0356482" mass="0.698353" fullinertia="0.000700514 0.00482338 0.00474653 0.000140851 -0.000302545 -4.50357e-05"/>
+                    <!-- Part sea_ankle_02e -->
+                    <geom type="mesh" class="visual" pos="-0.266 1.05e-08 0.0516" quat="0.5 0.5 0.5 -0.5" mesh="sea_ankle_02e" material="sea_ankle_02e_material"/>
+                    <!-- Part sea_spring_mount_05i_small_knee -->
+                    <geom type="mesh" class="visual" pos="-1.11022e-16 1.73472e-18 0.055" quat="0.5 -0.5 -0.5 -0.5" mesh="sea_spring_mount_05i_small_knee" material="sea_spring_mount_05i_small_knee_material"/>
+                    <!-- Link sea_spring_mount_05i_ankle -->
+                    <body name="sea_spring_mount_05i_ankle" pos="-0.266 1.05e-08 -0.0051" quat="1 2.97972e-15 9.99201e-16 -1.97369e-08">
+                      <!-- Joint from sea_ankle_02e to sea_spring_mount_05i_ankle -->
+                      <joint axis="0 0 1" name="right_ankle_pitch" type="hinge" class="cybergear"/>
+                      <inertial pos="-0.0407821 -0.0158188 0.0504789" mass="0.239095" fullinertia="0.000211094 0.000223022 0.000193976 3.3963e-05 2.54306e-05 6.719e-06"/>
+                      <!-- Part sea_spring_mount_05i_ankle -->
+                      <geom type="mesh" class="visual" pos="9.55615e-05 3.44826e-05 0.0548" quat="0.612372 -0.353553 -0.612372 -0.353553" mesh="sea_spring_mount_05i_ankle" material="sea_spring_mount_05i_ankle_material"/>
+                      <!-- Part sea_spring_mount_05i_ankle_2 -->
+                      <geom type="mesh" class="visual" pos="-4.44089e-16 -2.60209e-18 0.0548" quat="0.612372 -0.353553 -0.612372 -0.353553" mesh="sea_spring_mount_05i_ankle__2" material="sea_spring_mount_05i_ankle__2_material"/>
+                      <!-- Link heel_04b -->
+                      <body name="heel_04b" pos="-0.078798 0.0126822 0.0548" quat="0.353553 0.612372 -0.353553 0.612372">
+                        <!-- Joint from sea_spring_mount_05i_ankle to heel_04b -->
+                        <joint axis="0 0 1" name="right_ankle_roll" type="hinge" class="cybergear"/>
+                        <inertial pos="-0.0012217 0.00542904 0.0247931" mass="0.381627" fullinertia="0.00132369 0.00128054 0.000546581 -1.79076e-05 -2.38176e-05 -0.000346293"/>
+                        <!-- Part heel_04b -->
+                        <geom type="mesh" class="visual" pos="4.85584e-14 0.0351 0.0432218" quat="3.45967e-13 5.98808e-13 0.866025 0.5" mesh="heel_04b" material="heel_04b_material"/>
+                        <!-- Part heel_04b_2 -->
+                        <geom type="mesh" class="visual" pos="4.85723e-14 0.0351 0.0432218" quat="3.45977e-13 5.98825e-13 0.866025 0.5" mesh="heel_04b__2" material="heel_04b__2_material"/>
+                        <!-- Part right_foot_heel_collision -->
+                        <geom type="mesh" class="visual" pos="-0.00669903 0.0260668 0.00374903" quat="0.612372 0.353553 -0.353553 0.612372" mesh="right_foot_heel_collision" material="right_foot_heel_collision_material"/>
+                        <geom name="right_foot_bottom" type="mesh" class="collision" pos="-0.00669903 0.0260668 0.00374903" quat="0.612372 0.353553 -0.353553 0.612372" mesh="right_foot_heel_collision" material="right_foot_heel_collision_material"/>
+                        <!-- Part heel_04b_3 -->
+                        <geom type="mesh" class="visual" pos="4.84196e-14 0.035 0.0432218" quat="3.45977e-13 5.98825e-13 0.866025 0.5" mesh="heel_04b__3" material="heel_04b__3_material"/>
+                        <!-- Frame right_foot -->
+                        <site group="3" name="right_foot" pos="4.57689e-14 0.0330533 0.02085" quat="0.612372 0.353553 -0.353553 0.612372"/>
+                        <!-- Link toes_04b -->
+                        <body name="toes_04b" pos="-0.0345 0.0512058 0.089291" quat="0.683013 -0.183013 -0.683013 0.183013">
+                          <!-- Joint from heel_04b to toes_04b -->
+                          <joint axis="0 0 1" name="right_toe" type="hinge" class="cybergear"/>
+                          <inertial pos="0.0273128 0.00913029 -0.0303434" mass="0.0758636" fullinertia="4.76773e-05 7.74599e-05 4.42092e-05 -8.9882e-06 -4.76658e-06 -1.14422e-06"/>
+                          <!-- Part right_foot_toe_collision -->
+                          <geom type="mesh" class="visual" pos="-0.086327 0.021 -0.0270872" quat="0.707107 0.707107 -0 -1.86474e-16" mesh="right_foot_toe_collision" material="right_foot_toe_collision_material"/>
+                          <geom type="mesh" class="collision" pos="-0.086327 0.021 -0.0270872" quat="0.707107 0.707107 -0 -1.86474e-16" mesh="right_foot_toe_collision" material="right_foot_toe_collision_material"/>
+                          <!-- Part toes_04b -->
+                          <geom type="mesh" class="visual" pos="-0.048 0.009 -0.0345" quat="0.5 -0.5 -0.5 -0.5" mesh="toes_04b" material="toes_04b_material"/>
+                          <!-- Part toes_04b_2 -->
+                          <geom type="mesh" class="visual" pos="-0.048 0.009 -0.0344" quat="0.5 -0.5 -0.5 -0.5" mesh="toes_04b__2" material="toes_04b__2_material"/>
+                          <!-- Part toes_04b_3 -->
+                          <geom type="mesh" class="visual" pos="-0.048 0.009 -0.0343" quat="0.5 -0.5 -0.5 -0.5" mesh="toes_04b__3" material="toes_04b__3_material"/>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+            <!-- Link mirrorm5_80_pulley_03h_52 -->
+            <body name="mirrorm5_80_pulley_03h_52" pos="-0.126339 0 -0.0568402" quat="0.999048 -0 -0.0436194 -0">
+              <!-- Joint from pelvis_08 to mirrorm5_80_pulley_03h_52 -->
+              <joint axis="0 0 1" name="left_hip_pitch" type="hinge" class="cybergear"/>
+              <inertial pos="0.0178295 -0.0365821 -0.0483598" mass="0.278927" fullinertia="0.00043888 0.000737595 0.000456439 -8.41168e-05 5.50391e-05 -6.9516e-06"/>
+              <!-- Part mirrorm5_80_pulley_03h_52 -->
+              <geom type="mesh" class="visual" pos="-5.55112e-17 8.67362e-19 0.00249989" quat="0.707107 0 4.16334e-17 -0.707107" mesh="mirrorm5_80_pulley_03h_52" material="mirrorm5_80_pulley_03h_52_material"/>
+              <!-- Link cybergear_02b_2 -->
+              <body name="cybergear_02b_2" pos="-5.55112e-17 -0.052 -0.0725001" quat="0.706434 0.706434 0.0308436 -0.0308436">
+                <!-- Joint from mirrorm5_80_pulley_03h_52 to cybergear_02b_2 -->
+                <joint axis="0 0 1" name="left_hip_roll" type="hinge" class="cybergear"/>
+                <inertial pos="-0.0673596 -0.000320784 -0.0502102" mass="0.615532" fullinertia="0.00048956 0.000571369 0.000521835 -1.39347e-06 -5.05178e-05 -3.86056e-07"/>
+                <!-- Part cybergear_02b_2 -->
+                <geom type="mesh" class="visual" pos="-0.063 4.55191e-15 -0.0518" quat="0.5 0.5 -0.5 0.5" mesh="cybergear_02b" material="cybergear_02b_material"/>
+                <!-- Part mirrorsea_spring_mount_05i_hip_yaw -->
+                <geom type="mesh" class="visual" pos="0 0 -0.0518" quat="0.5 0.5 0.5 -0.5" mesh="mirrorsea_spring_mount_05i_hip_yaw" material="mirrorsea_spring_mount_05i_hip_yaw_material"/>
+                <!-- Part mirrorsea_spring_mount_05i_hip_yaw_2 -->
+                <geom type="mesh" class="visual" pos="0 4.55191e-15 -0.0518" quat="0.5 0.5 0.5 -0.5" mesh="mirrorsea_spring_mount_05i_hip_yaw__2" material="mirrorsea_spring_mount_05i_hip_yaw__2_material"/>
+                <!-- Link mirrorsea_humeral_01ka_femoral -->
+                <body name="mirrorsea_humeral_01ka_femoral" pos="-0.0962 4.55191e-15 -0.0518" quat="4.71783e-17 0.707107 0 0.707107">
+                  <!-- Joint from cybergear_02b_2 to mirrorsea_humeral_01ka_femoral -->
+                  <joint axis="0 0 1" name="left_hip_yaw" type="hinge" class="cybergear"/>
+                  <inertial pos="0.00513621 -0.023982 -0.135016" mass="0.60312" fullinertia="0.00238728 0.00251618 0.00065893 -0.000100328 0.000213834 6.30041e-05"/>
+                  <!-- Part mirrorsea_spring_mount_05i_arm_rotation -->
+                  <geom type="mesh" class="visual" pos="0 0 -0.0393" quat="0.707107 -1.68035e-16 -0.707107 -4.44089e-16" mesh="mirrorsea_spring_mount_05i_arm_rotation" material="mirrorsea_spring_mount_05i_arm_rotation_material"/>
+                  <!-- Part mirrorsea_humeral_01ka_femoral -->
+                  <geom type="mesh" class="visual" pos="-0.01 -0.0019 -0.2169" quat="0.5 0.5 -0.5 -0.5" mesh="mirrorsea_humeral_01ka_femoral" material="mirrorsea_humeral_01ka_femoral_material"/>
+                  <!-- Link mirrorsea_ankle_02e -->
+                  <body name="mirrorsea_ankle_02e" pos="-0.01 -0.0586 -0.2169" quat="0.5 -0.5 -0.5 -0.5">
+                    <!-- Joint from mirrorsea_humeral_01ka_femoral to mirrorsea_ankle_02e -->
+                    <joint axis="0 0 1" name="left_knee" type="hinge" class="cybergear"/>
+                    <inertial pos="-0.152144 -0.00248491 0.0356485" mass="0.698336" fullinertia="0.000700512 0.00482336 0.00474651 -0.000140848 -0.000302555 4.50366e-05"/>
+                    <!-- Part mirrorsea_spring_mount_05i_small_knee -->
+                    <geom type="mesh" class="visual" pos="0 0 0.055" quat="0.5 -0.5 -0.5 -0.5" mesh="mirrorsea_spring_mount_05i_small_knee" material="mirrorsea_spring_mount_05i_small_knee_material"/>
+                    <!-- Part mirrorsea_ankle_02e -->
+                    <geom type="mesh" class="visual" pos="-0.266 1.56819e-15 0.0516" quat="0.5 0.5 0.5 -0.5" mesh="mirrorsea_ankle_02e" material="mirrorsea_ankle_02e_material"/>
+                    <!-- Link mirrorsea_spring_mount_05i_ankle -->
+                    <body name="mirrorsea_spring_mount_05i_ankle" pos="-0.266 1.56299e-15 -0.0021" quat="9.04516e-17 1 -8.9939e-15 -2.28094e-17">
+                      <!-- Joint from mirrorsea_ankle_02e to mirrorsea_spring_mount_05i_ankle -->
+                      <joint axis="0 0 1" name="left_ankle_pitch" type="hinge" class="cybergear"/>
+                      <inertial pos="-0.0407873 -0.0158098 -0.047479" mass="0.239095" fullinertia="0.000211088 0.000223052 0.000194 3.39872e-05 -2.54365e-05 -6.70887e-06"/>
+                      <!-- Part mirrorsea_spring_mount_05i_ankle -->
+                      <geom type="mesh" class="visual" pos="0 0 -0.0518" quat="0.612372 0.353553 0.612372 -0.353553" mesh="mirrorsea_spring_mount_05i_ankle" material="mirrorsea_spring_mount_05i_ankle_material"/>
+                      <!-- Part mirrorsea_spring_mount_05i_ankle_2 -->
+                      <geom type="mesh" class="visual" pos="8.66025e-05 5e-05 -0.0518" quat="0.612372 0.353553 0.612372 -0.353553" mesh="mirrorsea_spring_mount_05i_ankle__2" material="mirrorsea_spring_mount_05i_ankle__2_material"/>
+                      <!-- Link mirrorheel_04b -->
+                      <body name="mirrorheel_04b" pos="-0.078807 0.0126977 -0.0518" quat="0.612372 0.353553 0.612372 -0.353553">
+                        <!-- Joint from mirrorsea_spring_mount_05i_ankle to mirrorheel_04b -->
+                        <joint axis="0 0 1" name="left_ankle_roll" type="hinge" class="cybergear"/>
+                        <inertial pos="-0.0012218 -0.00532959 0.0247941" mass="0.381619" fullinertia="0.00132368 0.00128052 0.000546573 1.79052e-05 -2.3811e-05 0.000346286"/>
+                        <!-- Part left_foot_heel_collision -->
+                        <geom type="mesh" class="visual" pos="-0.090399 -0.0259668 0.00374903" quat="0.612372 -0.353553 -0.353553 -0.612372" mesh="left_foot_heel_collision" material="left_foot_heel_collision_material"/>
+                        <geom name="left_foot_bottom" type="mesh" class="collision" pos="-0.090399 -0.0259668 0.00374903" quat="0.612372 -0.353553 -0.353553 -0.612372" mesh="left_foot_heel_collision" material="left_foot_heel_collision_material"/>
+                        <!-- Part mirrorheel_04b -->
+                        <geom type="mesh" class="visual" pos="0 -0.0349 0.0432218" quat="1.11022e-16 1.01544e-17 -0.5 -0.866025" mesh="mirrorheel_04b" material="mirrorheel_04b_material"/>
+                        <!-- Part mirrorheel_04b_2 -->
+                        <geom type="mesh" class="visual" pos="0 -0.035 0.0432218" quat="0 -9.87963e-18 0.5 0.866025" mesh="mirrorheel_04b__2" material="mirrorheel_04b__2_material"/>
+                        <!-- Part mirrorheel_04b_3 -->
+                        <geom type="mesh" class="visual" pos="0 -0.035 0.0432218" quat="0 0 -0.5 -0.866025" mesh="mirrorheel_04b__3" material="mirrorheel_04b__3_material"/>
+                        <!-- Frame left_foot -->
+                        <site group="3" name="left_foot" pos="2.77556e-17 -0.0329533 0.02085" quat="0.612372 -0.353553 -0.353553 -0.612372"/>
+                        <!-- Link mirrortoes_04b -->
+                        <body name="mirrortoes_04b" pos="-0.0345 -0.0511058 0.089291" quat="0.683013 0.183013 -0.683013 -0.183013">
+                          <!-- Joint from mirrorheel_04b to mirrortoes_04b -->
+                          <joint axis="0 0 1" name="left_toe" type="hinge" class="cybergear"/>
+                          <inertial pos="0.0273127 -0.00913028 -0.0303434" mass="0.0758634" fullinertia="4.76774e-05 7.74597e-05 4.4209e-05 8.98816e-06 -4.76652e-06 1.14421e-06"/>
+                          <!-- Part mirrortoes_04b -->
+                          <geom type="mesh" class="visual" pos="-0.048 -0.009 -0.0345" quat="0.5 -0.5 -0.5 -0.5" mesh="mirrortoes_04b" material="mirrortoes_04b_material"/>
+                          <!-- Part mirrortoes_04b_2 -->
+                          <geom type="mesh" class="visual" pos="-0.048 -0.009 -0.0344" quat="0.5 -0.5 -0.5 -0.5" mesh="mirrortoes_04b__2" material="mirrortoes_04b__2_material"/>
+                          <!-- Part left_foot_toe_collision -->
+                          <geom type="mesh" class="visual" pos="-0.0863267 -0.021 0.0566129" quat="0.707107 -0.707107 0 -7.33992e-18" mesh="left_foot_toe_collision" material="left_foot_toe_collision_material"/>
+                          <geom type="mesh" class="collision" pos="-0.0863267 -0.021 0.0566129" quat="0.707107 -0.707107 0 -7.33992e-18" mesh="left_foot_toe_collision" material="left_foot_toe_collision_material"/>
+                          <!-- Part mirrortoes_04b_3 -->
+                          <geom type="mesh" class="visual" pos="-0.048 -0.009 -0.0343" quat="0.5 -0.5 -0.5 -0.5" mesh="mirrortoes_04b__3" material="mirrortoes_04b__3_material"/>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <!-- Link hl_shoulder_yaw_03a -->
+      <body name="hl_shoulder_yaw_03a" pos="0.00694291 -0.150862 -0.0258308" quat="0.527261 -0.471164 -0.527261 -0.471164">
+        <!-- Joint from thorax_02d to hl_shoulder_yaw_03a -->
+        <joint axis="0 0 1" name="right_shoulder_pitch" type="hinge" class="cybergear"/>
+        <inertial pos="-0.000431902 -0.000146853 -0.0273848" mass="0.176309" fullinertia="0.000130995 0.000105595 0.000149717 4.81528e-07 5.7942e-07 2.61245e-07"/>
+        <!-- Part hl_shoulder_pitch_roller_clip_03a -->
+        <geom type="mesh" class="visual" pos="-1.35174e-05 7.80626e-17 -0.0214" quat="0.707107 -8.20755e-17 -3.33067e-16 -0.707107" mesh="hl_shoulder_pitch_roller_clip_03a" material="hl_shoulder_pitch_roller_clip_03a_material"/>
+        <!-- Part hl_shoulder_pitch_roller_clip_03a_2 -->
+        <geom type="mesh" class="visual" pos="-1.35174e-05 -0.0002 -0.0214" quat="0.707107 -4.50264e-16 3.60822e-16 -0.707107" mesh="hl_shoulder_pitch_roller_clip_03a__2" material="hl_shoulder_pitch_roller_clip_03a__2_material"/>
+        <!-- Part hl_shoulder_yaw_03a -->
+        <geom type="mesh" class="visual" pos="0.012 0 0" quat="0.707107 -0.707107 0 -9.24997e-32" mesh="hl_shoulder_yaw_03a" material="hl_shoulder_yaw_03a_material"/>
+        <!-- Part hl_shoulder_pitch_roller_clip_03a_3 -->
+        <geom type="mesh" class="visual" pos="-1.35174e-05 -3.46945e-18 -0.0214" quat="0.707107 -4.41086e-17 -2.22045e-16 -0.707107" mesh="hl_shoulder_pitch_roller_clip_03a__3" material="hl_shoulder_pitch_roller_clip_03a__3_material"/>
+        <!-- Part hl_shoulder_pitch_roller_clip_03a_4 -->
+        <geom type="mesh" class="visual" pos="-1.35174e-05 0.0002 -0.0214" quat="0.707107 -3.43292e-17 -6.93889e-17 -0.707107" mesh="hl_shoulder_pitch_roller_clip_03a__4" material="hl_shoulder_pitch_roller_clip_03a__4_material"/>
+        <!-- Link hl_humeral_03a -->
+        <body name="hl_humeral_03a" pos="-1.35174e-05 0.04015 -0.0556" quat="0.707107 -0.707107 1.11022e-15 -2.81686e-16">
+          <!-- Joint from hl_shoulder_yaw_03a to hl_humeral_03a -->
+          <joint axis="0 0 1" name="right_shoulder_roll" type="hinge" class="cybergear"/>
+          <inertial pos="-0.0714633 0.00178243 -0.0373091" mass="0.332565" fullinertia="0.000218226 0.000540858 0.000482877 -1.6259e-05 6.79165e-05 5.42911e-06"/>
+          <!-- Part hl_humeral_03a -->
+          <geom type="mesh" class="visual" pos="-1.11022e-15 -5e-05 -0.0402" quat="1 -0 1.11022e-16 1.66533e-16" mesh="hl_humeral_03a" material="hl_humeral_03a_material"/>
+          <!-- Part hl_humeral_03a_2 -->
+          <geom type="mesh" class="visual" pos="0 0 -0.0402" quat="1 0 -0 -7.88861e-31" mesh="hl_humeral_03a__2" material="hl_humeral_03a__2_material"/>
+          <!-- Part hl_humeral_03a_3 -->
+          <geom type="mesh" class="visual" pos="-1.38778e-17 -0.0001 -0.0402" quat="1 -0 -0 7.72193e-19" mesh="hl_humeral_03a__3" material="hl_humeral_03a__3_material"/>
+          <!-- Link hl_hum_elbow_03 -->
+          <body name="hl_hum_elbow_03" pos="-0.1438 -5e-05 -0.0407565" quat="0.00266361 0.707102 0.00266361 0.707102">
+            <!-- Joint from hl_humeral_03a to hl_hum_elbow_03 -->
+            <joint axis="0 0 1" name="right_elbow_yaw" type="hinge" class="cybergear"/>
+            <inertial pos="0.00122377 -0.0029525 -0.0191756" mass="0.130391" fullinertia="0.000209536 0.000249745 9.75661e-05 8.24276e-06 7.13689e-05 -1.28557e-05"/>
+            <!-- Part hl_hum_elbow_03 -->
+            <geom type="mesh" class="visual" pos="0.012 2.77556e-17 0.0464" quat="0.707107 -0.707107 0 3.81844e-18" mesh="hl_hum_elbow_03" material="hl_hum_elbow_03_material"/>
+            <!-- Part hl_hum_elbow_03_2 -->
+            <geom type="mesh" class="visual" pos="0.012 2.77556e-17 0.0464" quat="0.707107 -0.707107 0 -1.00332e-17" mesh="hl_hum_elbow_03__2" material="hl_hum_elbow_03__2_material"/>
+            <!-- Part hl_hum_elbow_03_3 -->
+            <geom type="mesh" class="visual" pos="0.012 2.77556e-17 0.0464" quat="0.707107 -0.707107 0 3.81844e-18" mesh="hl_hum_elbow_03__3" material="hl_hum_elbow_03__3_material"/>
+            <!-- Link hl_prox_forearm_03e -->
+            <body name="hl_prox_forearm_03e" pos="0.0382 -0.0324 -0.056" quat="0.5 0.5 -0.5 0.5">
+              <!-- Joint from hl_hum_elbow_03 to hl_prox_forearm_03e -->
+              <joint axis="0 0 1" name="right_elbow_pitch" type="hinge" class="cybergear"/>
+              <inertial pos="-0.0388066 0.00093388 -0.0356244" mass="0.116863" fullinertia="8.81194e-05 0.000105215 9.20621e-05 1.73856e-06 5.87523e-06 -3.50772e-06"/>
+              <!-- Part hl_prox_forearm_03e -->
+              <geom type="mesh" class="visual" pos="-2.77556e-17 1.73472e-17 -0.0343" quat="1.73472e-16 -1 2.16451e-16 5.18554e-16" mesh="hl_prox_forearm_03e" material="hl_prox_forearm_03e_material"/>
+              <!-- Part hl_prox_forearm_03e_2 -->
+              <geom type="mesh" class="visual" pos="8.32667e-17 1.38778e-17 -0.0343" quat="1.73472e-16 -1 2.16451e-16 4.58982e-16" mesh="hl_prox_forearm_03e__2" material="hl_prox_forearm_03e__2_material"/>
+              <!-- Part hl_prox_forearm_03e_3 -->
+              <geom type="mesh" class="visual" pos="8.32667e-17 6.93889e-18 -0.0342" quat="1.73472e-16 -1 2.14497e-16 5.18554e-16" mesh="hl_prox_forearm_03e__3" material="hl_prox_forearm_03e__3_material"/>
+              <!-- Part hl_prox_forearm_03e_4 -->
+              <geom type="mesh" class="visual" pos="2.77556e-17 0 -0.0344" quat="0 1 0 0" mesh="hl_prox_forearm_03e__4" material="hl_prox_forearm_03e__4_material"/>
+              <!-- Link mirrorhl_fore_arm_02c_part_01j -->
+              <body name="mirrorhl_fore_arm_02c_part_01j" pos="-0.06438 -2.77556e-17 -0.0343" quat="0.5 0.5 0.5 0.5">
+                <!-- Joint from hl_prox_forearm_03e to mirrorhl_fore_arm_02c_part_01j -->
+                <joint axis="0 0 1" name="right_forearm_yaw" type="hinge" class="cybergear"/>
+                <inertial pos="-0.00140023 -0.00320089 -0.0425478" mass="0.0971947" fullinertia="8.35223e-05 7.77236e-05 6.6518e-05 -1.88484e-07 -1.65232e-06 -2.93001e-06"/>
+                <!-- Part mirrorhl_fore_arm_02c_part_01j -->
+                <geom type="mesh" class="visual" pos="-0.0491308 -0.110857 0.285457" quat="0.759405 -0.145623 -0.622766 -0.119421" mesh="mirrorhl_fore_arm_02c_part_01j" material="mirrorhl_fore_arm_02c_part_01j_material"/>
+                <!-- Part mirrorhl_fore_arm_02c_part_01j_2 -->
+                <geom type="mesh" class="visual" pos="-0.049131 -0.110858 0.285457" quat="0.759405 -0.145623 -0.622766 -0.119421" mesh="mirrorhl_fore_arm_02c_part_01j__2" material="mirrorhl_fore_arm_02c_part_01j__2_material"/>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <!-- Link mirrorhl_shoulder_yaw_03a -->
+      <body name="mirrorhl_shoulder_yaw_03a" pos="0.00701727 0.175035 -0.0258308" quat="0.0343469 -0.0343469 -0.706272 0.706272">
+        <!-- Joint from thorax_02d to mirrorhl_shoulder_yaw_03a -->
+        <joint axis="0 0 1" name="left_shoulder_pitch" type="hinge" class="cybergear"/>
+        <inertial pos="0.000146801 0.000431893 -0.00318482" mass="0.176309" fullinertia="0.000105595 0.000130995 0.000149716 4.81482e-07 -2.61516e-07 -5.79432e-07"/>
+        <!-- Part mirrorhl_shoulder_yaw_03a -->
+        <geom type="mesh" class="visual" pos="-5.55112e-16 -0.012 0.0242" quat="0.5 -0.5 0.5 -0.5" mesh="mirrorhl_shoulder_yaw_03a" material="mirrorhl_shoulder_yaw_03a_material"/>
+        <!-- Part mirrorhl_shoulder_pitch_roller_clip_03a -->
+        <geom type="mesh" class="visual" pos="1.21431e-17 1.35174e-05 0.0028" quat="3.27847e-18 -1 2.34189e-14 -3.44338e-17" mesh="mirrorhl_shoulder_pitch_roller_clip_03a" material="mirrorhl_shoulder_pitch_roller_clip_03a_material"/>
+        <!-- Part mirrorhl_shoulder_pitch_roller_clip_03a_2 -->
+        <geom type="mesh" class="visual" pos="5.37764e-17 1.35174e-05 0.0028" quat="1.26277e-16 1 -2.34262e-14 -4.49209e-17" mesh="mirrorhl_shoulder_pitch_roller_clip_03a__2" material="mirrorhl_shoulder_pitch_roller_clip_03a__2_material"/>
+        <!-- Part mirrorhl_shoulder_pitch_roller_clip_03a_3 -->
+        <geom type="mesh" class="visual" pos="-0.0002 1.35174e-05 0.0028" quat="2.50707e-16 1 -2.35355e-14 -3.41135e-17" mesh="mirrorhl_shoulder_pitch_roller_clip_03a__3" material="mirrorhl_shoulder_pitch_roller_clip_03a__3_material"/>
+        <!-- Part mirrorhl_shoulder_pitch_roller_clip_03a_4 -->
+        <geom type="mesh" class="visual" pos="0.0002 1.35174e-05 0.0028" quat="2.51848e-16 1 -2.32591e-14 -4.03434e-17" mesh="mirrorhl_shoulder_pitch_roller_clip_03a__4" material="mirrorhl_shoulder_pitch_roller_clip_03a__4_material"/>
+        <!-- Link mirrorhl_humeral_03a -->
+        <body name="mirrorhl_humeral_03a" pos="-0.0403 1.35174e-05 -0.0314" quat="0.5 -0.5 0.5 -0.5">
+          <!-- Joint from mirrorhl_shoulder_yaw_03a to mirrorhl_humeral_03a -->
+          <joint axis="0 0 1" name="left_shoulder_roll" type="hinge" class="cybergear"/>
+          <inertial pos="-0.0714631 0.00181679 0.0374596" mass="0.332573" fullinertia="0.000218624 0.000540855 0.000483269 -1.62647e-05 -6.79083e-05 -5.43313e-06"/>
+          <!-- Part mirrorhl_humeral_03a -->
+          <geom type="mesh" class="visual" pos="3.46945e-18 -5e-05 0.04035" quat="1 -2.86498e-16 0 -1.8735e-16" mesh="mirrorhl_humeral_03a" material="mirrorhl_humeral_03a_material"/>
+          <!-- Part mirrorhl_humeral_03a_2 -->
+          <geom type="mesh" class="visual" pos="3.46945e-18 0 0.04035" quat="1 -1.8007e-16 -2.22045e-16 -3.33067e-16" mesh="mirrorhl_humeral_03a__2" material="mirrorhl_humeral_03a__2_material"/>
+          <!-- Part mirrorhl_humeral_03a_3 -->
+          <geom type="mesh" class="visual" pos="3.46945e-18 5.55112e-17 0.04035" quat="1 -2.86498e-16 -2.22045e-16 -1.80411e-16" mesh="mirrorhl_humeral_03a__3" material="mirrorhl_humeral_03a__3_material"/>
+          <!-- Link mirrorhl_hum_elbow_03 -->
+          <body name="mirrorhl_hum_elbow_03" pos="-0.1438 -5e-05 0.0409065" quat="0.707102 -0.00266361 0.707102 -0.00266361">
+            <!-- Joint from mirrorhl_humeral_03a to mirrorhl_hum_elbow_03 -->
+            <joint axis="0 0 1" name="left_elbow_yaw" type="hinge" class="cybergear"/>
+            <inertial pos="0.00122338 0.00295337 -0.0191753" mass="0.130399" fullinertia="0.000209541 0.00024975 9.7572e-05 -8.24153e-06 7.13706e-05 1.28552e-05"/>
+            <!-- Part mirrorhl_hum_elbow_03 -->
+            <geom type="mesh" class="visual" pos="0.012 0 0.0464" quat="0.707107 -0.707107 -0 -9.39974e-18" mesh="mirrorhl_hum_elbow_03" material="mirrorhl_hum_elbow_03_material"/>
+            <!-- Part mirrorhl_hum_elbow_03_2 -->
+            <geom type="mesh" class="visual" pos="0.012 0 0.0464" quat="0.707107 -0.707107 -0 -9.39974e-18" mesh="mirrorhl_hum_elbow_03__2" material="mirrorhl_hum_elbow_03__2_material"/>
+            <!-- Part mirrorhl_hum_elbow_03_3 -->
+            <geom type="mesh" class="visual" pos="0.012 0 0.0464" quat="0.707107 -0.707107 -0 2.43719e-17" mesh="mirrorhl_hum_elbow_03__3" material="mirrorhl_hum_elbow_03__3_material"/>
+            <!-- Link mirrorhl_prox_forearm_03e -->
+            <body name="mirrorhl_prox_forearm_03e" pos="0.0382 0.0324 -0.056" quat="0.5 -0.5 -0.5 -0.5">
+              <!-- Joint from mirrorhl_hum_elbow_03 to mirrorhl_prox_forearm_03e -->
+              <joint axis="0 0 1" name="left_elbow_pitch" type="hinge" class="cybergear"/>
+              <inertial pos="-0.0388065 -0.000933941 -0.0356243" mass="0.116864" fullinertia="8.812e-05 0.000105215 9.20626e-05 -1.7386e-06 5.87522e-06 3.50769e-06"/>
+              <!-- Part mirrorhl_prox_forearm_03e -->
+              <geom type="mesh" class="visual" pos="0 4.51028e-17 -0.0343" quat="1 -6.30478e-17 0 0" mesh="mirrorhl_prox_forearm_03e" material="mirrorhl_prox_forearm_03e_material"/>
+              <!-- Part mirrorhl_prox_forearm_03e_2 -->
+              <geom type="mesh" class="visual" pos="5.55112e-17 4.85723e-17 -0.0342" quat="1 -5.49313e-17 3.33067e-16 1.11022e-16" mesh="mirrorhl_prox_forearm_03e__2" material="mirrorhl_prox_forearm_03e__2_material"/>
+              <!-- Part mirrorhl_prox_forearm_03e_3 -->
+              <geom type="mesh" class="visual" pos="2.77556e-17 -5.20417e-17 -0.0343" quat="1 -6.30478e-17 0 0" mesh="mirrorhl_prox_forearm_03e__3" material="mirrorhl_prox_forearm_03e__3_material"/>
+              <!-- Part mirrorhl_prox_forearm_03e_4 -->
+              <geom type="mesh" class="visual" pos="0 0 -0.0344" quat="1 -0 0 0" mesh="mirrorhl_prox_forearm_03e__4" material="mirrorhl_prox_forearm_03e__4_material"/>
+              <!-- Link hl_fore_arm_02c_part_01j -->
+              <body name="hl_fore_arm_02c_part_01j" pos="-0.06438 -4.85723e-17 -0.0343" quat="0.5 -0.5 0.5 -0.5">
+                <!-- Joint from mirrorhl_prox_forearm_03e to hl_fore_arm_02c_part_01j -->
+                <joint axis="0 0 1" name="left_forearm_yaw" type="hinge" class="cybergear"/>
+                <inertial pos="-0.00140027 0.00320085 -0.0425478" mass="0.0971945" fullinertia="8.35224e-05 7.7724e-05 6.65178e-05 1.88422e-07 -1.65249e-06 2.92982e-06"/>
+                <!-- Part hl_fore_arm_02c_part_01j -->
+                <geom type="mesh" class="visual" pos="-0.049131 0.110858 0.285457" quat="0.145623 -0.759405 -0.119421 -0.622766" mesh="hl_fore_arm_02c_part_01j" material="hl_fore_arm_02c_part_01j_material"/>
+                <!-- Part hl_fore_arm_02c_part_01j_2 -->
+                <geom type="mesh" class="visual" pos="-0.0491308 0.110857 0.285457" quat="0.145623 -0.759405 -0.119421 -0.622766" mesh="hl_fore_arm_02c_part_01j__2" material="hl_fore_arm_02c_part_01j__2_material"/>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <asset>
+    <mesh file="mirrorsea_humeral_01ka_femoral.stl"/>
+    <mesh file="sea_humeral_01ka_femoral.stl"/>
+    <mesh file="hl_shoulder_pitch_roller_clip_03a__2.stl"/>
+    <mesh file="mirrorhl_hum_elbow_03__2.stl"/>
+    <mesh file="mirrorhl_prox_forearm_03e.stl"/>
+    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a__2.stl"/>
+    <mesh file="sea_spring_mount_05i_small_knee.stl"/>
+    <mesh file="sea_ankle_02e.stl"/>
+    <mesh file="head_mock_up_01g.stl"/>
+    <mesh file="sea_spring_mount_05i_ankle__2.stl"/>
+    <mesh file="mirrorhl_humeral_03a__3.stl"/>
+    <mesh file="mirrorm5_80_pulley_03h_52.stl"/>
+    <mesh file="hl_shoulder_pitch_roller_clip_03a.stl"/>
+    <mesh file="mirrorheel_04b__2.stl"/>
+    <mesh file="hl_shoulder_pitch_roller_clip_03a__4.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_ankle.stl"/>
+    <mesh file="mirrorhl_prox_forearm_03e__4.stl"/>
+    <mesh file="mirrormantle_01f.stl"/>
+    <mesh file="hl_humeral_03a__3.stl"/>
+    <mesh file="left_foot_toe_collision.stl"/>
+    <mesh file="mirrortoes_04b__2.stl"/>
+    <mesh file="chest_03.stl"/>
+    <mesh file="sea_spring_mount_05i_ankle.stl"/>
+    <mesh file="mirrorsea_ankle_02e.stl"/>
+    <mesh file="mirrorhl_humeral_03a__2.stl"/>
+    <mesh file="mirrorhl_hum_elbow_03__3.stl"/>
+    <mesh file="cybergear_02b.stl"/>
+    <mesh file="heel_04b__2.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_ankle__2.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_hip_yaw__2.stl"/>
+    <mesh file="right_foot_toe_collision.stl"/>
+    <mesh file="mirrorhl_prox_forearm_03e__2.stl"/>
+    <mesh file="hl_hum_elbow_03__2.stl"/>
+    <mesh file="sea_spring_mount_05i_hip_yaw.stl"/>
+    <mesh file="mirrorheel_04b__3.stl"/>
+    <mesh file="torso_pitch_yaw_03.stl"/>
+    <mesh file="mirrorchest_03.stl"/>
+    <mesh file="right_foot_heel_collision.stl"/>
+    <mesh file="hl_prox_forearm_03e__2.stl"/>
+    <mesh file="hl_fore_arm_02c_part_01j.stl"/>
+    <mesh file="waist_04d.stl"/>
+    <mesh file="mirrorhl_fore_arm_02c_part_01j.stl"/>
+    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_arm_rotation.stl"/>
+    <mesh file="toes_04b__3.stl"/>
+    <mesh file="mirrorhl_shoulder_yaw_03a.stl"/>
+    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a__3.stl"/>
+    <mesh file="heel_04b__3.stl"/>
+    <mesh file="hl_humeral_03a__2.stl"/>
+    <mesh file="mirrortoes_04b.stl"/>
+    <mesh file="mirrorhl_hum_elbow_03.stl"/>
+    <mesh file="mirrortoes_04b__3.stl"/>
+    <mesh file="heel_04b.stl"/>
+    <mesh file="left_foot_heel_collision.stl"/>
+    <mesh file="hl_humeral_03a.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_small_knee.stl"/>
+    <mesh file="mirrorhl_prox_forearm_03e__3.stl"/>
+    <mesh file="mirrorhl_fore_arm_02c_part_01j__2.stl"/>
+    <mesh file="sea_spring_mount_05i_arm_rotation.stl"/>
+    <mesh file="hl_prox_forearm_03e__4.stl"/>
+    <mesh file="thorax_02d.stl"/>
+    <mesh file="m5_80_pulley_03h_52.stl"/>
+    <mesh file="hl_hum_elbow_03.stl"/>
+    <mesh file="mantle_01f.stl"/>
+    <mesh file="hl_fore_arm_02c_part_01j__2.stl"/>
+    <mesh file="hl_prox_forearm_03e__3.stl"/>
+    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a__4.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_hip_yaw.stl"/>
+    <mesh file="hl_hum_elbow_03__3.stl"/>
+    <mesh file="toes_04b__2.stl"/>
+    <mesh file="hl_shoulder_pitch_roller_clip_03a__3.stl"/>
+    <mesh file="hl_prox_forearm_03e.stl"/>
+    <mesh file="mirrorheel_04b.stl"/>
+    <mesh file="hl_shoulder_yaw_03a.stl"/>
+    <mesh file="mirrorhl_humeral_03a.stl"/>
+    <mesh file="pelvis_08.stl"/>
+    <mesh file="sea_spring_mount_05i_hip_yaw__2.stl"/>
+    <mesh file="toes_04b.stl"/>
+    <material name="mirrorchest_03_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="head_mock_up_01g_material" rgba="0.615686 0.811765 0.929412 1"/>
+    <material name="thorax_02d_material" rgba="0.768627 0.886275 0.952941 1"/>
+    <material name="chest_03_material" rgba="0.231373 0.380392 0.705882 1"/>
+    <material name="mirrormantle_01f_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="mantle_01f_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="waist_04d_material" rgba="0.615686 0.811765 0.929412 1"/>
+    <material name="torso_pitch_yaw_03_material" rgba="0.917647 0.917647 0.917647 1"/>
+    <material name="pelvis_08_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="m5_80_pulley_03h_52_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="sea_spring_mount_05i_hip_yaw_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="cybergear_02b_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="sea_spring_mount_05i_hip_yaw__2_material" rgba="0.917647 0.917647 0.917647 1"/>
+    <material name="sea_humeral_01ka_femoral_material" rgba="0.917647 0.917647 0.917647 1"/>
+    <material name="sea_spring_mount_05i_arm_rotation_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="sea_ankle_02e_material" rgba="0.231373 0.380392 0.705882 1"/>
+    <material name="sea_spring_mount_05i_small_knee_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="sea_spring_mount_05i_ankle_material" rgba="0.768627 0.886275 0.952941 1"/>
+    <material name="sea_spring_mount_05i_ankle__2_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="heel_04b_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="heel_04b__2_material" rgba="0.231373 0.380392 0.705882 1"/>
+    <material name="right_foot_heel_collision_material" rgba="0.615686 0.811765 0.929412 1"/>
+    <material name="heel_04b__3_material" rgba="0.615686 0.811765 0.929412 1"/>
+    <material name="right_foot_toe_collision_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="toes_04b_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="toes_04b__2_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="toes_04b__3_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="mirrorm5_80_pulley_03h_52_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="mirrorsea_spring_mount_05i_hip_yaw_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="mirrorsea_spring_mount_05i_hip_yaw__2_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="mirrorsea_spring_mount_05i_arm_rotation_material" rgba="0.917647 0.917647 0.917647 1"/>
+    <material name="mirrorsea_humeral_01ka_femoral_material" rgba="0.917647 0.917647 0.917647 1"/>
+    <material name="mirrorsea_spring_mount_05i_small_knee_material" rgba="0.768627 0.886275 0.952941 1"/>
+    <material name="mirrorsea_ankle_02e_material" rgba="0.231373 0.380392 0.705882 1"/>
+    <material name="mirrorsea_spring_mount_05i_ankle_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="mirrorsea_spring_mount_05i_ankle__2_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="left_foot_heel_collision_material" rgba="0.615686 0.811765 0.929412 1"/>
+    <material name="mirrorheel_04b_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="mirrorheel_04b__2_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="mirrorheel_04b__3_material" rgba="0.615686 0.811765 0.929412 1"/>
+    <material name="mirrortoes_04b_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="mirrortoes_04b__2_material" rgba="0.768627 0.886275 0.952941 1"/>
+    <material name="left_foot_toe_collision_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="mirrortoes_04b__3_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="hl_shoulder_pitch_roller_clip_03a_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="hl_shoulder_pitch_roller_clip_03a__2_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="hl_shoulder_yaw_03a_material" rgba="0.615686 0.811765 0.929412 1"/>
+    <material name="hl_shoulder_pitch_roller_clip_03a__3_material" rgba="0.768627 0.886275 0.952941 1"/>
+    <material name="hl_shoulder_pitch_roller_clip_03a__4_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="hl_humeral_03a_material" rgba="0.615686 0.811765 0.929412 1"/>
+    <material name="hl_humeral_03a__2_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="hl_humeral_03a__3_material" rgba="0.231373 0.380392 0.705882 1"/>
+    <material name="hl_hum_elbow_03_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="hl_hum_elbow_03__2_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="hl_hum_elbow_03__3_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="hl_prox_forearm_03e_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="hl_prox_forearm_03e__2_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="hl_prox_forearm_03e__3_material" rgba="0.615686 0.811765 0.929412 1"/>
+    <material name="hl_prox_forearm_03e__4_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="mirrorhl_fore_arm_02c_part_01j_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="mirrorhl_fore_arm_02c_part_01j__2_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="mirrorhl_shoulder_yaw_03a_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="mirrorhl_shoulder_pitch_roller_clip_03a_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="mirrorhl_shoulder_pitch_roller_clip_03a__2_material" rgba="0.231373 0.380392 0.705882 1"/>
+    <material name="mirrorhl_shoulder_pitch_roller_clip_03a__3_material" rgba="0.768627 0.886275 0.952941 1"/>
+    <material name="mirrorhl_shoulder_pitch_roller_clip_03a__4_material" rgba="0.917647 0.917647 0.917647 1"/>
+    <material name="mirrorhl_humeral_03a_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="mirrorhl_humeral_03a__2_material" rgba="0.498039 0.498039 0.498039 1"/>
+    <material name="mirrorhl_humeral_03a__3_material" rgba="0.980392 0.713725 0.00392157 1"/>
+    <material name="mirrorhl_hum_elbow_03_material" rgba="0.647059 0.647059 0.647059 1"/>
+    <material name="mirrorhl_hum_elbow_03__2_material" rgba="0.768627 0.886275 0.952941 1"/>
+    <material name="mirrorhl_hum_elbow_03__3_material" rgba="0.231373 0.380392 0.705882 1"/>
+    <material name="mirrorhl_prox_forearm_03e_material" rgba="0.917647 0.917647 0.917647 1"/>
+    <material name="mirrorhl_prox_forearm_03e__2_material" rgba="0.972549 0.529412 0.00392157 1"/>
+    <material name="mirrorhl_prox_forearm_03e__3_material" rgba="0.231373 0.380392 0.705882 1"/>
+    <material name="mirrorhl_prox_forearm_03e__4_material" rgba="0.768627 0.886275 0.952941 1"/>
+    <material name="hl_fore_arm_02c_part_01j_material" rgba="0.231373 0.380392 0.705882 1"/>
+    <material name="hl_fore_arm_02c_part_01j__2_material" rgba="0.647059 0.647059 0.647059 1"/>
+  </asset>
+  <actuator>
+    <position class="cybergear" name="torso_yaw" joint="torso_yaw"/>
+    <position class="cybergear" name="torso_roll" joint="torso_roll"/>
+    <position class="cybergear" name="torso_pitch" joint="torso_pitch"/>
+    <position class="cybergear" name="right_hip_pitch" joint="right_hip_pitch"/>
+    <position class="cybergear" name="right_hip_roll" joint="right_hip_roll"/>
+    <position class="cybergear" name="right_hip_yaw" joint="right_hip_yaw"/>
+    <position class="cybergear" name="right_knee" joint="right_knee"/>
+    <position class="cybergear" name="right_ankle_pitch" joint="right_ankle_pitch"/>
+    <position class="cybergear" name="right_ankle_roll" joint="right_ankle_roll"/>
+    <position class="cybergear" name="right_toe" joint="right_toe"/>
+    <position class="cybergear" name="left_hip_pitch" joint="left_hip_pitch"/>
+    <position class="cybergear" name="left_hip_roll" joint="left_hip_roll"/>
+    <position class="cybergear" name="left_hip_yaw" joint="left_hip_yaw"/>
+    <position class="cybergear" name="left_knee" joint="left_knee"/>
+    <position class="cybergear" name="left_ankle_pitch" joint="left_ankle_pitch"/>
+    <position class="cybergear" name="left_ankle_roll" joint="left_ankle_roll"/>
+    <position class="cybergear" name="left_toe" joint="left_toe"/>
+    <position class="cybergear" name="right_shoulder_pitch" joint="right_shoulder_pitch"/>
+    <position class="cybergear" name="right_shoulder_roll" joint="right_shoulder_roll"/>
+    <position class="cybergear" name="right_elbow_yaw" joint="right_elbow_yaw"/>
+    <position class="cybergear" name="right_elbow_pitch" joint="right_elbow_pitch"/>
+    <position class="cybergear" name="right_forearm_yaw" joint="right_forearm_yaw"/>
+    <position class="cybergear" name="left_shoulder_pitch" joint="left_shoulder_pitch"/>
+    <position class="cybergear" name="left_shoulder_roll" joint="left_shoulder_roll"/>
+    <position class="cybergear" name="left_elbow_yaw" joint="left_elbow_yaw"/>
+    <position class="cybergear" name="left_elbow_pitch" joint="left_elbow_pitch"/>
+    <position class="cybergear" name="left_forearm_yaw" joint="left_forearm_yaw"/>
+  </actuator>
+  <equality/>
+</mujoco>
