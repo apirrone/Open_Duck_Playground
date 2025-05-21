@@ -1,236 +1,266 @@
 import mujoco
 import pickle
 import numpy as np
-
+import mujoco
 import mujoco.viewer
 import time
 import argparse
-
 from playground.common.onnx_infer import OnnxInfer
 from playground.common.poly_reference_motion_numpy import PolyReferenceMotion
+from playground.common.utils import LowPassActionFilter
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-o", "--onnx_model_path", type=str, required=True)
-parser.add_argument("-k", action="store_true", default=False)
-# parser.add_argument("--reference_data", type=str, default="playground/open_duck_mini_v2/data/polynomial_coefficients.pkl")
-args = parser.parse_args()
+from playground.new_hopejr.mujoco_infer_base import MJInferBase
 
-NUM_DOFS = 12
-
-if args.k:
-    import pygame
-
-    pygame.init()
-    # open a blank pygame window
-    screen = pygame.display.set_mode((100, 100))
-    pygame.display.set_caption("Press arrow keys to move robot")
-
-# Params
-linearVelocityScale = 1.0
-angularVelocityScale = 1.0
-dof_pos_scale = 1.0
-dof_vel_scale = 0.05
-action_scale = 0.25
-
-# PRM = PolyReferenceMotion(args.reference_data)
-
-init_pos = np.array(
-    [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-
-    ]
-)
-
-model = mujoco.MjModel.from_xml_path(
-    "playground/new_hopejr/xmls/scene.xml"
-)
-model.opt.timestep = 0.002
-data = mujoco.MjData(model)
-mujoco.mj_step(model, data)
-
-policy = OnnxInfer(args.onnx_model_path, awd=True)
-
-COMMANDS_RANGE_X = [-0.1, 0.15]
-COMMANDS_RANGE_Y = [-0.2, 0.2]
-COMMANDS_RANGE_THETA = [-0.5, 0.5] # [-1.0, 1.0]
-
-last_action = np.zeros(NUM_DOFS)
-last_last_action = np.zeros(NUM_DOFS)
-last_last_last_action = np.zeros(NUM_DOFS)
-commands = [0.0, 0.0, 0.0]
-decimation = 10
-data.qpos[3 : 3 + 4] = [1, 0, 0.0, 0]
-
-data.qpos[7:] = init_pos
-data.ctrl[:] = init_pos
+USE_MOTOR_SPEED_LIMITS = False
 
 
-gyro_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, "gyro")
-gyro_dimensions = 3
-linvel_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, "local_linvel")
-linvel_dimensions = 3
+class MjInfer(MJInferBase):
+    def __init__(
+        self, model_path: str, reference_data: str, onnx_model_path: str, standing: bool
+    ):
+        super().__init__(model_path)
 
+        self.standing = standing
+        self.head_control_mode = self.standing
 
-imu_site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "imu")
+        # Params
+        self.linearVelocityScale = 1.0
+        self.angularVelocityScale = 1.0
+        self.dof_pos_scale = 1.0
+        self.dof_vel_scale = 0.05
+        self.action_scale = 0.25
 
-# imitation_i = 0
+        self.action_filter = LowPassActionFilter(50, cutoff_frequency=37.5)
 
+        if not self.standing:
+            self.PRM = PolyReferenceMotion(reference_data)
 
-def get_sensor(model, data, name, dimensions):
-    i = model.sensor_name2id(name)
-    return data.sensordata[i : i + dimensions]
+        self.policy = OnnxInfer(onnx_model_path, awd=True)
 
+        self.COMMANDS_RANGE_X = [-0.15, 0.15]
+        self.COMMANDS_RANGE_Y = [-0.2, 0.2]
+        self.COMMANDS_RANGE_THETA = [-1.0, 1.0]  # [-1.0, 1.0]
 
-def get_gyro(data):
-    return data.sensordata[gyro_id : gyro_id + gyro_dimensions]
+        self.NECK_PITCH_RANGE = [-0.34, 1.1]
+        self.HEAD_PITCH_RANGE = [-0.78, 0.78]
+        self.HEAD_YAW_RANGE = [-1.5, 1.5]
+        self.HEAD_ROLL_RANGE = [-0.5, 0.5]
 
+        self.last_action = np.zeros(self.num_dofs)
+        self.last_last_action = np.zeros(self.num_dofs)
+        self.last_last_last_action = np.zeros(self.num_dofs)
+        self.commands = [0.0, 0.0, 0.0]#, 0.0, 0.0, 0.0, 0.0]
 
-def get_linvel(data):
-    return data.sensordata[linvel_id : linvel_id + linvel_dimensions]
+        self.imitation_i = 0
+        self.imitation_phase = np.array([0, 0])
+        self.saved_obs = []
 
+        self.max_motor_velocity = 5.24  # rad/s
 
-def get_gravity(data):
-    return data.site_xmat[imu_site_id].reshape((3, 3)).T @ np.array([0, 0, -1])
+        self.phase_frequency_factor = 1.0
 
+        print(f"joint names: {self.joint_names}")
+        print(f"actuator names: {self.actuator_names}")
+        print(f"backlash joint names: {self.backlash_joint_names}")
+        # print(f"actual joints idx: {self.get_actual_joints_idx()}")
 
-def check_contact(data, model, body1_name, body2_name):
-    body1_id = data.body(body1_name).id
-    body2_id = data.body(body2_name).id
+    def get_obs(
+        self,
+        data,
+        command,  # , qvel_history, qpos_error_history, gravity_history
+    ):
+        gyro = self.get_gyro(data)
+        accelerometer = self.get_accelerometer(data)
+        accelerometer[0] += 1.3
 
-    for i in range(data.ncon):
+        joint_angles = self.get_actuator_joints_qpos(data.qpos)
+        joint_vel = self.get_actuator_joints_qvel(data.qvel)
+
+        contacts = self.get_feet_contacts(data)
+
+        # if not self.standing:
+        # ref = self.PRM.get_reference_motion(*command[:3], self.imitation_i)
+
+        obs = np.concatenate(
+            [
+                gyro,
+                accelerometer,
+                # gravity,
+                command,
+                joint_angles - self.default_actuator,
+                joint_vel * self.dof_vel_scale,
+                self.last_action,
+                self.last_last_action,
+                self.last_last_last_action,
+                self.motor_targets,
+                contacts,
+                # ref if not self.standing else np.array([]),
+                # [self.imitation_i]
+                self.imitation_phase,
+            ]
+        )
+
+        return obs
+
+    def key_callback(self, keycode):
+        print(f"key: {keycode}")
+        if keycode == 72:  # h
+            self.head_control_mode = not self.head_control_mode
+        lin_vel_x = 0
+        lin_vel_y = 0
+        ang_vel = 0
+        if not self.head_control_mode:
+            if keycode == 265:  # arrow up
+                lin_vel_x = self.COMMANDS_RANGE_X[1]
+            if keycode == 264:  # arrow down
+                lin_vel_x = self.COMMANDS_RANGE_X[0]
+            if keycode == 263:  # arrow left
+                lin_vel_y = self.COMMANDS_RANGE_Y[1]
+            if keycode == 262:  # arrow right
+                lin_vel_y = self.COMMANDS_RANGE_Y[0]
+            if keycode == 81:  # a
+                ang_vel = self.COMMANDS_RANGE_THETA[1]
+            if keycode == 69:  # e
+                ang_vel = self.COMMANDS_RANGE_THETA[0]
+            if keycode == 80:  # p
+                self.phase_frequency_factor += 0.1
+            if keycode == 59:  # m
+                self.phase_frequency_factor -= 0.1
+        else:
+            neck_pitch = 0
+            head_pitch = 0
+            head_yaw = 0
+            head_roll = 0
+            if keycode == 265:  # arrow up
+                head_pitch = self.NECK_PITCH_RANGE[1]
+            if keycode == 264:  # arrow down
+                head_pitch = self.NECK_PITCH_RANGE[0]
+            if keycode == 263:  # arrow left
+                head_yaw = self.HEAD_YAW_RANGE[1]
+            if keycode == 262:  # arrow right
+                head_yaw = self.HEAD_YAW_RANGE[0]
+            if keycode == 81:  # a
+                head_roll = self.HEAD_ROLL_RANGE[1]
+            if keycode == 69:  # e
+                head_roll = self.HEAD_ROLL_RANGE[0]
+
+            self.commands[3] = neck_pitch
+            self.commands[4] = head_pitch
+            self.commands[5] = head_yaw
+            self.commands[6] = head_roll
+
+        self.commands[0] = lin_vel_x
+        self.commands[1] = lin_vel_y
+        self.commands[2] = ang_vel
+
+    def run(self):
         try:
-            contact = data.contact[i]
-        except Exception as e:
-            return False
+            with mujoco.viewer.launch_passive(
+                self.model,
+                self.data,
+                show_left_ui=False,
+                show_right_ui=False,
+                key_callback=self.key_callback,
+            ) as viewer:
+                counter = 0
+                while True:
 
-        if (
-            model.geom_bodyid[contact.geom1] == body1_id
-            and model.geom_bodyid[contact.geom2] == body2_id
-        ) or (
-            model.geom_bodyid[contact.geom1] == body2_id
-            and model.geom_bodyid[contact.geom2] == body1_id
-        ):
-            return True
+                    step_start = time.time()
 
-    return False
+                    mujoco.mj_step(self.model, self.data)
+
+                    counter += 1
+
+                    if counter % self.decimation == 0:
+                        if not self.standing:
+                            self.imitation_i += 1.0 * self.phase_frequency_factor
+                            self.imitation_i = (
+                                self.imitation_i % self.PRM.nb_steps_in_period
+                            )
+                            # print(self.PRM.nb_steps_in_period)
+                            # exit()
+                            self.imitation_phase = np.array(
+                                [
+                                    np.cos(
+                                        self.imitation_i
+                                        / self.PRM.nb_steps_in_period
+                                        * 2
+                                        * np.pi
+                                    ),
+                                    np.sin(
+                                        self.imitation_i
+                                        / self.PRM.nb_steps_in_period
+                                        * 2
+                                        * np.pi
+                                    ),
+                                ]
+                            )
+                        obs = self.get_obs(
+                            self.data,
+                            self.commands,
+                        )
+                        self.saved_obs.append(obs)
+                        action = self.policy.infer(obs)
+
+                        # self.action_filter.push(action)
+                        # action = self.action_filter.get_filtered_action()
+
+                        self.last_last_last_action = self.last_last_action.copy()
+                        self.last_last_action = self.last_action.copy()
+                        self.last_action = action.copy()
+
+                        self.motor_targets = (
+                            self.default_actuator + action * self.action_scale
+                        )
+
+                        if USE_MOTOR_SPEED_LIMITS:
+                            self.motor_targets = np.clip(
+                                self.motor_targets,
+                                self.prev_motor_targets
+                                - self.max_motor_velocity
+                                * (self.sim_dt * self.decimation),
+                                self.prev_motor_targets
+                                + self.max_motor_velocity
+                                * (self.sim_dt * self.decimation),
+                            )
+
+                            self.prev_motor_targets = self.motor_targets.copy()
+
+                        # head_targets = self.commands[3:]
+                        # self.motor_targets[5:9] = head_targets
+                        self.data.ctrl = self.motor_targets.copy()
+
+                    viewer.sync()
+
+                    time_until_next_step = self.model.opt.timestep - (
+                        time.time() - step_start
+                    )
+                    if time_until_next_step > 0:
+                        time.sleep(time_until_next_step)
+        except KeyboardInterrupt:
+            pickle.dump(self.saved_obs, open("mujoco_saved_obs.pkl", "wb"))
 
 
-def get_feet_contacts():
-    left_contact = check_contact(data, model, "foot", "floor")
-    right_contact = check_contact(data, model, "foot_2", "floor")
-    return left_contact, right_contact
+if __name__ == "__main__":
 
-def get_obs(
-    data, last_action, command  # , qvel_history, qpos_error_history, gravity_history
-):
-    gravity = get_gravity(data)
-    joint_angles = data.qpos[7:]
-    joint_vel = data.qvel[6:]
-
-    contacts = get_feet_contacts()
-
-    # ref = PRM.get_reference_motion(*command, imitation_i)
-    ref = np.array([])
-
-    obs = np.concatenate(
-        [
-            gravity,
-            command,
-            joint_angles - init_pos,
-            joint_vel * dof_vel_scale,
-            last_action,
-            last_last_action,
-            last_last_last_action,
-            contacts,
-            # ref,
-        ]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--onnx_model_path", type=str, required=True)
+    # parser.add_argument("-k", action="store_true", default=False)
+    parser.add_argument(
+        "--reference_data",
+        type=str,
+        default="playground/open_duck_mini_v2/data/polynomial_coefficients.pkl",
     )
+    parser.add_argument(
+        "--model_path",
+        type=str,
+        default="playground/new_hopejr/xmls/scene.xml",
+    )
+    parser.add_argument("--standing", action="store_true", default=False)
 
-    return obs
+    args = parser.parse_args()
 
-
-def key_callback(keycode):
-    pass
-
-
-def handle_keyboard():
-    global commands
-    keys = pygame.key.get_pressed()
-    lin_vel_x = 0
-    lin_vel_y = 0
-    ang_vel = 0
-    if keys[pygame.K_z]:
-        lin_vel_x = COMMANDS_RANGE_X[1]
-    if keys[pygame.K_s]:
-        lin_vel_x = COMMANDS_RANGE_X[0]
-    if keys[pygame.K_q]:
-        lin_vel_y = COMMANDS_RANGE_Y[1]
-    if keys[pygame.K_d]:
-        lin_vel_y = COMMANDS_RANGE_Y[0]
-    if keys[pygame.K_a]:
-        ang_vel = COMMANDS_RANGE_THETA[1]
-    if keys[pygame.K_e]:
-        ang_vel = COMMANDS_RANGE_THETA[0]
-
-    commands[0] = lin_vel_x
-    commands[1] = lin_vel_y
-    commands[2] = ang_vel
-
-    # print(commands)
-
-    pygame.event.pump()  # process event queue
-
-
-saved_obs = []
-try:
-    with mujoco.viewer.launch_passive(
-        model, data, show_left_ui=False, show_right_ui=False, key_callback=key_callback
-    ) as viewer:
-        counter = 0
-        while True:
-
-            step_start = time.time()
-
-            mujoco.mj_step(model, data)
-
-            counter += 1
-
-            if counter % decimation == 0:
-                # imitation_i += 1
-                # imitation_i = imitation_i % PRM.nb_steps_in_period
-                obs = get_obs(
-                    data,
-                    last_action,
-                    commands,
-                )
-                saved_obs.append(obs)
-                action = policy.infer(obs)
-
-                last_last_last_action = last_last_action.copy()
-                last_last_action = last_action.copy()
-                last_action = action.copy()
-                # action = np.zeros(12)
-                action = init_pos + action * action_scale
-                data.ctrl = action.copy()
-
-            viewer.sync()
-
-            if args.k:
-                handle_keyboard()
-
-            time_until_next_step = model.opt.timestep - (time.time() - step_start)
-            if time_until_next_step > 0:
-                time.sleep(time_until_next_step)
-except KeyboardInterrupt:
-    pickle.dump(saved_obs, open("mujoco_saved_obs.pkl", "wb"))
+    mjinfer = MjInfer(
+        args.model_path, args.reference_data, args.onnx_model_path, args.standing
+    )
+    mjinfer.run()
