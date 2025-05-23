@@ -2,7 +2,7 @@
 <!-- Generated using onshape-to-robot -->
 <!-- Onshape https://cad.onshape.com/documents/95619c5a3c37ea0971576814/w/26610785af7f329813cd57b4/e/6cae43dcd495e7a1a823b044 -->
 <mujoco model="hopejr">
-  <compiler angle="radian" meshdir="assets" />
+  <compiler angle="radian" meshdir="assets"/>
   <option iterations="1" ls_iterations="5">
     <flag eulerdamp="disable"/>
   </option>
@@ -21,11 +21,11 @@
   <!-- Additional joints_properties.xml -->
   <default>
     <default class="cybergear">
-        <geom contype="0" conaffinity="0"/>
-        <joint damping="5" frictionloss="1.0" armature="0.005" range="-2 2"/>
-        <!-- <position kp="40" forcerange="-12 12"/> -->
+      <geom contype="0" conaffinity="0"/>
+      <joint damping="5" frictionloss="1.0" armature="0.005" range="-2 2"/>
+      <!-- <position kp="40" forcerange="-12 12"/> -->
         <position kp="40"/>
-      </default>
+    </default>
   </default>
   <!-- Additional sensors.xml -->
   <sensor>
@@ -87,8 +87,6 @@
             <geom type="mesh" class="visual" pos="0 0 6.16298e-33" quat="0.5 -0.5 -0.5 -0.5" mesh="pelvis_08" material="pelvis_08_material"/>
             <!-- Part pelvis_08_2 -->
             <geom type="mesh" class="visual" pos="0 7.62771e-06 -8.46846e-22" quat="0.5 0.5 0.5 -0.5" mesh="pelvis_08" material="pelvis_08_material"/>
-            <!-- Frame trunk -->
-            <site group="3" name="trunk" pos="-0.121965 0.0002 -0.0002" quat="0.5 -0.5 0.5 -0.5"/>
             <!-- Link m5_80_pulley_03h_52 -->
             <body name="m5_80_pulley_03h_52" pos="-0.126943 7.62771e-06 0.0499415" quat="0.0308436 0.706434 -0.706434 -0.0308436">
               <!-- Joint from pelvis_08 to m5_80_pulley_03h_52 -->
@@ -387,84 +385,84 @@
     </body>
   </worldbody>
   <asset>
-    <mesh file="toes_04b__2.stl"/>
-    <mesh file="mirrorsea_spring_mount_05i_ankle__2.stl"/>
-    <mesh file="mirrorheel_04b__2.stl"/>
-    <mesh file="mirrorhl_hum_elbow_03__3.stl"/>
-    <mesh file="mantle_01f.stl"/>
-    <mesh file="sea_spring_mount_05i_arm_rotation.stl"/>
-    <mesh file="chest_03.stl"/>
-    <mesh file="sea_ankle_02e.stl"/>
-    <mesh file="mirrortoes_04b.stl"/>
-    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a__2.stl"/>
-    <mesh file="mirrorm5_80_pulley_03h_52.stl"/>
-    <mesh file="hl_prox_forearm_03e.stl"/>
-    <mesh file="mirrorsea_humeral_01ka_femoral.stl"/>
-    <mesh file="cybergear_02b.stl"/>
-    <mesh file="hl_hum_elbow_03__3.stl"/>
-    <mesh file="mirrorhl_prox_forearm_03e.stl"/>
-    <mesh file="sea_spring_mount_05i_ankle.stl"/>
-    <mesh file="sea_humeral_01ka_femoral.stl"/>
-    <mesh file="mirrorchest_03.stl"/>
-    <mesh file="mirrorhl_humeral_03a__2.stl"/>
-    <mesh file="hl_shoulder_pitch_roller_clip_03a__4.stl"/>
-    <mesh file="hl_fore_arm_02c_part_01j__2.stl"/>
-    <mesh file="mirrorheel_04b.stl"/>
-    <mesh file="sea_spring_mount_05i_small_knee.stl"/>
-    <mesh file="mirrorsea_spring_mount_05i_hip_yaw__2.stl"/>
-    <mesh file="mirrorsea_spring_mount_05i_hip_yaw.stl"/>
-    <mesh file="mirrorsea_spring_mount_05i_ankle.stl"/>
-    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a.stl"/>
-    <mesh file="hl_fore_arm_02c_part_01j.stl"/>
-    <mesh file="mirrorhl_shoulder_yaw_03a.stl"/>
-    <mesh file="mirrorhl_fore_arm_02c_part_01j__2.stl"/>
-    <mesh file="heel_04b__3.stl"/>
-    <mesh file="sea_spring_mount_05i_hip_yaw__2.stl"/>
-    <mesh file="mirrortoes_04b__3.stl"/>
     <mesh file="mirrorsea_spring_mount_05i_arm_rotation.stl"/>
-    <mesh file="toes_04b__3.stl"/>
-    <mesh file="hl_prox_forearm_03e__4.stl"/>
-    <mesh file="hl_shoulder_pitch_roller_clip_03a__3.stl"/>
-    <mesh file="pelvis_08.stl"/>
-    <mesh file="hl_hum_elbow_03__2.stl"/>
-    <mesh file="left_foot_heel_collision.stl"/>
-    <mesh file="hl_prox_forearm_03e__2.stl"/>
-    <mesh file="hl_humeral_03a__2.stl"/>
-    <mesh file="hl_prox_forearm_03e__3.stl"/>
-    <mesh file="hl_shoulder_pitch_roller_clip_03a.stl"/>
-    <mesh file="waist_04d.stl"/>
-    <mesh file="mirrormantle_01f.stl"/>
-    <mesh file="mirrorhl_humeral_03a__3.stl"/>
-    <mesh file="torso_pitch_yaw_03.stl"/>
+    <mesh file="mirrorheel_04b.stl"/>
+    <mesh file="sea_spring_mount_05i_ankle.stl"/>
     <mesh file="thorax_02d.stl"/>
-    <mesh file="m5_80_pulley_03h_52.stl"/>
+    <mesh file="cybergear_02b.stl"/>
+    <mesh file="hl_prox_forearm_03e__4.stl"/>
+    <mesh file="mirrorhl_humeral_03a.stl"/>
+    <mesh file="left_foot_heel_collision.stl"/>
+    <mesh file="mirrorhl_fore_arm_02c_part_01j__2.stl"/>
+    <mesh file="hl_shoulder_pitch_roller_clip_03a__3.stl"/>
+    <mesh file="mirrorm5_80_pulley_03h_52.stl"/>
+    <mesh file="mirrormantle_01f.stl"/>
+    <mesh file="mirrortoes_04b__3.stl"/>
+    <mesh file="sea_ankle_02e.stl"/>
+    <mesh file="mirrorhl_prox_forearm_03e__2.stl"/>
+    <mesh file="waist_04d.stl"/>
+    <mesh file="hl_humeral_03a.stl"/>
+    <mesh file="sea_spring_mount_05i_small_knee.stl"/>
+    <mesh file="hl_prox_forearm_03e.stl"/>
+    <mesh file="toes_04b__3.stl"/>
+    <mesh file="mirrorhl_shoulder_yaw_03a.stl"/>
+    <mesh file="hl_prox_forearm_03e__3.stl"/>
+    <mesh file="toes_04b__2.stl"/>
+    <mesh file="mirrorhl_prox_forearm_03e__3.stl"/>
+    <mesh file="hl_fore_arm_02c_part_01j__2.stl"/>
+    <mesh file="mirrorheel_04b__3.stl"/>
+    <mesh file="heel_04b.stl"/>
+    <mesh file="mirrorhl_prox_forearm_03e__4.stl"/>
+    <mesh file="mirrortoes_04b.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_small_knee.stl"/>
+    <mesh file="torso_pitch_yaw_03.stl"/>
+    <mesh file="mirrorsea_ankle_02e.stl"/>
+    <mesh file="toes_04b.stl"/>
+    <mesh file="left_foot_toe_collision.stl"/>
+    <mesh file="hl_humeral_03a__2.stl"/>
     <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a__3.stl"/>
-    <mesh file="sea_spring_mount_05i_ankle__2.stl"/>
+    <mesh file="mirrorchest_03.stl"/>
+    <mesh file="mirrorhl_fore_arm_02c_part_01j.stl"/>
     <mesh file="hl_shoulder_yaw_03a.stl"/>
     <mesh file="sea_spring_mount_05i_hip_yaw.stl"/>
-    <mesh file="mirrortoes_04b__2.stl"/>
-    <mesh file="mirrorsea_ankle_02e.stl"/>
-    <mesh file="right_foot_toe_collision.stl"/>
-    <mesh file="heel_04b.stl"/>
-    <mesh file="heel_04b__2.stl"/>
-    <mesh file="mirrorsea_spring_mount_05i_small_knee.stl"/>
-    <mesh file="hl_humeral_03a.stl"/>
-    <mesh file="mirrorhl_humeral_03a.stl"/>
-    <mesh file="mirrorhl_prox_forearm_03e__2.stl"/>
+    <mesh file="sea_spring_mount_05i_arm_rotation.stl"/>
+    <mesh file="hl_shoulder_pitch_roller_clip_03a.stl"/>
+    <mesh file="hl_shoulder_pitch_roller_clip_03a__4.stl"/>
+    <mesh file="hl_fore_arm_02c_part_01j.stl"/>
+    <mesh file="mirrorhl_humeral_03a__2.stl"/>
+    <mesh file="pelvis_08.stl"/>
+    <mesh file="hl_hum_elbow_03__3.stl"/>
     <mesh file="hl_humeral_03a__3.stl"/>
-    <mesh file="mirrorhl_prox_forearm_03e__4.stl"/>
-    <mesh file="head_mock_up_01g.stl"/>
-    <mesh file="right_foot_heel_collision.stl"/>
-    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a__4.stl"/>
+    <mesh file="mirrorheel_04b__2.stl"/>
+    <mesh file="heel_04b__3.stl"/>
     <mesh file="hl_hum_elbow_03.stl"/>
-    <mesh file="mirrorhl_hum_elbow_03__2.stl"/>
-    <mesh file="mirrorhl_prox_forearm_03e__3.stl"/>
-    <mesh file="mirrorhl_fore_arm_02c_part_01j.stl"/>
-    <mesh file="mirrorheel_04b__3.stl"/>
+    <mesh file="mirrorhl_prox_forearm_03e.stl"/>
+    <mesh file="sea_spring_mount_05i_ankle__2.stl"/>
     <mesh file="mirrorhl_hum_elbow_03.stl"/>
-    <mesh file="left_foot_toe_collision.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_hip_yaw.stl"/>
+    <mesh file="right_foot_heel_collision.stl"/>
+    <mesh file="mirrorsea_humeral_01ka_femoral.stl"/>
+    <mesh file="mirrorhl_hum_elbow_03__2.stl"/>
+    <mesh file="head_mock_up_01g.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_ankle__2.stl"/>
+    <mesh file="mirrortoes_04b__2.stl"/>
+    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a__2.stl"/>
+    <mesh file="sea_humeral_01ka_femoral.stl"/>
+    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a.stl"/>
+    <mesh file="hl_prox_forearm_03e__2.stl"/>
+    <mesh file="mirrorhl_shoulder_pitch_roller_clip_03a__4.stl"/>
+    <mesh file="mirrorhl_hum_elbow_03__3.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_ankle.stl"/>
+    <mesh file="m5_80_pulley_03h_52.stl"/>
+    <mesh file="mirrorhl_humeral_03a__3.stl"/>
+    <mesh file="heel_04b__2.stl"/>
     <mesh file="hl_shoulder_pitch_roller_clip_03a__2.stl"/>
-    <mesh file="toes_04b.stl"/>
+    <mesh file="hl_hum_elbow_03__2.stl"/>
+    <mesh file="mirrorsea_spring_mount_05i_hip_yaw__2.stl"/>
+    <mesh file="sea_spring_mount_05i_hip_yaw__2.stl"/>
+    <mesh file="chest_03.stl"/>
+    <mesh file="mantle_01f.stl"/>
+    <mesh file="right_foot_toe_collision.stl"/>
     <material name="mirrorchest_03_material" rgba="0.647059 0.647059 0.647059 1"/>
     <material name="head_mock_up_01g_material" rgba="0.615686 0.811765 0.929412 1"/>
     <material name="thorax_02d_material" rgba="0.768627 0.886275 0.952941 1"/>
