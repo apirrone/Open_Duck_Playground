@@ -64,6 +64,8 @@ class MjInfer(MJInferBase):
         print(f"backlash joint names: {self.backlash_joint_names}")
         # print(f"actual joints idx: {self.get_actual_joints_idx()}")
 
+        self.torques = []
+
     def get_obs(
         self,
         data,
@@ -229,6 +231,15 @@ class MjInfer(MJInferBase):
                         # head_targets = self.commands[3:]
                         # self.motor_targets[5:9] = head_targets
                         self.data.ctrl = self.motor_targets.copy()
+                        actuator_forces = self.data.actuator_force
+                        # step_torques = {}
+                        # for i, force in enumerate(actuator_forces):
+                        #     step_torques[self.actuator_names[i]] = force
+                        #     print(f"{self.actuator_names[i]}: {force}")
+                        # print("==")
+
+                        # self.torques.append(step_torques)
+
 
                     viewer.sync()
 
@@ -239,6 +250,7 @@ class MjInfer(MJInferBase):
                         time.sleep(time_until_next_step)
         except KeyboardInterrupt:
             pickle.dump(self.saved_obs, open("mujoco_saved_obs.pkl", "wb"))
+            # pickle.dump(self.torques, open("mujoco_torques.pkl", "wb"))
 
 
 if __name__ == "__main__":

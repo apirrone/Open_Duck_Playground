@@ -58,7 +58,7 @@ def default_config() -> config_dict.ConfigDict:
         soft_joint_pos_limit_factor=0.95,
         max_motor_velocity=5.24,  # rad/s
         noise_config=config_dict.create(
-            level=0.0,  # Set to 0.0 to disable noise.
+            level=1.0,  # Set to 0.0 to disable noise.
             action_min_delay=0,  # env steps
             action_max_delay=3,  # env steps
             imu_min_delay=0,  # env steps
@@ -87,11 +87,11 @@ def default_config() -> config_dict.ConfigDict:
             tracking_sigma=0.01,  # was working at 0.01
         ),
         push_config=config_dict.create(
-            enable=False,
+            enable=True,
             interval_range=[5.0, 10.0],
-            magnitude_range=[0.1, 1.0],
+            magnitude_range=[0.1, 5.0],
         ),
-        lin_vel_x=[-0.15, 0.15],
+        lin_vel_x=[-0.2, 0.2],
         lin_vel_y=[-0.2, 0.2],
         ang_vel_yaw=[-1.0, 1.0],  # [-1.0, 1.0]
     )
