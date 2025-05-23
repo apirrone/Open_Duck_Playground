@@ -196,6 +196,7 @@ with mujoco.viewer.launch_passive(
                 # print(len(ref_joint_pos))
                 # print(ref_joint_pos.shape)
                 # exit()
+
                 new_qpos = default_qpos.copy()
                 if new_qpos[7 : 7 + 27].shape[0] == ref_joint_pos.shape[0]:
                     new_qpos[7 : 7 + 27] = ref_joint_pos

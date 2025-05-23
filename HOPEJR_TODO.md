@@ -1,0 +1,1 @@
+- init pos with legs flexed

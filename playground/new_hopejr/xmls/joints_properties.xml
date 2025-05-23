@@ -1,7 +1,7 @@
 <default>
     <default class="cybergear">
-        <geom contype="0" conaffinity="0"/>
-        <joint damping="1.0" frictionloss="0.01" armature="0.005" range="-2 2"/>
-        <position kp="100"/>
+    <geom contype="0" conaffinity="0"/>
+    <joint damping="20.0" frictionloss="0.1" armature="0.005" range="-2 2"/>
+    <position kp="100"/>
     </default>
 </default>
