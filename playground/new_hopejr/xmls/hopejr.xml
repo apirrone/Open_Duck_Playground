@@ -2,10 +2,7 @@
 <!-- Generated using onshape-to-robot -->
 <!-- Onshape https://cad.onshape.com/documents/95619c5a3c37ea0971576814/w/26610785af7f329813cd57b4/e/6cae43dcd495e7a1a823b044 -->
 <mujoco model="hopejr">
-  <compiler angle="radian" meshdir="assets"/>
-  <option iterations="1" ls_iterations="5">
-    <flag eulerdamp="disable"/>
-  </option>
+  <compiler angle="radian" meshdir="assets" autolimits="true"/>
   <default>
     <default class="hopejr">
       <joint frictionloss="0.1" armature="0.005"/>
@@ -22,8 +19,8 @@
   <default>
     <default class="cybergear">
       <geom contype="0" conaffinity="0"/>
-      <joint damping="5" frictionloss="0.1" armature="0.005" range="-2 2"/>
-      <position kp="120"/>
+      <joint damping="20.0" frictionloss="0.1" armature="0.005" range="-2 2"/>
+      <position kp="100"/>
     </default>
   </default>
   <!-- Additional sensors.xml -->
