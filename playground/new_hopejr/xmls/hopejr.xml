@@ -23,7 +23,8 @@
     <default class="cybergear">
       <geom contype="0" conaffinity="0"/>
       <joint damping="5" frictionloss="1.0" armature="0.005" range="-2 2"/>
-      <position kp="40"/>
+      <!-- <position kp="40" forcerange="-12 12"/> -->
+        <position kp="40"/>
     </default>
   </default>
   <!-- Additional sensors.xml -->
