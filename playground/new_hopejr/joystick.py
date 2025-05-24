@@ -53,7 +53,7 @@ def default_config() -> config_dict.ConfigDict:
         episode_length=1000,
         action_repeat=1,
         action_scale=1.0,
-        dof_vel_scale=0.05,
+        dof_vel_scale=0.5, # was 0.05
         history_len=0,
         soft_joint_pos_limit_factor=0.95,
         max_motor_velocity=5.24,  # rad/s
@@ -67,7 +67,7 @@ def default_config() -> config_dict.ConfigDict:
                 hip_pos=0.03,  # rad, for each hip joint
                 knee_pos=0.05,  # rad, for each knee joint
                 ankle_pos=0.08,  # rad, for each ankle joint
-                joint_vel=2.5,  # rad/s # Was 1.5
+                joint_vel=1.5,  # rad/s # Was 2.5
                 gravity=0.1,
                 linvel=0.1,
                 gyro=0.1,

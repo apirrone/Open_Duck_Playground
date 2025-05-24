@@ -27,7 +27,7 @@ class MjInfer(MJInferBase):
         self.linearVelocityScale = 1.0
         self.angularVelocityScale = 1.0
         self.dof_pos_scale = 1.0
-        self.dof_vel_scale = 0.05
+        self.dof_vel_scale = 0.5 # was 0.05
         self.action_scale = 1.0
 
         self.action_filter = LowPassActionFilter(50, cutoff_frequency=37.5)
@@ -126,7 +126,7 @@ class MjInfer(MJInferBase):
                 ang_vel = self.COMMANDS_RANGE_THETA[0]
             if keycode == 80:  # p
                 # self.phase_frequency_factor += 0.1
-                self.data.qvel[:3] = (np.random.random(3)-0.5)*2
+                self.data.qvel[:2] = (np.random.random(2)-0.5)*2
             # if keycode == 59:  # m
             #     self.phase_frequency_factor -= 0.1
         else:
@@ -176,11 +176,11 @@ class MjInfer(MJInferBase):
 
                     if counter % self.decimation == 0:
                         if not self.standing:
-                            # if np.linalg.norm(self.commands[:3]) > 0.01:
-                            self.imitation_i += 1.0 * self.phase_frequency_factor
-                            self.imitation_i = (
-                                self.imitation_i % self.PRM.nb_steps_in_period
-                            )
+                            if np.linalg.norm(self.commands[:3]) > 0.01:
+                                self.imitation_i += 1.0 * self.phase_frequency_factor
+                                self.imitation_i = (
+                                    self.imitation_i % self.PRM.nb_steps_in_period
+                                )
                             # else:
                             #     self.imitation_i = 0.0
 
