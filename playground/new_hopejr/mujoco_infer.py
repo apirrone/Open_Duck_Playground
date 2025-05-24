@@ -37,7 +37,7 @@ class MjInfer(MJInferBase):
 
         self.policy = OnnxInfer(onnx_model_path, awd=True)
 
-        self.COMMANDS_RANGE_X = [-0.15, 0.15]
+        self.COMMANDS_RANGE_X = [-0.3, 0.3]
         self.COMMANDS_RANGE_Y = [-0.2, 0.2]
         self.COMMANDS_RANGE_THETA = [-1.0, 1.0]  # [-1.0, 1.0]
 
@@ -125,9 +125,10 @@ class MjInfer(MJInferBase):
             if keycode == 69:  # e
                 ang_vel = self.COMMANDS_RANGE_THETA[0]
             if keycode == 80:  # p
-                self.phase_frequency_factor += 0.1
-            if keycode == 59:  # m
-                self.phase_frequency_factor -= 0.1
+                # self.phase_frequency_factor += 0.1
+                self.data.qvel[:3] = (np.random.random(3)-0.5)*2
+            # if keycode == 59:  # m
+            #     self.phase_frequency_factor -= 0.1
         else:
             neck_pitch = 0
             head_pitch = 0
@@ -175,13 +176,13 @@ class MjInfer(MJInferBase):
 
                     if counter % self.decimation == 0:
                         if not self.standing:
-                            if np.linalg.norm(self.commands[:3]) > 0.01:
-                                self.imitation_i += 1.0 * self.phase_frequency_factor
-                                self.imitation_i = (
-                                    self.imitation_i % self.PRM.nb_steps_in_period
-                                )
-                            else:
-                                self.imitation_i = 0.0
+                            # if np.linalg.norm(self.commands[:3]) > 0.01:
+                            self.imitation_i += 1.0 * self.phase_frequency_factor
+                            self.imitation_i = (
+                                self.imitation_i % self.PRM.nb_steps_in_period
+                            )
+                            # else:
+                            #     self.imitation_i = 0.0
 
                             # print(self.PRM.nb_steps_in_period)
                             # exit()
