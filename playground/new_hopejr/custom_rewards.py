@@ -156,13 +156,13 @@ def reward_imitation(
     contact_rew = jp.sum(contacts == ref_foot_contacts) * w_contact
 
     reward = (
-        lin_vel_xy_rew
-        + lin_vel_z_rew
-        + ang_vel_xy_rew
-        + ang_vel_z_rew
+        # lin_vel_xy_rew
+        # + lin_vel_z_rew
+        # + ang_vel_xy_rew
+        # + ang_vel_z_rew
         + joint_pos_rew
         + joint_vel_rew
-        + contact_rew
+        # + contact_rew
         # + torso_orientation_rew
     )
 
