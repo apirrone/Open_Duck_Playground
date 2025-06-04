@@ -178,25 +178,44 @@ class MjInfer(MJInferBase):
                         if not self.standing:
                             # if np.linalg.norm(self.commands[:3]) > 0.01:
                             self.imitation_i += 1.0 * self.phase_frequency_factor
+                            # self.imitation_i = (
+                            #     self.imitation_i % self.PRM.nb_steps_in_period
+                            # )
                             self.imitation_i = (
-                                self.imitation_i % self.PRM.nb_steps_in_period
+                                self.imitation_i % 64
                             )
                             # else:
                             #     self.imitation_i = 0.0
 
                             # print(self.PRM.nb_steps_in_period)
                             # exit()
+                            # self.imitation_phase = np.array(
+                            #     [
+                            #         np.cos(
+                            #             self.imitation_i
+                            #             / self.PRM.nb_steps_in_period
+                            #             * 2
+                            #             * np.pi
+                            #         ),
+                            #         np.sin(
+                            #             self.imitation_i
+                            #             / self.PRM.nb_steps_in_period
+                            #             * 2
+                            #             * np.pi
+                            #         ),
+                            #     ]
+                            # )
                             self.imitation_phase = np.array(
                                 [
                                     np.cos(
                                         self.imitation_i
-                                        / self.PRM.nb_steps_in_period
+                                        / 64
                                         * 2
                                         * np.pi
                                     ),
                                     np.sin(
                                         self.imitation_i
-                                        / self.PRM.nb_steps_in_period
+                                        / 64
                                         * 2
                                         * np.pi
                                     ),
