@@ -41,7 +41,8 @@ class BaseRunner(ABC):
         self.obs_size = None
         self.num_timesteps = args.num_timesteps
         self.restore_checkpoint_path = None
-        
+        self.num_envs = args.num_envs if hasattr(args, "num_envs") else None
+
         # CACHE STUFF
         os.makedirs(".tmp", exist_ok=True)
         jax.config.update("jax_compilation_cache_dir", ".tmp/jax_cache")
@@ -54,7 +55,6 @@ class BaseRunner(ABC):
         os.environ["JAX_COMPILATION_CACHE_DIR"] = ".tmp/jax_cache"
 
     def progress_callback(self, num_steps: int, metrics: dict) -> None:
-
         for metric_name, metric_value in metrics.items():
             # Convert to float, but watch out for 0-dim JAX arrays
             self.writer.add_scalar(metric_name, metric_value, num_steps)
@@ -80,16 +80,17 @@ class BaseRunner(ABC):
             self.action_size,
             self.ppo_params,
             self.obs_size,  # may not work
-            output_path=onnx_export_path
+            output_path=onnx_export_path,
         )
 
     def train(self) -> None:
         self.ppo_params = locomotion_params.brax_ppo_config(
             "BerkeleyHumanoidJoystickFlatTerrain"
         )  # TODO
+        if self.num_envs is not None:
+            self.ppo_params["num_envs"] = self.num_envs
         self.ppo_training_params = dict(self.ppo_params)
         # self.ppo_training_params["num_timesteps"] = 150000000 * 20
-        
 
         if "network_factory" in self.ppo_params:
             network_factory = functools.partial(
