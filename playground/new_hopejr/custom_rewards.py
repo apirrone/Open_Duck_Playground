@@ -39,7 +39,6 @@ def reward_imitation(
     # w_joint_vel = 1.0e-3
     # w_contact = 5.0
 
-
     # dimensions_names = [
     #     0  "pos head_yaw",
     #     1  "pos head_pitch",
@@ -156,10 +155,10 @@ def reward_imitation(
     contact_rew = jp.sum(contacts == ref_foot_contacts) * w_contact
 
     reward = (
-        # lin_vel_xy_rew
-        # + lin_vel_z_rew
-        # + ang_vel_xy_rew
-        # + ang_vel_z_rew
+        lin_vel_xy_rew
+        + lin_vel_z_rew
+        + ang_vel_xy_rew
+        + ang_vel_z_rew
         + joint_pos_rew
         + joint_vel_rew
         # + contact_rew
@@ -170,5 +169,5 @@ def reward_imitation(
     return jp.nan_to_num(reward)
 
 
-def cost_feet_rectangle_contact(feet_rectangle_contact:jax.Array):
+def cost_feet_rectangle_contact(feet_rectangle_contact: jax.Array):
     return jp.nan_to_num(-jp.sum(feet_rectangle_contact))

@@ -58,7 +58,7 @@ class RetargetReferenceMotion:
 
         # self.target_fps = 100.0
         self.target_fps = 50.0
-        self.data_fps = int(1.0/self.frames[0][0])
+        self.data_fps = int(1.0 / self.frames[0][0])
         self.converted_frames = self.convert_to_hopejr()
         self.converted_frames = self.interpolate_frames(self.converted_frames)
         self.converted_frames = jp.array(self.converted_frames)
@@ -66,7 +66,9 @@ class RetargetReferenceMotion:
 
     def interpolate_frames(self, converted_frames):
         # Add or remove frames to match the target FPS
-        target_nb_frames = int(self.target_fps * (len(converted_frames) / self.data_fps))
+        target_nb_frames = int(
+            self.target_fps * (len(converted_frames) / self.data_fps)
+        )
         if target_nb_frames == len(converted_frames):
             return converted_frames
         elif target_nb_frames < len(converted_frames):
@@ -82,12 +84,12 @@ class RetargetReferenceMotion:
                     next_index = index + 1
                     ratio = (i * len(converted_frames)) / target_nb_frames - index
                     new_frame = [
-                        (1 - ratio) * converted_frames[index][j] + ratio * converted_frames[next_index][j]
+                        (1 - ratio) * converted_frames[index][j]
+                        + ratio * converted_frames[next_index][j]
                         for j in range(len(converted_frames[0]))
                     ]
                     new_frames.append(new_frame)
             return new_frames
-
 
     def sample_frame(self, i):
         return jp.array(self.converted_frames[i])
@@ -127,14 +129,43 @@ class RetargetReferenceMotion:
             "left_elbow_angle": left_elbow_angle,
         }
 
-    def compute_joints_vels(self, joints_positions, dt):
+    def compute_joints_vels(self, joints_positions, dts):
         joints_vels = []
         for i in range(len(joints_positions) - 1):
-            vel = list((jp.array(joints_positions[i + 1]) - jp.array(joints_positions[i])) / dt[i])
+            vel = list(
+                (jp.array(joints_positions[i + 1]) - jp.array(joints_positions[i]))
+                / dts[i]
+            )
             joints_vels.append(vel)
         # Append the last velocity as zero since we don't have a next frame
         joints_vels.append(list(jp.zeros_like(jp.array(joints_positions[0]))))
         return joints_vels
+
+    def compute_base_linear_vel(self, root_positions, dts):
+        base_linear_vel = []
+        for i in range(len(root_positions) - 1):
+            vel = list(
+                (jp.array(root_positions[i + 1]) - jp.array(root_positions[i])) / dts[i]
+            )
+            base_linear_vel.append(vel)
+        # Append the last velocity the same as the last position
+        base_linear_vel.append(base_linear_vel[-1].copy())
+        return jp.array(base_linear_vel)
+
+    def compute_base_angular_vel(self, root_quats, dts):
+        # euler
+        base_angular_vel = []
+        for i in range(len(root_quats) - 1):
+            quat1 = R.from_quat(root_quats[i])
+            quat2 = R.from_quat(root_quats[i + 1])
+            delta_quat = quat2 * quat1.inv()
+            euler_vel = delta_quat.as_euler("xyz", degrees=False) / dts[i]
+            base_angular_vel.append(jp.array(euler_vel))
+
+        # Append the last velocity the same as the last position
+        base_angular_vel.append(base_angular_vel[-1].copy())
+
+        return jp.array(base_angular_vel)
 
     def convert_to_hopejr(self):
         # output = [
@@ -145,21 +176,20 @@ class RetargetReferenceMotion:
         #     base_angular_vel # 3
         # ]
         joints_positions = []
+        root_positions = []
+        root_quats = []
         dts = []
         for frame in self.frames:
             parsed_frame = self.parse_frame(frame)
             joints_positions.append(self.get_frame_joints_pos(parsed_frame))
             dts.append(parsed_frame["duration"])
-
+            root_positions.append(parsed_frame["root_pos"])
+            root_quats.append(parsed_frame["root_quat"])
 
         joints_vels = self.compute_joints_vels(joints_positions, dts)
         foot_contacts = jp.zeros((len(self.frames), 2))  # Placeholder for foot contacts
-        base_linear_vel = jp.zeros(
-            (len(self.frames), 3)
-        )  # Placeholder for base linear velocity
-        base_angular_vel = jp.zeros(
-            (len(self.frames), 3)
-        )  # Placeholder for base angular velocity
+        base_linear_vel = self.compute_base_linear_vel(root_positions, dts)
+        base_angular_vel = self.compute_base_angular_vel(root_quats, dts)
 
         # The output structure is a list of numpy arrays, each corresponding to a different part of the state
 
@@ -173,7 +203,6 @@ class RetargetReferenceMotion:
                     jp.array(base_linear_vel[i]),
                     jp.array(base_angular_vel[i]),
                 ]
-
             )
 
             converted_frames.append(list(converted_frame))
@@ -187,9 +216,9 @@ class RetargetReferenceMotion:
         torso_pitch = torso_euler[1]
         torso_yaw = torso_euler[2]
 
-        right_hip_euler = R.from_quat(parsed_frame["right_hip_quat"], scalar_first=True).as_euler(
-            "xyz", degrees=False
-        )
+        right_hip_euler = R.from_quat(
+            parsed_frame["right_hip_quat"], scalar_first=True
+        ).as_euler("xyz", degrees=False)
         right_hip_roll = right_hip_euler[0]
         right_hip_pitch = right_hip_euler[1]
         # right_hip_yaw = right_hip_euler[2]
@@ -197,17 +226,17 @@ class RetargetReferenceMotion:
 
         right_knee = parsed_frame["right_knee_angle"]
 
-        right_ankle_euler = R.from_quat(parsed_frame["right_ankle_quat"], scalar_first=True).as_euler(
-            "xyz", degrees=False
-        )
+        right_ankle_euler = R.from_quat(
+            parsed_frame["right_ankle_quat"], scalar_first=True
+        ).as_euler("xyz", degrees=False)
         # right_ankle_roll = right_ankle_euler[0]
         right_ankle_roll = right_ankle_euler[0]
         right_ankle_pitch = right_ankle_euler[1]
         right_toe = 0.0
 
-        left_hip_euler = R.from_quat(parsed_frame["left_hip_quat"], scalar_first=True).as_euler(
-            "xyz", degrees=False
-        )
+        left_hip_euler = R.from_quat(
+            parsed_frame["left_hip_quat"], scalar_first=True
+        ).as_euler("xyz", degrees=False)
         left_hip_roll = -left_hip_euler[0]
         left_hip_pitch = -left_hip_euler[1]
         # left_hip_yaw = left_hip_euler[2]
@@ -215,9 +244,9 @@ class RetargetReferenceMotion:
 
         left_knee = -parsed_frame["left_knee_angle"]
 
-        left_ankle_euler = R.from_quat(parsed_frame["left_ankle_quat"], scalar_first=True).as_euler(
-            "xyz", degrees=False
-        )
+        left_ankle_euler = R.from_quat(
+            parsed_frame["left_ankle_quat"], scalar_first=True
+        ).as_euler("xyz", degrees=False)
         left_ankle_roll = left_ankle_euler[0]
         left_ankle_pitch = left_ankle_euler[1]
         left_toe = 0.0
