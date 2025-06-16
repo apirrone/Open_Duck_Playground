@@ -44,6 +44,7 @@ from playground.open_duck_mini_v2.custom_rewards import reward_imitation
 # if set to false, won't require the reference data to be present and won't compute the reference motions polynoms for nothing
 USE_IMITATION_REWARD = True
 USE_MOTOR_SPEED_LIMITS = False
+HEAD_MIX = True  # if true, the head joints are mixed with the commands
 
 
 def default_config() -> config_dict.ConfigDict:
@@ -67,7 +68,7 @@ def default_config() -> config_dict.ConfigDict:
                 hip_pos=0.03,  # rad, for each hip joint
                 knee_pos=0.05,  # rad, for each knee joint
                 ankle_pos=0.08,  # rad, for each ankle joint
-                joint_vel=2.5,  # rad/s # Was 1.5
+                joint_vel=1.5,  # rad/s # Was 2.5
                 gravity=0.1,
                 linvel=0.1,
                 gyro=0.1,
@@ -88,15 +89,15 @@ def default_config() -> config_dict.ConfigDict:
         ),
         push_config=config_dict.create(
             enable=True,
-            interval_range=[5.0, 10.0],
-            magnitude_range=[0.1, 1.0],
+            interval_range=[2.0, 5.0],
+            magnitude_range=[0.5, 1.0],
         ),
         lin_vel_x=[-0.15, 0.15],
         lin_vel_y=[-0.2, 0.2],
         ang_vel_yaw=[-1.0, 1.0],  # [-1.0, 1.0]
         neck_pitch_range=[-0.34, 1.1],
-        head_pitch_range=[-0.78, 0.78],
-        head_yaw_range=[-1.5, 1.5],
+        head_pitch_range=[-0.78, 0.3],
+        head_yaw_range=[-1.0, 1.0],
         head_roll_range=[-0.5, 0.5],
         head_range_factor=1.0,  # to make it easier
     )
@@ -416,7 +417,10 @@ class Joystick(open_duck_mini_v2_base.OpenDuckMiniV2Env):
                 + self._config.max_motor_velocity * self.dt,  # control dt
             )
 
-        # motor_targets.at[5:9].set(state.info["command"][3:])  # head joints
+        if HEAD_MIX:
+            head_mix = state.info["command"][3:] + motor_targets[5:9]
+            motor_targets.at[5:9].set(head_mix)  # head joints
+
         data = mjx_env.step(self.mjx_model, state.data, motor_targets, self.n_substeps)
 
         state.info["motor_targets"] = motor_targets
@@ -499,7 +503,7 @@ class Joystick(open_duck_mini_v2_base.OpenDuckMiniV2Env):
 
         accelerometer = self.get_accelerometer(data)
         # accelerometer[0] += 1.3 # TODO testing
-        accelerometer.at[0].set(accelerometer[0] + 1.3)
+        # accelerometer.at[0].set(accelerometer[0] + 1.3)
 
         info["rng"], noise_rng = jax.random.split(info["rng"])
         noisy_accelerometer = (

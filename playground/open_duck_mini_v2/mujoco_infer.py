@@ -12,6 +12,7 @@ from playground.common.utils import LowPassActionFilter
 from playground.open_duck_mini_v2.mujoco_infer_base import MJInferBase
 
 USE_MOTOR_SPEED_LIMITS = False
+HEAD_MIX = True  # if true, the head joints are mixed with the commands
 
 
 class MjInfer(MJInferBase):
@@ -42,8 +43,8 @@ class MjInfer(MJInferBase):
         self.COMMANDS_RANGE_THETA = [-1.0, 1.0]  # [-1.0, 1.0]
 
         self.NECK_PITCH_RANGE = [-0.34, 1.1]
-        self.HEAD_PITCH_RANGE = [-0.78, 0.78]
-        self.HEAD_YAW_RANGE = [-1.5, 1.5]
+        self.HEAD_PITCH_RANGE = [-0.78, 0.3]
+        self.HEAD_YAW_RANGE = [-1.0, 1.0]
         self.HEAD_ROLL_RANGE = [-0.5, 0.5]
 
         self.last_action = np.zeros(self.num_dofs)
@@ -71,7 +72,7 @@ class MjInfer(MJInferBase):
     ):
         gyro = self.get_gyro(data)
         accelerometer = self.get_accelerometer(data)
-        accelerometer[0] += 1.3
+        # accelerometer[0] += 1.3
 
         joint_angles = self.get_actuator_joints_qpos(data.qpos)
         joint_vel = self.get_actuator_joints_qvel(data.qvel)
@@ -123,7 +124,8 @@ class MjInfer(MJInferBase):
             if keycode == 69:  # e
                 ang_vel = self.COMMANDS_RANGE_THETA[0]
             if keycode == 80:  # p
-                self.phase_frequency_factor += 0.1
+                # self.phase_frequency_factor += 0.1
+                self.data.qvel[:2] = [1.0, 0]
             if keycode == 59:  # m
                 self.phase_frequency_factor -= 0.1
         else:
@@ -132,9 +134,9 @@ class MjInfer(MJInferBase):
             head_yaw = 0
             head_roll = 0
             if keycode == 265:  # arrow up
-                head_pitch = self.NECK_PITCH_RANGE[1]
+                head_pitch = self.HEAD_PITCH_RANGE[1]
             if keycode == 264:  # arrow down
-                head_pitch = self.NECK_PITCH_RANGE[0]
+                head_pitch = self.HEAD_PITCH_RANGE[0]
             if keycode == 263:  # arrow left
                 head_yaw = self.HEAD_YAW_RANGE[1]
             if keycode == 262:  # arrow right
@@ -172,7 +174,8 @@ class MjInfer(MJInferBase):
 
                     if counter % self.decimation == 0:
                         if not self.standing:
-                            self.imitation_i += 1.0 * self.phase_frequency_factor
+                            if np.linalg.norm(self.commands[:3]) > 0.01:
+                                self.imitation_i += 1.0 * self.phase_frequency_factor
                             self.imitation_i = (
                                 self.imitation_i % self.PRM.nb_steps_in_period
                             )
@@ -225,8 +228,10 @@ class MjInfer(MJInferBase):
 
                             self.prev_motor_targets = self.motor_targets.copy()
 
-                        # head_targets = self.commands[3:]
-                        # self.motor_targets[5:9] = head_targets
+                        if HEAD_MIX:
+                            head_mix = self.commands[3:] + self.motor_targets[5:9]
+                            self.motor_targets[5:9] = head_mix
+
                         self.data.ctrl = self.motor_targets.copy()
 
                     viewer.sync()
