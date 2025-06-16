@@ -43,7 +43,7 @@ from playground.open_duck_mini_v2.custom_rewards import reward_imitation
 
 # if set to false, won't require the reference data to be present and won't compute the reference motions polynoms for nothing
 USE_IMITATION_REWARD = True
-USE_MOTOR_SPEED_LIMITS = True
+USE_MOTOR_SPEED_LIMITS = False
 
 
 def default_config() -> config_dict.ConfigDict:
