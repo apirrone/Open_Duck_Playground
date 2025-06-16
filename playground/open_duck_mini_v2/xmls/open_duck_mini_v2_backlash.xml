@@ -47,7 +47,7 @@
       <!-- <joint damping="0.60" frictionloss="0.052" armature="0.028"/>
       <position kp="17.8" kv="0.0" forcerange="-3.35 3.35"/> -->
       <joint damping="0.56" frictionloss="0.068" armature="0.027"/>
-      <position kp="17.11" kv="0.0" forcerange="-3.23 3.23"/>
+      <position kp="4.32" kv="0.0" forcerange="-3.23 3.23"/>
     </default>
     <default class="backlash">
       <!-- +/- 0.5° of backlash -->

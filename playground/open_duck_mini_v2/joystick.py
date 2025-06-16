@@ -52,7 +52,7 @@ def default_config() -> config_dict.ConfigDict:
         sim_dt=0.002,
         episode_length=1000,
         action_repeat=1,
-        action_scale=0.25,
+        action_scale=0.5,
         dof_vel_scale=0.05,
         history_len=0,
         soft_joint_pos_limit_factor=0.95,
@@ -79,7 +79,7 @@ def default_config() -> config_dict.ConfigDict:
                 tracking_lin_vel=2.5,
                 tracking_ang_vel=6.0,
                 torques=-1.0e-3,
-                action_rate=-0.5,  # was -1.5
+                action_rate=-0.15,  # was -1.5
                 stand_still=-0.2,  # was -1.0 TODO try to relax this a bit ?
                 alive=20.0,
                 imitation=1.0,
