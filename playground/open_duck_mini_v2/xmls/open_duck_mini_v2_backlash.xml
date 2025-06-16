@@ -44,10 +44,14 @@
   <default>
     <default class="sts3215">
       <geom contype="0" conaffinity="0"/>
-      <!-- <joint damping="0.60" frictionloss="0.052" armature="0.028"/>
-      <position kp="17.8" kv="0.0" forcerange="-3.35 3.35"/> -->
       <joint damping="0.56" frictionloss="0.068" armature="0.027"/>
       <position kp="17.11" kv="0.0" forcerange="-3.23 3.23"/>
+    </default>
+    <default class="sts3215_12v">
+      <geom contype="0" conaffinity="0"/>
+      <joint damping="1.05" frictionloss="0.195" armature="0.032"/>
+      <position kp="46.3" kv="0.0" forcerange="-8.53 8.53"/>
+      <default class="chosen_actuator"/>
     </default>
     <default class="backlash">
       <!-- +/- 0.5° of backlash -->
@@ -115,7 +119,7 @@
         <!-- Link hip_roll_assembly -->
         <body name="hip_roll_assembly" pos="-0.019 0.035 0.0459409" quat="1 -1.17663e-16 -1.09357e-14 2.77556e-17">
           <!-- Joint from trunk_assembly to hip_roll_assembly -->
-          <joint name="left_hip_yaw" type="hinge" range="-0.5235987755982979 0.5235987755982997" class="sts3215"/>
+          <joint name="left_hip_yaw" type="hinge" range="-0.5235987755982979 0.5235987755982997" class="chosen_actuator"/>
           <joint name="left_hip_yaw_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
           <inertial pos="0.000795081 -5.46541e-06 -0.03306" mass="0.06648"
             fullinertia="2.44411e-05 2.81818e-05 1.42687e-05 2.35658e-09 -3.81059e-07 -7.50036e-09"/>
@@ -134,7 +138,7 @@
           <!-- Link left_roll_to_pitch_assembly -->
           <body name="left_roll_to_pitch_assembly" pos="0.01905 4.61436e-15 -0.046015" quat="0.5 -0.5 -0.5 0.5">
             <!-- Joint from hip_roll_assembly to left_roll_to_pitch_assembly -->
-            <joint name="left_hip_roll" type="hinge" range="-0.4363323129985815 0.43633231299858327" class="sts3215"/>
+            <joint name="left_hip_roll" type="hinge" range="-0.4363323129985815 0.43633231299858327" class="chosen_actuator"/>
             <joint name="left_hip_roll_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
             <inertial pos="0.0508042 -0.00041105 0.0204704" mass="0.07516"
               fullinertia="2.52335e-05 4.13855e-05 2.8127e-05 1.22133e-07 -5.90499e-07 -1.07544e-07"/>
@@ -150,7 +154,7 @@
             <body name="knee_and_ankle_assembly" pos="0.07415 -3.25261e-17 0.03511"
               quat="8.49887e-24 -0.707107 -1.11022e-16 0.707107">
               <!-- Joint from left_roll_to_pitch_assembly to knee_and_ankle_assembly -->
-              <joint name="left_hip_pitch" type="hinge" range="-1.2217304763960306 0.5235987755982988" class="sts3215"/>
+              <joint name="left_hip_pitch" type="hinge" range="-1.2217304763960306 0.5235987755982988" class="chosen_actuator"/>
               <joint name="left_hip_pitch_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
               <inertial pos="0.00253369 -0.0390636 0.0102776" mass="0.12407"
                 fullinertia="0.000211406 7.83759e-05 0.000225619 -2.68706e-05 3.81906e-06 2.08009e-05"/>
@@ -175,7 +179,7 @@
               <body name="knee_and_ankle_assembly_2" pos="0 -0.07865 0.0001"
                 quat="1 1.11022e-16 1.11022e-16 -2.64698e-23">
                 <!-- Joint from knee_and_ankle_assembly to knee_and_ankle_assembly_2 -->
-                <joint name="left_knee" type="hinge" range="-1.5707963267948966 1.5707963267948966" class="sts3215"/>
+                <joint name="left_knee" type="hinge" range="-1.5707963267948966 1.5707963267948966" class="chosen_actuator"/>
                 <joint name="left_knee_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
                 <inertial pos="5.01859e-06 -0.0577465 0.0181136" mass="0.07259"
                   fullinertia="4.99575e-05 1.87273e-05 4.23932e-05 1.03817e-08 2.25175e-09 8.81049e-08"/>
@@ -196,7 +200,7 @@
                 <!-- Link foot_assembly -->
                 <body name="foot_assembly" pos="1.8735e-16 -0.07865 0.0001" quat="1 2.77556e-16 5.55112e-16 1.52656e-16">
                   <!-- Joint from knee_and_ankle_assembly_2 to foot_assembly -->
-                  <joint name="left_ankle" type="hinge" range="-1.5707963267948957 1.5707963267948974" class="sts3215"/>
+                  <joint name="left_ankle" type="hinge" range="-1.5707963267948957 1.5707963267948974" class="chosen_actuator"/>
                   <joint name="left_ankle_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
                   <inertial pos="0.0110718 -0.0246608 0.0190626" mass="0.07524"
                     fullinertia="1.87482e-05 6.74427e-05 6.061e-05 1.58839e-06 -6.52354e-09 5.67391e-08"/>
@@ -226,7 +230,7 @@
         <!-- Link neck_pitch_assembly -->
         <body name="neck_pitch_assembly" pos="0.001 0.01915 0.0900009" quat="0.707107 0.707107 -7.88258e-15 7.79925e-15">
           <!-- Joint from trunk_assembly to neck_pitch_assembly -->
-          <joint name="neck_pitch" type="hinge" range="-0.3490658503988437 1.1344640137963364" class="sts3215"/>
+          <joint name="neck_pitch" type="hinge" range="-0.3490658503988437 1.1344640137963364" class="chosen_actuator"/>
           <inertial pos="-5.63137e-06 0.0492968 0.0181786" mass="0.06618"
             fullinertia="3.49456e-05 1.70231e-05 2.80043e-05 8.75633e-09 -2.15592e-09 -1.85188e-08"/>
           <!-- Part neck_left_sheet -->
@@ -243,7 +247,7 @@
           <!-- Link head_pitch_to_yaw -->
           <body name="head_pitch_to_yaw" pos="-2.9924e-17 0.066 -6.93889e-18" quat="1 -1.7203e-16 0 1.10553e-17">
             <!-- Joint from neck_pitch_assembly to head_pitch_to_yaw -->
-            <joint name="head_pitch" type="hinge" range="-0.7853981633974483 0.7853981633974483" class="sts3215"/>
+            <joint name="head_pitch" type="hinge" range="-0.7853981633974483 0.7853981633974483" class="chosen_actuator"/>
             <inertial pos="-0.00766247 0.026015 0.0186681" mass="0.0169378"
               fullinertia="9.43036e-06 4.64763e-06 8.02915e-06 1.35195e-06 3.05899e-08 -8.42802e-08"/>
             <!-- Part head_pitch_to_yaw -->
@@ -253,7 +257,7 @@
             <body name="neck_yaw_assembly" pos="-4.33681e-19 0.057 0.01905"
               quat="0.707107 -0.707107 1.11022e-16 -5.88785e-17">
               <!-- Joint from head_pitch_to_yaw to neck_yaw_assembly -->
-              <joint name="head_yaw" type="hinge" range="-2.792526803190927 2.792526803190927" class="sts3215"/>
+              <joint name="head_yaw" type="hinge" range="-2.792526803190927 2.792526803190927" class="chosen_actuator"/>
               <inertial pos="0.00412907 3.95745e-06 -0.0222828" mass="0.0918099"
                 fullinertia="3.11706e-05 6.94935e-05 7.04025e-05 4.29429e-09 -4.41251e-06 -3.82028e-09"/>
               <!-- Part head_yaw_to_roll -->
@@ -269,7 +273,7 @@
               <body name="head_assembly" pos="0.04095 2.1764e-16 -0.01915"
                 quat="0.707107 2.89132e-14 -0.707107 -2.86438e-14">
                 <!-- Joint from neck_yaw_assembly to head_assembly -->
-                <joint name="head_roll" type="hinge" range="-0.523598775598218 0.5235987755983796" class="sts3215"/>
+                <joint name="head_roll" type="hinge" range="-0.523598775598218 0.5235987755983796" class="chosen_actuator"/>
                 <inertial pos="0.00815416 -0.00390754 0.0227726" mass="0.406607"
                   fullinertia="0.00244627 0.0016864 0.00108002 -2.02404e-06 9.2382e-05 -1.84944e-05"/>
                 <!-- Part right_antenna_holder -->
@@ -325,7 +329,7 @@
         <!-- Link hip_roll_assembly_2 -->
         <body name="hip_roll_assembly_2" pos="-0.019 -0.035 0.0459409" quat="1 -4.25414e-16 -1.07137e-14 2.77556e-17">
           <!-- Joint from trunk_assembly to hip_roll_assembly_2 -->
-          <joint name="right_hip_yaw" type="hinge" range="-0.523598775598297 0.5235987755983006" class="sts3215"/>
+          <joint name="right_hip_yaw" type="hinge" range="-0.523598775598297 0.5235987755983006" class="chosen_actuator"/>
           <joint name="right_hip_yaw_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
           <inertial pos="0.000795081 -5.46541e-06 -0.03306" mass="0.06648"
             fullinertia="2.44411e-05 2.81818e-05 1.42687e-05 2.35658e-09 -3.81059e-07 -7.50036e-09"/>
@@ -343,7 +347,7 @@
           <!-- Link right_roll_to_pitch_assembly -->
           <body name="right_roll_to_pitch_assembly" pos="0.01905 4.05787e-14 -0.046015" quat="0.5 -0.5 -0.5 0.5">
             <!-- Joint from hip_roll_assembly_2 to right_roll_to_pitch_assembly -->
-            <joint name="right_hip_roll" type="hinge" range="-0.4363323129985797 0.43633231299858505" class="sts3215"/>
+            <joint name="right_hip_roll" type="hinge" range="-0.4363323129985797 0.43633231299858505" class="chosen_actuator"/>
             <joint name="right_hip_roll_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
             <inertial pos="-0.0508042 -0.000420742 0.0204704" mass="0.07516"
               fullinertia="2.52329e-05 4.13855e-05 2.81264e-05 -1.30528e-07 5.90499e-07 -9.13427e-08"/>
@@ -359,7 +363,7 @@
             <body name="knee_and_ankle_assembly_3" pos="-0.07415 2.48437e-15 0.03511"
               quat="0.707107 6.41892e-22 0.707107 -2.22045e-16">
               <!-- Joint from right_roll_to_pitch_assembly to knee_and_ankle_assembly_3 -->
-              <joint name="right_hip_pitch" type="hinge" range="-0.5235987755982988 1.2217304763960306" class="sts3215"/>
+              <joint name="right_hip_pitch" type="hinge" range="-0.5235987755982988 1.2217304763960306" class="chosen_actuator"/>
               <joint name="right_hip_pitch_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
               <inertial pos="0.00253369 0.0390636 0.010809" mass="0.12407"
                 fullinertia="0.000212363 7.93324e-05 0.000225619 2.68706e-05 3.9656e-06 -2.17407e-05"/>
@@ -384,7 +388,7 @@
               <body name="knee_and_ankle_assembly_4" pos="1.38778e-16 0.07865 0.037"
                 quat="1.32068e-16 1 -1.10334e-26 3.55346e-22">
                 <!-- Joint from knee_and_ankle_assembly_3 to knee_and_ankle_assembly_4 -->
-                <joint name="right_knee" type="hinge" range="-1.5707963267948966 1.5707963267948966" class="sts3215"/>
+                <joint name="right_knee" type="hinge" range="-1.5707963267948966 1.5707963267948966" class="chosen_actuator"/>
                 <joint name="right_knee_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
                 <inertial pos="5.01859e-06 -0.0577465 0.0181136" mass="0.07259"
                   fullinertia="4.99575e-05 1.87273e-05 4.23932e-05 1.03817e-08 2.25175e-09 8.81049e-08"/>
@@ -406,7 +410,7 @@
                 <body name="foot_assembly_2" pos="1.32533e-15 -0.07865 0.0001"
                   quat="1 3.88578e-16 -3.33067e-16 5.55111e-16">
                   <!-- Joint from knee_and_ankle_assembly_4 to foot_assembly_2 -->
-                  <joint name="right_ankle" type="hinge" range="-1.5707963267948957 1.5707963267948974" class="sts3215"/>
+                  <joint name="right_ankle" type="hinge" range="-1.5707963267948957 1.5707963267948974" class="chosen_actuator"/>
                   <joint name="right_ankle_backlash" pos="0 0 0" axis="0 0 1" class="backlash"/>
                   <inertial pos="0.0110718 -0.0246608 0.0190626" mass="0.07524"
                     fullinertia="1.87482e-05 6.74427e-05 6.061e-05 1.58839e-06 -6.52354e-09 5.67391e-08"/>
@@ -495,20 +499,20 @@
     <material name="right_cache_material" rgba="0.917647 0.917647 0.917647 1"/>
   </asset>
   <actuator>
-    <position class="sts3215" name="left_hip_yaw" joint="left_hip_yaw" inheritrange="1"/>
-    <position class="sts3215" name="left_hip_roll" joint="left_hip_roll" inheritrange="1"/>
-    <position class="sts3215" name="left_hip_pitch" joint="left_hip_pitch" inheritrange="1"/>
-    <position class="sts3215" name="left_knee" joint="left_knee" inheritrange="1"/>
-    <position class="sts3215" name="left_ankle" joint="left_ankle" inheritrange="1"/>
-    <position class="sts3215" name="neck_pitch" joint="neck_pitch" inheritrange="1"/>
-    <position class="sts3215" name="head_pitch" joint="head_pitch" inheritrange="1"/>
-    <position class="sts3215" name="head_yaw" joint="head_yaw" inheritrange="1"/>
-    <position class="sts3215" name="head_roll" joint="head_roll" inheritrange="1"/>
-    <position class="sts3215" name="right_hip_yaw" joint="right_hip_yaw" inheritrange="1"/>
-    <position class="sts3215" name="right_hip_roll" joint="right_hip_roll" inheritrange="1"/>
-    <position class="sts3215" name="right_hip_pitch" joint="right_hip_pitch" inheritrange="1"/>
-    <position class="sts3215" name="right_knee" joint="right_knee" inheritrange="1"/>
-    <position class="sts3215" name="right_ankle" joint="right_ankle" inheritrange="1"/>
+    <position class="chosen_actuator" name="left_hip_yaw" joint="left_hip_yaw" inheritrange="1"/>
+    <position class="chosen_actuator" name="left_hip_roll" joint="left_hip_roll" inheritrange="1"/>
+    <position class="chosen_actuator" name="left_hip_pitch" joint="left_hip_pitch" inheritrange="1"/>
+    <position class="chosen_actuator" name="left_knee" joint="left_knee" inheritrange="1"/>
+    <position class="chosen_actuator" name="left_ankle" joint="left_ankle" inheritrange="1"/>
+    <position class="chosen_actuator" name="neck_pitch" joint="neck_pitch" inheritrange="1"/>
+    <position class="chosen_actuator" name="head_pitch" joint="head_pitch" inheritrange="1"/>
+    <position class="chosen_actuator" name="head_yaw" joint="head_yaw" inheritrange="1"/>
+    <position class="chosen_actuator" name="head_roll" joint="head_roll" inheritrange="1"/>
+    <position class="chosen_actuator" name="right_hip_yaw" joint="right_hip_yaw" inheritrange="1"/>
+    <position class="chosen_actuator" name="right_hip_roll" joint="right_hip_roll" inheritrange="1"/>
+    <position class="chosen_actuator" name="right_hip_pitch" joint="right_hip_pitch" inheritrange="1"/>
+    <position class="chosen_actuator" name="right_knee" joint="right_knee" inheritrange="1"/>
+    <position class="chosen_actuator" name="right_ankle" joint="right_ankle" inheritrange="1"/>
   </actuator>
   <equality/>
 </mujoco>
