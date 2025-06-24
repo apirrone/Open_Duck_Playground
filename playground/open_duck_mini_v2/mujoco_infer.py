@@ -11,7 +11,7 @@ from playground.common.utils import LowPassActionFilter
 
 from playground.open_duck_mini_v2.mujoco_infer_base import MJInferBase
 
-USE_MOTOR_SPEED_LIMITS = True
+USE_MOTOR_SPEED_LIMITS = False
 
 
 class MjInfer(MJInferBase):
@@ -28,7 +28,7 @@ class MjInfer(MJInferBase):
         self.angularVelocityScale = 1.0
         self.dof_pos_scale = 1.0
         self.dof_vel_scale = 0.05
-        self.action_scale = 1.0
+        self.action_scale = 0.5
 
         self.action_filter = LowPassActionFilter(50, cutoff_frequency=37.5)
 
