@@ -54,7 +54,7 @@ def default_config() -> config_dict.ConfigDict:
         episode_length=1000,
         action_repeat=1,
         action_scale=0.25,
-        dof_vel_scale=0.5, # was 0.05
+        dof_vel_scale=0.2, # was 0.05
         history_len=0,
         soft_joint_pos_limit_factor=0.95,
         max_motor_velocity=5.24,  # rad/s
