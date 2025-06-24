@@ -12,7 +12,7 @@ from playground.common.utils import LowPassActionFilter
 from playground.open_duck_mini_v2.mujoco_infer_base import MJInferBase
 
 USE_MOTOR_SPEED_LIMITS = True
-HEAD_MIX = True  # if true, the head joints are mixed with the commands
+HEAD_MIX = False  # if true, the head joints are mixed with the commands
 
 
 class MjInfer(MJInferBase):
