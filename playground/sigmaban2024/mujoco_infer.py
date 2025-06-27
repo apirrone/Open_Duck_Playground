@@ -115,6 +115,10 @@ class MjInfer(MJInferBase):
         accelerometer = self.get_accelerometer(data)
         accelerometer[0] += 1.3
 
+        gravity = data.site_xmat[self.get_body_id_from_name("trunk")].T @ np.array(
+            [0, 0, -1]
+        )
+
         joint_angles = self.get_actuator_joints_qpos(data.qpos)
         joint_vel = self.get_actuator_joints_qvel(data.qvel)
 
@@ -128,8 +132,9 @@ class MjInfer(MJInferBase):
         obs = np.concatenate(
             [
                 # linvel,
-                gyro,
-                accelerometer,
+                # gyro,
+                # accelerometer,
+                gravity,
                 command,
                 joint_angles - self.default_actuator,
                 joint_vel * self.dof_vel_scale,
@@ -206,7 +211,6 @@ class MjInfer(MJInferBase):
             ) as viewer:
                 counter = 0
                 while True:
-
                     step_start = time.time()
 
                     mujoco.mj_step(self.model, self.data)
@@ -287,7 +291,6 @@ class MjInfer(MJInferBase):
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-o", "--onnx_model_path", type=str, required=True)
     # parser.add_argument("-k", action="store_true", default=False)

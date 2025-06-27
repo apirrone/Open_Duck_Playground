@@ -6,7 +6,6 @@ from playground.sigmaban2024 import base
 
 class MJInferBase:
     def __init__(self, model_path):
-
         self.model = mujoco.MjModel.from_xml_string(
             epath.Path(model_path).read_text(), assets=base.get_assets()
         )
@@ -23,9 +22,7 @@ class MJInferBase:
             self.model.jnt(k).name
             for k in range(0, self.model.njnt)
             if self.model.jnt(k).type == 0
-        ][
-            0
-        ]  # assuming only one floating object!
+        ][0]  # assuming only one floating object!
         self.actuator_names = [
             self.model.actuator(k).name for k in range(0, self.model.nu)
         ]  # will be useful to get only the actuators we care about
@@ -126,6 +123,10 @@ class MJInferBase:
 
         self.data.qpos[:] = self.model.keyframe("home").qpos
         self.data.ctrl[:] = self.default_actuator
+
+    def get_body_id_from_name(self, name: str) -> int:
+        """Return the id of a specified body"""
+        return mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, name)
 
     def get_actuator_id_from_name(self, name: str) -> int:
         """Return the id of a specified actuator"""
@@ -278,6 +279,8 @@ class MJInferBase:
         return False
 
     def get_feet_contacts(self, data):
-        left_contact = self.check_contact(data, "left_foot___list_t0v6opd9rekumc_default", "floor")
+        left_contact = self.check_contact(
+            data, "left_foot___list_t0v6opd9rekumc_default", "floor"
+        )
         right_contact = self.check_contact(data, "right_foot_", "floor")
         return left_contact, right_contact

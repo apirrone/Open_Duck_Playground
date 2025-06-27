@@ -652,8 +652,9 @@ class Joystick(sigmaban_base.SigmabanEnv):
         state = jp.hstack(
             [
                 # linvel,
-                noisy_gyro,  # 3
-                noisy_accelerometer,  # 3
+                # noisy_gyro,  # 3
+                # noisy_accelerometer,  # 3
+                noisy_gravity,  # 3
                 info["command"],  # 7
                 noisy_joint_angles - self._default_actuator,  # 20
                 noisy_joint_vel * self._config.dof_vel_scale,  # 20
