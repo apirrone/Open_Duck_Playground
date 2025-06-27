@@ -42,9 +42,7 @@ from playground.common.rewards import (
     # reward_imitation,
     # cost_head_pos,
 )
-from playground.sigmaban2024.custom_rewards import (
-    reward_imitation,
-)
+from playground.sigmaban2024.custom_rewards import reward_imitation, cost_feet_dist
 
 # if set to false, won't require the reference data to be present and won't compute the reference motions polynoms for nothing
 USE_IMITATION_REWARD = True
@@ -92,6 +90,7 @@ def default_config() -> config_dict.ConfigDict:
                 stand_still=0.0,  # was -0.3
                 alive=20.0,
                 imitation=1.0,
+                feet_dist=-0.5,
                 # head_pos=-1.0,
             ),
             tracking_sigma=0.01,  # was working at 0.01
@@ -363,6 +362,45 @@ class Joystick(sigmaban_base.SigmabanEnv):
         obs = self._get_obs(data, info, contact)
         reward, done = jp.zeros(2)
         return mjx_env.State(data, obs, reward, done, metrics, info)
+
+    def _get_projected_foot(self, data, foot="left"):
+        if foot not in ["left", "right"]:
+            raise ValueError("foot must be 'left' or 'right'")
+        # body_id = mujoco.mj_name2id(
+        #     self.mjx_model, mujoco.mjtObj.mjOBJ_BODY, f"{foot}_ps_2"
+        # )
+        # body_id = self.mjx_model.body(name=f"{foot}_ps_2")
+        # body_id = self.mjx_model.mj_name2id("body", f"{foot}_ps_2")
+        body_id = self.get_body_id_from_name(f"{foot}_ps_2")
+
+        pos = data.xpos[body_id]  # np.array([x, y, z])
+
+        offset = jp.array([0.14 / 2, -0.08 / 2, 0.0])
+        mat = data.xmat[body_id].reshape(3, 3)  # rotation matrix
+
+        # project pos on the ground
+        pos = pos.at[2].set(0.001)
+
+        # cancel all rotation except z
+        theta = jp.arctan2(mat[1, 0], mat[0, 0])
+
+        # Build a pure yaw rotation matrix
+        mat = jp.array(
+            [
+                [jp.cos(theta), -jp.sin(theta), 0],
+                [jp.sin(theta), jp.cos(theta), 0],
+                [0, 0, 1],
+            ]
+        )
+
+        # apply the offset to the position resulting from the rotation
+        # the offset is in the local frame of the left foot
+        offset_world = mat @ offset
+        # offset_world = jp.matmul(mat, offset)
+
+        pos += offset_world
+
+        return pos, theta, mat
 
     def step(self, state: mjx_env.State, action: jax.Array) -> mjx_env.State:
         if USE_IMITATION_REWARD:
@@ -670,6 +708,14 @@ class Joystick(sigmaban_base.SigmabanEnv):
     ) -> dict[str, jax.Array]:
         del metrics  # Unused.
 
+        projected_left_foot_pos, _, _ = self._get_projected_foot(data, "left")
+
+        projected_right_foot_pos, _, _ = self._get_projected_foot(data, "right")
+
+        feet_dist = jp.linalg.norm(
+            projected_left_foot_pos[:2] - projected_right_foot_pos[:2]
+        )
+
         ret = {
             "tracking_lin_vel": reward_tracking_lin_vel(
                 info["command"],
@@ -703,6 +749,7 @@ class Joystick(sigmaban_base.SigmabanEnv):
                 self._default_actuator,
                 ignore_head=False,
             ),
+            "feet_dist": cost_feet_dist(feet_dist),
             # "head_pos": cost_head_pos(
             #     self.get_actuator_joints_qpos(data.qpos),
             #     self.get_actuator_joints_qvel(data.qvel),

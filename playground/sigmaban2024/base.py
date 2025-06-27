@@ -132,6 +132,9 @@ class SigmabanEnv(mjx_env.MjxEnv):
         print(f"floating qpos addr: {self._floating_base_qpos_addr} qvel addr: {self._floating_base_qvel_addr}")
 
 
+    def get_body_id_from_name(self, name: str) -> int:
+        """Return the id of a specified body"""
+        return mujoco.mj_name2id(self._mj_model, mujoco.mjtObj.mjOBJ_BODY, name)
 
     def get_actuator_id_from_name(self, name: str) -> int:
         """Return the id of a specified actuator"""

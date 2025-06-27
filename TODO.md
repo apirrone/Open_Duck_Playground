@@ -1,0 +1,5 @@
+- réentraîner policy qui se tape pas les pieds
+  - activer randomization
+- Exporter onnx to openvino
+- écrire l'inférence en c++ dans kid_size branch walk_rl (faire une autre branche)
+-

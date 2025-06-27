@@ -172,3 +172,7 @@ def reward_imitation(
 
 def cost_feet_rectangle_contact(feet_rectangle_contact:jax.Array):
     return jp.nan_to_num(-jp.sum(feet_rectangle_contact))
+
+
+def cost_feet_dist(feet_dist):
+    return jp.nan_to_num(feet_dist < 0.1)
