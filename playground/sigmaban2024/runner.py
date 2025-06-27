@@ -22,7 +22,7 @@ class SigmabanRunner(BaseRunner):
         self.env_config = self.env_file[0].default_config()
         self.env = self.env_file[1](task=args.task)
         self.eval_env = self.env_file[1](task=args.task)
-        # self.randomizer = randomize.domain_randomize # TODO
+        self.randomizer = randomize.domain_randomize
         self.action_size = self.env.action_size
         self.obs_size = int(
             self.env.observation_size["state"][0]
