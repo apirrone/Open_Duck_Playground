@@ -215,10 +215,13 @@ class MjInfer(MJInferBase):
 
                     if counter % self.decimation == 0:
                         if not self.standing:
-                            self.imitation_i += 1.0 * self.phase_frequency_factor
-                            self.imitation_i = (
-                                self.imitation_i % self.PRM.nb_steps_in_period
-                            )
+                            if np.linalg.norm(self.commands) > 0.0:
+                                self.imitation_i += 1.0 * self.phase_frequency_factor
+                                self.imitation_i = (
+                                    self.imitation_i % self.PRM.nb_steps_in_period
+                                )
+                            else:
+                                self.imitation_i = 0.0
                             # print(self.PRM.nb_steps_in_period)
                             # exit()
                             self.imitation_phase = np.array(

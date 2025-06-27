@@ -63,7 +63,7 @@ def default_config() -> config_dict.ConfigDict:
         soft_joint_pos_limit_factor=0.95,
         max_motor_velocity=5.24,  # rad/s
         noise_config=config_dict.create(
-            level=0.0,  # Set to 0.0 to disable noise.
+            level=1.0,  # Set to 0.0 to disable noise.
             action_min_delay=0,  # env steps
             action_max_delay=3,  # env steps
             imu_min_delay=0,  # env steps
@@ -86,7 +86,7 @@ def default_config() -> config_dict.ConfigDict:
                 # orientation=-0.5,
                 torques=-1.0e-3,
                 # action_rate=-0.375,  # was -1.5
-                action_rate=-0.5,  # was -0.3
+                action_rate=-1.0,  # was -0.3
                 stand_still=0.0,  # was -0.3
                 alive=20.0,
                 imitation=1.0,
