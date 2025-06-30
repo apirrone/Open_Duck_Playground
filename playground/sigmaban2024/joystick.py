@@ -322,7 +322,7 @@ class Joystick(sigmaban_base.SigmabanEnv):
             "last_act": jp.zeros(self.mjx_model.nu),
             "last_last_act": jp.zeros(self.mjx_model.nu),
             "last_last_last_act": jp.zeros(self.mjx_model.nu),
-            # "motor_targets": self._default_actuator,
+            "motor_targets": self._default_actuator,
             "feet_air_time": jp.zeros(2),
             "last_contact": jp.zeros(2, dtype=bool),
             "swing_peak": jp.zeros(2),
