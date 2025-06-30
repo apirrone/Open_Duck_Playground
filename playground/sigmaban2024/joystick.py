@@ -84,13 +84,13 @@ def default_config() -> config_dict.ConfigDict:
                 tracking_lin_vel=2.5,
                 tracking_ang_vel=4.0,
                 # orientation=-0.5,
-                torques=-1.0e-3,
+                torques=-1.0e-2,
                 # action_rate=-0.375,  # was -1.5
-                action_rate=-1.0,  # was -0.3
+                action_rate=-0.5,  # was -0.3
                 stand_still=0.0,  # was -0.3
                 alive=20.0,
                 imitation=1.0,
-                feet_dist=-1.0,
+                feet_dist=-2.0,
                 # head_pos=-1.0,
             ),
             tracking_sigma=0.01,  # was working at 0.01
@@ -322,7 +322,7 @@ class Joystick(sigmaban_base.SigmabanEnv):
             "last_act": jp.zeros(self.mjx_model.nu),
             "last_last_act": jp.zeros(self.mjx_model.nu),
             "last_last_last_act": jp.zeros(self.mjx_model.nu),
-            "motor_targets": self._default_actuator,
+            # "motor_targets": self._default_actuator,
             "feet_air_time": jp.zeros(2),
             "last_contact": jp.zeros(2, dtype=bool),
             "swing_peak": jp.zeros(2),
@@ -652,7 +652,7 @@ class Joystick(sigmaban_base.SigmabanEnv):
         state = jp.hstack(
             [
                 # linvel,
-                # noisy_gyro,  # 3
+                noisy_gyro,  # 3
                 # noisy_accelerometer,  # 3
                 noisy_gravity,  # 3
                 info["command"],  # 7
@@ -661,7 +661,7 @@ class Joystick(sigmaban_base.SigmabanEnv):
                 info["last_act"],  # 20
                 info["last_last_act"],  # 20
                 info["last_last_last_act"],  # 20
-                info["motor_targets"],  # 20
+                # info["motor_targets"],  # 20
                 contact,  # 2
                 info["imitation_phase"],  # 2
             ]

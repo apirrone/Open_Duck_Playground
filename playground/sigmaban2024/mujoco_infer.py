@@ -132,7 +132,7 @@ class MjInfer(MJInferBase):
         obs = np.concatenate(
             [
                 # linvel,
-                # gyro,
+                gyro,
                 # accelerometer,
                 gravity,
                 command,
@@ -141,7 +141,7 @@ class MjInfer(MJInferBase):
                 self.last_action,
                 self.last_last_action,
                 self.last_last_last_action,
-                self.motor_targets,
+                # self.motor_targets,
                 contacts,
                 self.imitation_phase,
             ]
