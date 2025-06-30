@@ -123,6 +123,7 @@ class MjInfer(MJInferBase):
         joint_vel = self.get_actuator_joints_qvel(data.qvel)
 
         contacts = self.get_feet_contacts(data)
+        # contacts = [1., 1.]
 
         linvel = self.get_linvel(data)
 
@@ -170,7 +171,7 @@ class MjInfer(MJInferBase):
             if keycode == 69:  # e
                 ang_vel = self.COMMANDS_RANGE_THETA[0]
             if keycode == 80:  # p
-                self.data.qvel[:2] = [1.0, 0]
+                self.data.qvel[:2] = [0.5, 0]
                 # self.phase_frequency_factor += 0.1
             if keycode == 59:  # m
                 self.phase_frequency_factor -= 0.1
