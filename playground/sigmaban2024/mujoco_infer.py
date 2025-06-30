@@ -115,7 +115,7 @@ class MjInfer(MJInferBase):
         accelerometer = self.get_accelerometer(data)
         accelerometer[0] += 1.3
 
-        gravity = data.site_xmat[self.get_body_id_from_name("trunk")].T @ np.array(
+        gravity = np.array(data.site_xmat[self.get_body_id_from_name("trunk")].T).reshape((3, 3)) @ np.array(
             [0, 0, -1]
         )
 
@@ -219,13 +219,13 @@ class MjInfer(MJInferBase):
 
                     if counter % self.decimation == 0:
                         if not self.standing:
-                            if np.linalg.norm(self.commands) > 0.0:
-                                self.imitation_i += 1.0 * self.phase_frequency_factor
-                                self.imitation_i = (
-                                    self.imitation_i % self.PRM.nb_steps_in_period
-                                )
-                            else:
-                                self.imitation_i = 0.0
+                            # if np.linalg.norm(self.commands) > 0.0:
+                            self.imitation_i += 1.0 * self.phase_frequency_factor
+                            self.imitation_i = (
+                                self.imitation_i % self.PRM.nb_steps_in_period
+                            )
+                            # else:
+                            #     self.imitation_i = 0.0
                             # print(self.PRM.nb_steps_in_period)
                             # exit()
                             self.imitation_phase = np.array(
