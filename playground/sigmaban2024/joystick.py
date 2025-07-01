@@ -514,7 +514,8 @@ class Joystick(sigmaban_base.SigmabanEnv):
         state.info["swing_peak"] = jp.maximum(state.info["swing_peak"], p_fz)
 
         obs = self._get_obs(data, state.info, contact)
-        done = self._get_termination(data)
+        # done = self._get_termination(data)
+        done = jp.array(False)
 
         rewards = self._get_reward(
             data,

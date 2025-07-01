@@ -3,7 +3,7 @@
 
     <default>
         <geom contype="0" conaffinity="0"/>
-        <default class="cleat">
+        <default class="floor_collision">
             <geom conaffinity="1" contype="1"/>
         </default>
     </default>
@@ -133,12 +133,12 @@
                         <inertial pos="7.98171e-05 -0.0556905 -0.0234333" quat="0.516125 0.5144 -0.483923 0.484589"
                             mass="0.256846" diaginertia="0.000947096 0.000937203 0.000130591"/>
                         <joint class="mx64" name="left_elbow" pos="0 0 0" axis="0 0 1"/>
-                        <geom size="0.04 0.0015" pos="0 -0.1496 -0.042" quat="0.707107 0 0 -0.707107" type="cylinder"/>
-                        <geom size="0.0497756 0.0206 0.0015" pos="0 -0.0649756 -0.042" quat="0.707107 0 0 -0.707107"
+                        <geom class="floor_collision" size="0.04 0.0015" pos="0 -0.1496 -0.042" quat="0.707107 0 0 -0.707107" type="cylinder"/>
+                        <geom class="floor_collision" size="0.0497756 0.0206 0.0015" pos="0 -0.0649756 -0.042" quat="0.707107 0 0 -0.707107"
                             type="box"/>
-                        <geom size="0.0201 0.03055 0.0205" pos="0 -0.01755 -0.0235" quat="1 0 0 0" type="box"/>
-                        <geom size="0.04 0.0015" pos="0 -0.1496 -0.005" quat="0.707107 0 0 -0.707107" type="cylinder"/>
-                        <geom size="0.0497756 0.0206 0.0015" pos="0 -0.0649756 -0.005" quat="0.707107 0 0 -0.707107"
+                        <geom class="floor_collision" size="0.0201 0.03055 0.0205" pos="0 -0.01755 -0.0235" quat="1 0 0 0" type="box"/>
+                        <geom class="floor_collision" size="0.04 0.0015" pos="0 -0.1496 -0.005" quat="0.707107 0 0 -0.707107" type="cylinder"/>
+                        <geom class="floor_collision" size="0.0497756 0.0206 0.0015" pos="0 -0.0649756 -0.005" quat="0.707107 0 0 -0.707107"
                             type="box"/>
                     </body>
                 </body>
@@ -158,13 +158,13 @@
                         <inertial pos="7.98171e-05 0.0556905 0.0234333" quat="0.484589 0.483923 -0.5144 0.516125"
                             mass="0.256846" diaginertia="0.000947096 0.000937203 0.000130591"/>
                         <joint class="mx64" name="right_elbow" pos="0 0 0" axis="0 0 1"/>
-                        <geom size="0.04 0.0015" pos="0 0.1496 0.005" quat="0 0.707107 0.707107 0" type="cylinder"/>
-                        <geom size="0.0497756 0.0206 0.0015" pos="0 0.0649756 0.005" quat="0 0.707107 0.707107 0"
+                        <geom class="floor_collision" size="0.04 0.0015" pos="0 0.1496 0.005" quat="0 0.707107 0.707107 0" type="cylinder"/>
+                        <geom class="floor_collision" size="0.0497756 0.0206 0.0015" pos="0 0.0649756 0.005" quat="0 0.707107 0.707107 0"
                             type="box"/>
-                        <geom size="0.04 0.0015" pos="0 0.1496 0.042" quat="0 0.707107 0.707107 0" type="cylinder"/>
-                        <geom size="0.0497756 0.0206 0.0015" pos="0 0.0649756 0.042" quat="0 0.707107 0.707107 0"
+                        <geom class="floor_collision" size="0.04 0.0015" pos="0 0.1496 0.042" quat="0 0.707107 0.707107 0" type="cylinder"/>
+                        <geom class="floor_collision" size="0.0497756 0.0206 0.0015" pos="0 0.0649756 0.042" quat="0 0.707107 0.707107 0"
                             type="box"/>
-                        <geom size="0.0201 0.03055 0.0205" pos="0 0.01755 0.0235" quat="0 1 0 0" type="box"/>
+                        <geom class="floor_collision" size="0.0201 0.03055 0.0205" pos="0 0.01755 0.0235" quat="0 1 0 0" type="box"/>
                     </body>
                 </body>
             </body>
@@ -193,9 +193,9 @@
                                 quat="0.706918 0.707174 -0.00934954 -0.00915237" mass="0.113077"
                                 diaginertia="0.000351979 0.00027164 0.000103748"/>
                             <joint class="mx106" name="left_knee" pos="0 0 0" axis="0 0 1"/>
-                            <geom size="0.0202131 0.0850495 0.0015" pos="-0.0062131 0.068951 0.0015" quat="0 0 -1 0"
+                            <geom class="floor_collision" size="0.0202131 0.0850495 0.0015" pos="-0.0062131 0.068951 0.0015" quat="0 0 -1 0"
                                 type="box"/>
-                            <geom size="0.0202131 0.0850495 0.0015" pos="-0.0062131 0.068951 -0.05594" quat="0 0 -1 0"
+                            <geom class="floor_collision" size="0.0202131 0.0850495 0.0015" pos="-0.0062131 0.068951 -0.05594" quat="0 0 -1 0"
                                 type="box"/>
                             <body name="mx106_block_mir_ankle" pos="0 0.14 0" quat="0 0 0 1">
                                 <inertial pos="0.0195695 0.0153964 -0.0290274"
@@ -218,25 +218,25 @@
 
                                     <body name="left_foot_cleat_back_left">
                                         <site name="left_foot_cleat_back_left" quat="0.5 -0.5 -0.5 -0.5"/>
-                                        <geom class="cleat" size="0.008 0.008" pos="0.0435 -0.0535 -0.03213"
+                                        <geom class="floor_collision" size="0.008 0.008" pos="0.0435 -0.0535 -0.03213"
                                             quat="0.707107 0.707107 0 0" type="cylinder" name="left_foot_cleat_back_left"/>
                                     </body>
 
                                     <body name="left_foot_cleat_back_right">
                                         <site name="left_foot_cleat_back_right" quat="0.5 -0.5 -0.5 -0.5"/>
-                                        <geom class="cleat" size="0.008 0.008" pos="-0.0325 -0.0535 -0.03213"
+                                        <geom class="floor_collision" size="0.008 0.008" pos="-0.0325 -0.0535 -0.03213"
                                             quat="0.707107 0.707107 0 0" type="cylinder" name="left_foot_cleat_back_right"/>
                                     </body>
 
                                     <body name="left_foot_cleat_front_left">
                                         <site name="left_foot_cleat_front_left" quat="0.5 -0.5 -0.5 -0.5"/>
-                                        <geom class="cleat" size="0.008 0.008" pos="0.0435 -0.0535 0.10947"
+                                        <geom class="floor_collision" size="0.008 0.008" pos="0.0435 -0.0535 0.10947"
                                             quat="0 0 -0.707107 0.707107" type="cylinder" name="left_foot_cleat_front_left"/>
                                     </body>
 
                                     <body name="left_foot_cleat_front_right">
                                         <site name="left_foot_cleat_front_right" quat="0.5 -0.5 -0.5 -0.5"/>
-                                        <geom class="cleat" size="0.008 0.008" pos="-0.0325 -0.0535 0.10947"
+                                        <geom class="floor_collision" size="0.008 0.008" pos="-0.0325 -0.0535 0.10947"
                                             quat="0 0 -0.707107 0.707107" type="cylinder" name="left_foot_cleat_front_right"/>
                                     </body>
 
@@ -285,9 +285,9 @@
                                 quat="0.707175 0.706918 -0.00915244 -0.00934946" mass="0.113077"
                                 diaginertia="0.000351979 0.00027164 0.000103748"/>
                             <joint class="mx106" name="right_knee" pos="0 0 0" axis="0 0 1"/>
-                            <geom size="0.0202131 0.0850495 0.0015" pos="-0.0062131 0.068951 0.05594" quat="0 0 1 0"
+                            <geom class="floor_collision" size="0.0202131 0.0850495 0.0015" pos="-0.0062131 0.068951 0.05594" quat="0 0 1 0"
                                 type="box"/>
-                            <geom size="0.0202131 0.0850495 0.0015" pos="-0.0062131 0.068951 -0.0015" quat="0 0 -1 0"
+                            <geom class="floor_collision" size="0.0202131 0.0850495 0.0015" pos="-0.0062131 0.068951 -0.0015" quat="0 0 -1 0"
                                 type="box"/>
                             <body name="mx106_block_ankle__list_0bj1pweadmbeeq_default" pos="0 0.14 0" quat="1 0 0 0">
                                 <inertial pos="-0.0195724 -0.0153964 0.0290252"
@@ -309,23 +309,23 @@
 
                                     <body name="right_foot_cleat_back_right">
                                         <site name="right_foot_cleat_back_right" quat="0.5 -0.5 -0.5 -0.5"/>
-                                        <geom class="cleat" size="0.008 0.008" pos="-0.0435 -0.0535 -0.03213"
+                                        <geom class="floor_collision" size="0.008 0.008" pos="-0.0435 -0.0535 -0.03213"
                                             quat="0.707107 0.707107 0 0" type="cylinder" name="right_foot_cleat_back_right"/>
                                     </body>
                                     <body name="right_foot_cleat_back_left">
                                         <site name="right_foot_cleat_back_left" quat="0.5 -0.5 -0.5 -0.5"/>
-                                        <geom class="cleat" size="0.008 0.008" pos="0.0325 -0.0535 -0.03213"
+                                        <geom class="floor_collision" size="0.008 0.008" pos="0.0325 -0.0535 -0.03213"
                                             quat="0.707107 0.707107 0 0" type="cylinder" name="right_foot_cleat_back_left"/>
                                     </body>
                                     <body name="right_foot_cleat_front_right">
                                         <site name="right_foot_cleat_front_right" quat="0.5 -0.5 -0.5 -0.5"/>
-                                        <geom class="cleat" size="0.008 0.008" pos="-0.0435 -0.0535 0.10947"
+                                        <geom class="floor_collision" size="0.008 0.008" pos="-0.0435 -0.0535 0.10947"
                                             quat="0 0 -0.707107 0.707107" type="cylinder" name="right_foot_cleat_front_right"/>
                                     </body>
                                     <body name="right_foot_cleat_front_left">
                                         <site name="right_foot_cleat_front_left" quat="0.5 -0.5 -0.5 -0.5"/>
 
-                                        <geom class="cleat" size="0.008 0.008" pos="0.0325 -0.0535 0.10947"
+                                        <geom class="floor_collision" size="0.008 0.008" pos="0.0325 -0.0535 0.10947"
                                             quat="0 0 -0.707107 0.707107" type="cylinder" name="right_foot_cleat_front_left"/>
                                     </body>
 
