@@ -124,6 +124,10 @@ class MJInferBase:
         self.data.qpos[:] = self.model.keyframe("home").qpos
         self.data.ctrl[:] = self.default_actuator
 
+    def get_site_id_from_name(self, name: str) -> int:
+        """Return the id of a specified site"""
+        return mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_SITE, name)
+
     def get_body_id_from_name(self, name: str) -> int:
         """Return the id of a specified body"""
         return mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, name)

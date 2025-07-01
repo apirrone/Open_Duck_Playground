@@ -115,9 +115,16 @@ class MjInfer(MJInferBase):
         accelerometer = self.get_accelerometer(data)
         accelerometer[0] += 1.3
 
-        gravity = np.array(data.site_xmat[self.get_body_id_from_name("trunk")].T).reshape((3, 3)) @ np.array(
+        # BEFORE
+        # gravity = np.array(data.site_xmat[self.get_body_id_from_name("trunk")]).T.reshape((3, 3)) @ np.array(
+        #     [0, 0, -1]
+        # )
+
+        # AFTER
+        gravity = np.array(data.site_xmat[self.get_site_id_from_name("trunk")]).reshape((3, 3)).T @ np.array(
             [0, 0, -1]
         )
+
 
         joint_angles = self.get_actuator_joints_qpos(data.qpos)
         joint_vel = self.get_actuator_joints_qvel(data.qvel)
@@ -171,7 +178,7 @@ class MjInfer(MJInferBase):
             if keycode == 69:  # e
                 ang_vel = self.COMMANDS_RANGE_THETA[0]
             if keycode == 80:  # p
-                self.data.qvel[:2] = [0.5, 0]
+                self.data.qvel[:2] = [1.0, 0]
                 # self.phase_frequency_factor += 0.1
             if keycode == 59:  # m
                 self.phase_frequency_factor -= 0.1
