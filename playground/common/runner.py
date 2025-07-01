@@ -40,8 +40,8 @@ class BaseRunner(ABC):
         self.action_size = None
         self.obs_size = None
         self.num_timesteps = args.num_timesteps
-        self.restore_checkpoint_path = None
-        
+        self.restore_checkpoint_path = args.restore_checkpoint_path
+
         # CACHE STUFF
         os.makedirs(".tmp", exist_ok=True)
         jax.config.update("jax_compilation_cache_dir", ".tmp/jax_cache")
@@ -89,7 +89,7 @@ class BaseRunner(ABC):
         )  # TODO
         self.ppo_training_params = dict(self.ppo_params)
         # self.ppo_training_params["num_timesteps"] = 150000000 * 20
-        
+
 
         if "network_factory" in self.ppo_params:
             network_factory = functools.partial(
