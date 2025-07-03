@@ -56,7 +56,7 @@ def default_config() -> config_dict.ConfigDict:
         # episode_length=450,
         episode_length=1000,
         action_repeat=1,
-        action_scale=0.5,
+        action_scale=1.0,
         # action_scale=1.0,
         dof_vel_scale=1.0,
         history_len=0,
