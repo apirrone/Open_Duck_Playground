@@ -86,7 +86,7 @@ def default_config() -> config_dict.ConfigDict:
                 # orientation=-0.5,
                 torques=-1.0e-2,
                 # action_rate=-0.375,  # was -1.5
-                action_rate=-1.5,  # was -0.3
+                action_rate=-0.75,  # was -0.3
                 stand_still=0.0,  # was -0.3
                 alive=20.0,
                 imitation=1.0,
