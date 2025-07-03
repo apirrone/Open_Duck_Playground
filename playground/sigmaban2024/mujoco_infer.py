@@ -129,6 +129,10 @@ class MjInfer(MJInferBase):
         joint_angles = self.get_actuator_joints_qpos(data.qpos)
         joint_vel = self.get_actuator_joints_qvel(data.qvel)
 
+        # add noise to joint vel
+        # joint_vel += np.random.random(20)*1.5
+
+
         contacts = self.get_feet_contacts(data)
         # contacts = [1., 1.]
 
@@ -149,7 +153,7 @@ class MjInfer(MJInferBase):
                 self.last_action,
                 self.last_last_action,
                 self.last_last_last_action,
-                # self.motor_targets,
+                self.motor_targets,
                 contacts,
                 self.imitation_phase,
             ]

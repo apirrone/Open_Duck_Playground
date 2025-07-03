@@ -72,7 +72,7 @@ for i in range(num_dofs):
     actions.append([])
     for obs in obses:
         dof_poses[i].append(obs[13 : 13 + num_dofs][i])
-        actions[i].append(obs[26 : 26 + num_dofs][i])
+        actions[i].append(obs[53 : 53 + num_dofs][i])
 
 # plot action vs dof pos
 
@@ -220,6 +220,8 @@ obses_names = [
 ]
 # print(len(obses_names))
 # exit()
+print(obses_names[13:13+20])
+print(obses_names[53:53+20])
 
 
 # obses = [[56 obs at time 0], [56 obs at time 1], ...]
