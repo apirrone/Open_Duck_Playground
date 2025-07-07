@@ -43,7 +43,7 @@ from playground.open_duck_mini_v2.custom_rewards import reward_imitation
 
 # if set to false, won't require the reference data to be present and won't compute the reference motions polynoms for nothing
 USE_IMITATION_REWARD = True
-USE_MOTOR_SPEED_LIMITS = False
+USE_MOTOR_SPEED_LIMITS = True
 HEAD_MIX = True  # if true, the head joints are mixed with the commands
 
 
@@ -54,7 +54,7 @@ def default_config() -> config_dict.ConfigDict:
         episode_length=1000,
         action_repeat=1,
         action_scale=1.0,
-        dof_vel_scale=0.05,
+        dof_vel_scale=1.0,
         history_len=0,
         soft_joint_pos_limit_factor=0.95,
         max_motor_velocity=5.24,  # rad/s
@@ -68,7 +68,7 @@ def default_config() -> config_dict.ConfigDict:
                 hip_pos=0.03,  # rad, for each hip joint
                 knee_pos=0.05,  # rad, for each knee joint
                 ankle_pos=0.08,  # rad, for each ankle joint
-                joint_vel=1.5,  # rad/s # Was 2.5
+                joint_vel=2.5,  # rad/s # Was 2.5
                 gravity=0.1,
                 linvel=0.1,
                 gyro=0.1,
@@ -81,7 +81,7 @@ def default_config() -> config_dict.ConfigDict:
                 tracking_ang_vel=6.0,
                 torques=-1.0e-3,
                 action_rate=-0.1,  # was -1.5
-                stand_still=-0.2,  # was -1.0 TODO try to relax this a bit ?
+                stand_still=0.0,
                 alive=20.0,
                 imitation=1.0,
             ),
@@ -238,8 +238,8 @@ class Joystick(open_duck_mini_v2_base.OpenDuckMiniV2Env):
         rng, key = jax.random.split(rng)
 
         # multiply actual joints with noise (excluding floating base and backlash)
-        qpos_j = self.get_actuator_joints_qpos(qpos) * jax.random.uniform(
-            key, (self._actuators,), minval=0.5, maxval=1.5
+        qpos_j = self.get_actuator_joints_qpos(qpos) + jax.random.uniform(
+            key, (self._actuators,), minval=0.5, maxval=0.5
         )
         qpos = self.set_actuator_joints_qpos(qpos_j, qpos)
         # print(f'DEBUG2 joint qpos: {qpos}')

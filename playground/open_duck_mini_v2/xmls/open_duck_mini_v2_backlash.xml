@@ -44,11 +44,11 @@
   <default>
     <default class="sts3215">
       <geom contype="0" conaffinity="0"/>
-      <joint damping="0.56" frictionloss="0.068" armature="0.027"/>
+      <joint damping="0.578" frictionloss="0.084" armature="0.0262"/>
       <!-- Corresponds to firmware kp = 32 -->
-      <!-- <position kp="17.11" kv="0.0" forcerange="-3.23 3.23"/> -->
-      <!-- Corresponds to firmware kp = 8 -->
-      <position kp="4.32" kv="0.0" forcerange="-3.23 3.23"/>
+      <!-- <position kp="17.28" kv="0.0" forcerange="-3.35 3.35"/> -->
+      <!-- Corresponds to firmware kp = 16 -->
+      <position kp="8.64" kv="0.0" forcerange="-3.23 3.23"/>
     </default>
     <default class="backlash">
       <!-- +/- 0.5° of backlash -->

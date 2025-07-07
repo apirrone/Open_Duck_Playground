@@ -11,7 +11,7 @@ from playground.common.utils import LowPassActionFilter
 
 from playground.open_duck_mini_v2.mujoco_infer_base import MJInferBase
 
-USE_MOTOR_SPEED_LIMITS = False
+USE_MOTOR_SPEED_LIMITS = True
 HEAD_MIX = True  # if true, the head joints are mixed with the commands
 
 
@@ -28,7 +28,7 @@ class MjInfer(MJInferBase):
         self.linearVelocityScale = 1.0
         self.angularVelocityScale = 1.0
         self.dof_pos_scale = 1.0
-        self.dof_vel_scale = 0.05
+        self.dof_vel_scale = 1.0
         self.action_scale = 1.0
 
         self.action_filter = LowPassActionFilter(50, cutoff_frequency=37.5)
