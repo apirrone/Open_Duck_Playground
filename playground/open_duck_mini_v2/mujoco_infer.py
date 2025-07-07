@@ -11,8 +11,8 @@ from playground.common.utils import LowPassActionFilter
 
 from playground.open_duck_mini_v2.mujoco_infer_base import MJInferBase
 
-USE_MOTOR_SPEED_LIMITS = True
-HEAD_MIX = True  # if true, the head joints are mixed with the commands
+USE_MOTOR_SPEED_LIMITS = False
+HEAD_MIX = False  # if true, the head joints are mixed with the commands
 
 
 class MjInfer(MJInferBase):
@@ -174,8 +174,8 @@ class MjInfer(MJInferBase):
 
                     if counter % self.decimation == 0:
                         if not self.standing:
-                            if np.linalg.norm(self.commands[:3]) > 0.01:
-                                self.imitation_i += 1.0 * self.phase_frequency_factor
+                            # if np.linalg.norm(self.commands[:3]) > 0.01:
+                            self.imitation_i += 1.0 * self.phase_frequency_factor
                             self.imitation_i = (
                                 self.imitation_i % self.PRM.nb_steps_in_period
                             )
@@ -231,6 +231,7 @@ class MjInfer(MJInferBase):
                         if HEAD_MIX:
                             head_mix = self.commands[3:] + self.motor_targets[5:9]
                             self.motor_targets[5:9] = head_mix
+                        # self.motor_targets[5:9] = [0.3, -0.3, 0, 0]
 
                         self.data.ctrl = self.motor_targets.copy()
 
