@@ -85,7 +85,7 @@ def default_config() -> config_dict.ConfigDict:
                 stand_still=0.0,
                 alive=20.0,
                 imitation=1.0,
-                head_pos=-0.1
+                head_pos=-1.0
             ),
             tracking_sigma=0.01,  # was working at 0.01
         ),
