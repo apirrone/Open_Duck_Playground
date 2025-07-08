@@ -16,6 +16,8 @@ dependencies = [
     "pygame>=2.6.1",
     "tensorflow>=2.18.0",
     "tf2onnx>=1.16.1",
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
 ]
 [build-system]
 requires = ["setuptools"]

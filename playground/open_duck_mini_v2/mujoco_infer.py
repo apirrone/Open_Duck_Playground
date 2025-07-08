@@ -10,18 +10,20 @@ from playground.common.poly_reference_motion_numpy import PolyReferenceMotion
 from playground.common.utils import LowPassActionFilter
 
 from playground.open_duck_mini_v2.mujoco_infer_base import MJInferBase
+from playground.open_duck_mini_v2.command_handler import CommandHandler, CommandLimits
 
 USE_MOTOR_SPEED_LIMITS = True
 
 
 class MjInfer(MJInferBase):
     def __init__(
-        self, model_path: str, reference_data: str, onnx_model_path: str, standing: bool
+        self, model_path: str, reference_data: str, onnx_model_path: str, standing: bool,
+        use_api: bool = False
     ):
         super().__init__(model_path)
 
         self.standing = standing
-        self.head_control_mode = self.standing
+        self.use_api = use_api
 
         # Params
         self.linearVelocityScale = 1.0
@@ -37,19 +39,29 @@ class MjInfer(MJInferBase):
 
         self.policy = OnnxInfer(onnx_model_path, awd=True)
 
-        self.COMMANDS_RANGE_X = [-0.15, 0.15]
-        self.COMMANDS_RANGE_Y = [-0.2, 0.2]
-        self.COMMANDS_RANGE_THETA = [-1.0, 1.0]  # [-1.0, 1.0]
-
-        self.NECK_PITCH_RANGE = [-0.34, 1.1]
-        self.HEAD_PITCH_RANGE = [-0.78, 0.78]
-        self.HEAD_YAW_RANGE = [-1.5, 1.5]
-        self.HEAD_ROLL_RANGE = [-0.5, 0.5]
+        # Initialize command handler with limits
+        limits = CommandLimits(
+            linear_velocity_x=(-0.15, 0.15),
+            linear_velocity_y=(-0.2, 0.2),
+            angular_velocity=(-1.0, 1.0),
+            neck_pitch=(-0.34, 1.1),
+            head_pitch=(-0.78, 0.78),
+            head_yaw=(-1.5, 1.5),
+            head_roll=(-0.5, 0.5)
+        )
+        
+        if self.use_api:
+            # Use the global command handler from API server
+            from playground.open_duck_mini_v2.api_server import get_command_handler
+            self.command_handler = get_command_handler()
+        else:
+            # Create local command handler for keyboard control
+            self.command_handler = CommandHandler(limits)
 
         self.last_action = np.zeros(self.num_dofs)
         self.last_last_action = np.zeros(self.num_dofs)
         self.last_last_last_action = np.zeros(self.num_dofs)
-        self.commands = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        # Commands are now managed by command_handler
 
         self.imitation_i = 0
         self.imitation_phase = np.array([0, 0])
@@ -103,55 +115,14 @@ class MjInfer(MJInferBase):
         return obs
 
     def key_callback(self, keycode):
-        print(f"key: {keycode}")
-        if keycode == 72:  # h
-            self.head_control_mode = not self.head_control_mode
-        lin_vel_x = 0
-        lin_vel_y = 0
-        ang_vel = 0
-        if not self.head_control_mode:
-            if keycode == 265:  # arrow up
-                lin_vel_x = self.COMMANDS_RANGE_X[1]
-            if keycode == 264:  # arrow down
-                lin_vel_x = self.COMMANDS_RANGE_X[0]
-            if keycode == 263:  # arrow left
-                lin_vel_y = self.COMMANDS_RANGE_Y[1]
-            if keycode == 262:  # arrow right
-                lin_vel_y = self.COMMANDS_RANGE_Y[0]
-            if keycode == 81:  # a
-                ang_vel = self.COMMANDS_RANGE_THETA[1]
-            if keycode == 69:  # e
-                ang_vel = self.COMMANDS_RANGE_THETA[0]
-            if keycode == 80:  # p
-                self.phase_frequency_factor += 0.1
-            if keycode == 59:  # m
-                self.phase_frequency_factor -= 0.1
-        else:
-            neck_pitch = 0
-            head_pitch = 0
-            head_yaw = 0
-            head_roll = 0
-            if keycode == 265:  # arrow up
-                head_pitch = self.NECK_PITCH_RANGE[1]
-            if keycode == 264:  # arrow down
-                head_pitch = self.NECK_PITCH_RANGE[0]
-            if keycode == 263:  # arrow left
-                head_yaw = self.HEAD_YAW_RANGE[1]
-            if keycode == 262:  # arrow right
-                head_yaw = self.HEAD_YAW_RANGE[0]
-            if keycode == 81:  # a
-                head_roll = self.HEAD_ROLL_RANGE[1]
-            if keycode == 69:  # e
-                head_roll = self.HEAD_ROLL_RANGE[0]
-
-            self.commands[3] = neck_pitch
-            self.commands[4] = head_pitch
-            self.commands[5] = head_yaw
-            self.commands[6] = head_roll
-
-        self.commands[0] = lin_vel_x
-        self.commands[1] = lin_vel_y
-        self.commands[2] = ang_vel
+        if not self.use_api:
+            print(f"key: {keycode}")
+            if not self.command_handler.process_keyboard_input(keycode):
+                # Handle phase frequency changes
+                if keycode == 80:  # p
+                    self.phase_frequency_factor += 0.1
+                elif keycode == 59:  # m
+                    self.phase_frequency_factor -= 0.1
 
     def run(self):
         try:
@@ -197,7 +168,7 @@ class MjInfer(MJInferBase):
                             )
                         obs = self.get_obs(
                             self.data,
-                            self.commands,
+                            self.command_handler.get_commands(),
                         )
                         self.saved_obs.append(obs)
                         action = self.policy.infer(obs)
@@ -257,10 +228,13 @@ if __name__ == "__main__":
         default="playground/open_duck_mini_v2/xmls/scene_flat_terrain.xml",
     )
     parser.add_argument("--standing", action="store_true", default=False)
+    parser.add_argument("--use_api", action="store_true", default=False,
+                        help="Use API server for control instead of keyboard")
 
     args = parser.parse_args()
 
     mjinfer = MjInfer(
-        args.model_path, args.reference_data, args.onnx_model_path, args.standing
+        args.model_path, args.reference_data, args.onnx_model_path, args.standing,
+        args.use_api
     )
     mjinfer.run()
