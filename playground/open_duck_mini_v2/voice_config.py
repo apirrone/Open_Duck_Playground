@@ -9,7 +9,7 @@ API_TIMEOUT = 5.0  # seconds
 # Voice Recognition Configuration
 DEFAULT_MODEL_SIZE = "tiny"  # Options: tiny, base, small, medium, large
 DEFAULT_LANGUAGE = "en"
-DEFAULT_WAKE_WORDS = ["duck duck"]
+DEFAULT_WAKE_WORDS = ["duckduck"]
 
 # Audio Configuration
 AUDIO_SAMPLE_RATE = 16000

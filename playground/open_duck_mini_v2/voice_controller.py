@@ -21,7 +21,7 @@ class DuckVoiceController:
         self.api_url = api_url
         self.model_size = model_size
         self.language = language
-        self.wake_words = wake_words or ["duck duck"]
+        self.wake_words = wake_words
         self.on_wake_word_callback = on_wake_word
         self.on_command_callback = on_command
         self.is_listening = False
@@ -47,20 +47,13 @@ class DuckVoiceController:
             
             # Add wake word configuration if provided
             if self.wake_words:
+                # Use OpenWakeWord backend which supports custom wake words
                 wake_words_str = ", ".join(self.wake_words) if isinstance(self.wake_words, list) else self.wake_words
-                # Check if using a default Porcupine wake word
-                default_wake_words = [
-                    "pico clock", "ok google", "bumblebee", "americano", "porcupine", 
-                    "hey siri", "terminator", "grapefruit", "jarvis", "alexa", 
-                    "computer", "hey google", "blueberry", "grasshopper", "picovoice"
-                ]
-                if wake_words_str.lower() in default_wake_words:
-                    config["wake_words"] = wake_words_str
-                    config["wakeword_backend"] = "pvporcupine"
-                    config["on_wakeword_detected"] = self._on_wake_word_detected
-                else:
-                    logger.warning(f"Wake word '{wake_words_str}' not in default Porcupine list. Running without wake word.")
-                    logger.info("Available wake words: " + ", ".join(default_wake_words))
+                config["wake_words"] = wake_words_str
+                config["wakeword_backend"] = "oww"  # Use OpenWakeWord
+                config["on_wakeword_detected"] = self._on_wake_word_detected
+                config["openwakeword_inference_framework"] = "onnx"  # Use ONNX for better compatibility
+                logger.info(f"Using OpenWakeWord backend with wake word: {wake_words_str}")
             
             self.recorder = AudioToTextRecorder(**config)
             logger.info(f"Voice controller initialized with model: {self.model_size}")
@@ -87,7 +80,10 @@ class DuckVoiceController:
         
         try:
             while self.is_listening:
-                logger.info("Listening for wake word...")
+                if self.wake_words:
+                    logger.info("Listening for wake word...")
+                else:
+                    logger.info("Listening for command...")
                 text = self.recorder.text()
                 
                 if text and len(text.strip()) > 0:
