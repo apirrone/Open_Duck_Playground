@@ -3,6 +3,7 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 import threading
+import time
 
 
 class ControlMode(Enum):
@@ -157,5 +158,5 @@ class CommandHandler:
                     "head_pitch": self.limits.head_pitch,
                     "head_yaw": self.limits.head_yaw,
                     "head_roll": self.limits.head_roll
-                }
+                },
             }

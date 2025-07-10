@@ -69,6 +69,12 @@ def main():
         action="store_true",
         help="Enable debug logging"
     )
+    parser.add_argument(
+        "--auto-stop-delay",
+        type=float,
+        default=5.0,
+        help="Seconds before a movement command is automatically stopped (default: 5.0)"
+    )
     
     args = parser.parse_args()
     
@@ -92,7 +98,10 @@ def main():
         logger.info("Wake word: None (always listening)")
 
     # Initialize command parser
-    command_parser = DuckCommandParser(api_url=args.api_url)
+    command_parser = DuckCommandParser(
+        api_url=args.api_url,
+        auto_stop_delay=args.auto_stop_delay
+    )
     
     # Initialize voice controller
     global controller
