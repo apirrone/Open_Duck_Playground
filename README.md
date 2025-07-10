@@ -94,6 +94,20 @@ curl -X POST http://localhost:8000/command/locomotion \
 
 See [API_CONTROL_README.md](API_CONTROL_README.md) for full API documentation.
 
+### Voice Control (New!)
+Control the robot using voice commands:
+
+```bash
+# Recommended: Use with language filtering
+python playground/open_duck_mini_v2/run_voice_control.py --no-wake-word --filter-languages
+
+# With wake word "duck duck"
+python playground/open_duck_mini_v2/run_voice_control.py --filter-languages
+```
+
+Voice commands include: "go forward", "turn left", "stop", "look up", etc.
+Use `--filter-languages` to prevent false triggers from non-English speech.
+
 # Documentation
 
 ## Project structure : 

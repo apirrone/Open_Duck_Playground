@@ -34,14 +34,25 @@ def main():
     )
     parser.add_argument(
         "--model",
-        default="base",
+        default="small",
         choices=["tiny", "base", "small", "medium", "large"],
-        help="Whisper model size (default: base)"
+        help="Whisper model size (default: small)"
     )
     parser.add_argument(
         "--language",
         default="en",
         help="Language code (default: en)"
+    )
+    parser.add_argument(
+        "--filter-languages",
+        action="store_true",
+        help="Enable language filtering to only accept specified languages"
+    )
+    parser.add_argument(
+        "--allowed-languages",
+        nargs="+",
+        default=["en"],
+        help="List of allowed language codes when filtering is enabled (default: en)"
     )
     parser.add_argument(
         "--wake-word",
@@ -70,6 +81,9 @@ def main():
     logger.info("Starting Open Duck Voice Control")
     logger.info(f"API URL: {args.api_url}")
     logger.info(f"Model: {args.model}")
+    logger.info(f"Language: {args.language}")
+    if args.filter_languages:
+        logger.info(f"Language filtering enabled. Allowed languages: {', '.join(args.allowed_languages)}")
 
     use_wake_word = not args.no_wake_word
     if use_wake_word:
@@ -88,7 +102,9 @@ def main():
         language=args.language,
         wake_words=[args.wake_word] if use_wake_word else None,
         on_wake_word=lambda: print("\n🦆 Wake word detected! Listening for command..."),
-        on_command=lambda text: handle_command(text, command_parser)
+        on_command=lambda text: handle_command(text, command_parser),
+        filter_languages=args.filter_languages,
+        allowed_languages=args.allowed_languages
     )
     
     print("\n" + "="*50)
