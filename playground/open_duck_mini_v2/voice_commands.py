@@ -168,14 +168,16 @@ class DuckCommandParser:
         logger.debug(f"Auto-stop scheduled in {self.auto_stop_delay} seconds")
     
     def execute_command(self, text: str) -> Dict[str, Any]:
-        # Cancel any pending auto-stop when a new command arrives
-        self._cancel_auto_stop()
-        
         cmd_type, params = self.parse_command(text)
         
         if cmd_type == CommandType.UNKNOWN:
             logger.warning(f"Unknown command: {text}")
+            # Don't cancel auto-stop for unknown commands
             return {"success": False, "message": "Command not recognized"}
+        
+        # Only cancel auto-stop for actual commands that affect movement
+        if cmd_type in [CommandType.STOP, CommandType.MOVE, CommandType.TURN]:
+            self._cancel_auto_stop()
         
         try:
             if cmd_type == CommandType.STOP:
