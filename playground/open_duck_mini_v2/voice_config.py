@@ -8,7 +8,7 @@ API_TIMEOUT = 5.0  # seconds
 
 # Voice Recognition Configuration
 DEFAULT_MODEL_SIZE = "small"  # Options: tiny, base, small, medium, large
-DEFAULT_LANGUAGE = "en"
+DEFAULT_LANGUAGE = "en"  # Force specific language to avoid auto-detection errors
 DEFAULT_WAKE_WORDS = ["duckduck"]
 
 # Audio Configuration
@@ -29,12 +29,6 @@ REALTIME_PROCESSING_PAUSE = 0.2  # seconds
 # Command Recognition
 COMMAND_CONFIDENCE_THRESHOLD = 0.7  # 0.0 to 1.0
 MAX_COMMAND_LENGTH = 100  # characters
-
-# Language Detection and Filtering
-LANGUAGE_DETECTION_ENABLED = True
-LANGUAGE_DETECTION_CONFIDENCE_THRESHOLD = 0.8  # 0.0 to 1.0
-ALLOWED_LANGUAGES = ["en"]  # List of allowed language codes (ISO 639-1)
-FILTER_NON_ENGLISH = True  # Filter out non-English transcriptions
 
 # Logging
 LOG_LEVEL = "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL

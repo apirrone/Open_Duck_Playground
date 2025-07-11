@@ -103,17 +103,17 @@ mjpython -m playground.open_duck_mini_v2.mujoco_with_api -o <path_to_.onnx>
 
 Then, run the voice control script in another terminal:
 ```bash
-# Recommended: Use with language filtering and no wake word
-python playground/open_duck_mini_v2/run_voice_control.py --filter-languages --no-wake-word
+# Recommended: Use no wake word for always-listening mode
+python playground/open_duck_mini_v2/run_voice_control.py --no-wake-word
 
 # With wake word "duck duck"
-python playground/open_duck_mini_v2/run_voice_control.py --filter-languages
+python playground/open_duck_mini_v2/run_voice_control.py
 ```
 
 #### Command-line Options
 The `run_voice_control.py` script has several options:
 
-By default, this will be in "always listening" mode. For more options, see `python playground/open_duck_mini_v2/run_voice_control.py --help`. The most common options are `--wake-word` to require a wake phrase (e.g., "duck duck"), and `--auto-stop-delay` to change how long the robot moves before stopping.
+By default, this will be in "always listening" mode. For more options, see `python playground/open_duck_mini_v2/run_voice_control.py --help`. The most common options are `--wake-word` to require a wake phrase (e.g., "duck duck"), `--language` to force a specific language (default: "en"), and `--auto-stop-delay` to change how long the robot moves before stopping.
 
 # Documentation
 
