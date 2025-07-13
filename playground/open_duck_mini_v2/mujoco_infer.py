@@ -75,6 +75,10 @@ class MjInfer(MJInferBase):
         print(f"actuator names: {self.actuator_names}")
         print(f"backlash joint names: {self.backlash_joint_names}")
         # print(f"actual joints idx: {self.get_actual_joints_idx()}")
+        
+        # Selection tracking for red highlighting
+        self.last_selected_body = -1
+        self.original_geom_colors = {}
 
     def get_obs(
         self,
@@ -123,6 +127,28 @@ class MjInfer(MJInferBase):
                     self.phase_frequency_factor += 0.1
                 elif keycode == 59:  # m
                     self.phase_frequency_factor -= 0.1
+    
+    def update_selection_highlight(self, viewer):
+        """Update red highlighting based on current selection."""
+        current_selected = viewer.perturb.select
+        
+        if current_selected != self.last_selected_body:
+            # Restore previous selection's colors
+            if self.last_selected_body > 0:
+                for geom_id, original_color in self.original_geom_colors.items():
+                    self.model.geom_rgba[geom_id] = original_color
+                self.original_geom_colors.clear()
+            
+            # Highlight new selection
+            if current_selected > 0:
+                for i in range(self.model.ngeom):
+                    if self.model.geom_bodyid[i] == current_selected:
+                        # Store original color
+                        self.original_geom_colors[i] = self.model.geom_rgba[i].copy()
+                        # Set to red
+                        self.model.geom_rgba[i] = [1.0, 0.0, 0.0, 1.0]
+            
+            self.last_selected_body = current_selected
 
     def run(self):
         try:
@@ -202,6 +228,9 @@ class MjInfer(MJInferBase):
                         self.data.ctrl = self.motor_targets.copy()
 
                     viewer.sync()
+                    
+                    # Update selection highlighting
+                    self.update_selection_highlight(viewer)
 
                     time_until_next_step = self.model.opt.timestep - (
                         time.time() - step_start

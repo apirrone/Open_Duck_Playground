@@ -13,7 +13,7 @@ class ControlMode(Enum):
 
 @dataclass
 class CommandLimits:
-    linear_velocity_x: Tuple[float, float] = (-0.15, 0.15)
+    linear_velocity_x: Tuple[float, float] = (-0.2, 0.2)
     linear_velocity_y: Tuple[float, float] = (-0.2, 0.2)
     angular_velocity: Tuple[float, float] = (-1.0, 1.0)
     neck_pitch: Tuple[float, float] = (-0.34, 1.1)
