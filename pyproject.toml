@@ -23,6 +23,7 @@ dependencies = [
     "faster-whisper",
     "pyaudio>=0.2.14",
     "sounddevice>=0.4.6",
+    "pvrecorder>=1.2.0",
 ]
 [build-system]
 requires = ["setuptools"]

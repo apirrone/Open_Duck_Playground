@@ -46,7 +46,7 @@ def main():
     parser.add_argument(
         "--wake-word",
         default="duck duck",
-        help="Wake word phrase (default: 'duck duck'). OpenWakeWord supports custom phrases."
+        help="Wake word phrase (default: 'duck duck'). For Porcupine, use built-in keywords like 'computer', 'jarvis', 'alexa', etc."
     )
     parser.add_argument(
         "--no-wake-word",
@@ -63,6 +63,26 @@ def main():
         type=float,
         default=5.0,
         help="Seconds before a movement command is automatically stopped (default: 5.0)"
+    )
+    parser.add_argument(
+        "--wake-word-backend",
+        default="porcupine",
+        choices=["oww", "porcupine"],
+        help="Wake word detection backend (default: porcupine)"
+    )
+    parser.add_argument(
+        "--porcupine-access-key",
+        help="Picovoice access key for Porcupine wake word detection. Get one at https://console.picovoice.ai/"
+    )
+    parser.add_argument(
+        "--porcupine-keyword-path",
+        help="Path to custom Porcupine wake word model (.ppn file)"
+    )
+    parser.add_argument(
+        "--wake-word-sensitivity",
+        type=float,
+        default=0.5,
+        help="Wake word detection sensitivity (0.0-1.0, default: 0.5)"
     )
     
     args = parser.parse_args()
@@ -81,8 +101,16 @@ def main():
     use_wake_word = not args.no_wake_word
     if use_wake_word:
         logger.info(f"Wake word: {args.wake_word}")
+        logger.info(f"Wake word backend: {args.wake_word_backend}")
     else:
         logger.info("Wake word: None (always listening)")
+        
+    # Validate Porcupine settings
+    if use_wake_word and args.wake_word_backend == "porcupine" and not args.porcupine_access_key:
+        print("\n❌ Error: Porcupine access key required when using Porcupine backend")
+        print("Get your free access key at: https://console.picovoice.ai/")
+        print("Then run with: --porcupine-access-key YOUR_ACCESS_KEY")
+        sys.exit(1)
 
     # Initialize command parser
     command_parser = DuckCommandParser(
@@ -92,11 +120,21 @@ def main():
     
     # Initialize voice controller
     global controller
+    
+    # Prepare keyword paths for Porcupine if provided
+    porcupine_keyword_paths = None
+    if args.porcupine_keyword_path:
+        porcupine_keyword_paths = [args.porcupine_keyword_path]
+    
     controller = DuckVoiceController(
         api_url=args.api_url,
         model_size=args.model,
         language=args.language,
         wake_words=[args.wake_word] if use_wake_word else None,
+        wake_word_backend=args.wake_word_backend if use_wake_word else None,
+        porcupine_access_key=args.porcupine_access_key,
+        porcupine_keyword_paths=porcupine_keyword_paths,
+        wake_word_sensitivity=args.wake_word_sensitivity,
         on_wake_word=lambda: print("\n🦆 Wake word detected! Listening for command..."),
         on_command=lambda text: handle_command(text, command_parser)
     )

@@ -21,6 +21,12 @@ conda activate open_duck_env
 
 # Install dependencies
 pip install -e .
+
+# If you want to use custom wake word, easily, maybe:
+# The maually install pvporcupine, realtimestt choose not to support newer version of it
+# Which is maybe not bad, not not so good for demo
+# https://github.com/KoljaB/RealtimeSTT/issues/15
+pip install "pvporcupine>=3.0"
 ```
 
 # Training
@@ -106,8 +112,8 @@ Then, run the voice control script in another terminal:
 # Recommended: Use no wake word for always-listening mode
 python playground/open_duck_mini_v2/run_voice_control.py --no-wake-word
 
-# With wake word "duck duck"
-python playground/open_duck_mini_v2/run_voice_control.py
+# With custom wake word "duck duck"
+python playground/open_duck_mini_v2/run_voice_control.py --wake-word "Duck duck" --porcupine-keyword-path=playground/wakeword/Duckduck/Duck-duck_en_mac_v3_0_0.ppn --porcupine-access-key=xxx
 ```
 
 #### Command-line Options
