@@ -259,10 +259,6 @@ if __name__ == "__main__":
     parser.add_argument("--standing", action="store_true", default=False)
     parser.add_argument("--use_api", action="store_true", default=False,
                         help="Use API server for control instead of keyboard")
-    parser.add_argument("--auto-stop-timeout", type=float, default=5.0, 
-                        help="Auto-stop timeout in seconds (default: 5.0)")
-    parser.add_argument("--no-auto-stop", action="store_true", 
-                        help="Disable auto-stop feature")
 
     args = parser.parse_args()
 
@@ -270,13 +266,5 @@ if __name__ == "__main__":
         args.model_path, args.reference_data, args.onnx_model_path, args.standing,
         args.use_api
     )
-    
-    # Configure auto-stop
-    mjinfer.command_handler.set_auto_stop_config(
-        enabled=not args.no_auto_stop,
-        timeout=args.auto_stop_timeout
-    )
-    
-    print(f"Auto-stop: {'Disabled' if args.no_auto_stop else f'Enabled ({args.auto_stop_timeout}s timeout)'}")
     
     mjinfer.run()
