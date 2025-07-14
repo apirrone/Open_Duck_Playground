@@ -4,6 +4,9 @@ from dataclasses import dataclass
 from enum import Enum
 import threading
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ControlMode(Enum):
@@ -98,6 +101,9 @@ class CommandHandler:
         self.set_locomotion_command(angular=-speed)
     
     def process_keyboard_input(self, keycode: int) -> bool:
+        if keycode == 32: # space - stop
+            self.stop()
+            return True
         if keycode == 72:  # h - toggle control mode
             new_mode = (ControlMode.HEAD if self.control_mode == ControlMode.LOCOMOTION 
                        else ControlMode.LOCOMOTION)
