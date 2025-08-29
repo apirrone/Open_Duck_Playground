@@ -1,0 +1,522 @@
+<robot name="open_duck_mini_v2">
+    <link name="trunk_assembly">
+        <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="-0.048325895233303092779 -9.9782299489572899446e-05 0.038497067106456776819" rpy="0 0 0"/>
+            <mass value="0.69852641931996084512"/>
+            <inertia ixx="0.0016770053685612809624" ixy="-1.3166218023193746172e-05" ixz="-3.2495310924311253907e-05"
+                iyy="0.0034447879527285730529" iyz="-2.15581424807903811e-06" izz="0.0029263533437058342201"/>
+        </inertial>
+    </link>
+    <link name="imu">
+    <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="red">
+            <color rgba="1.0 0.0 0.0 1.0"/>
+        </material>
+        </visual>
+    </link>
+    <joint name="imu_attachment" type="fixed">
+        <origin xyz="-0.08 -0.0 0.05"/>
+        <parent link="trunk_assembly"/>
+        <child link="imu"/>
+        <axis xyz="0 0 0"/>
+    </joint>
+    <link name="trunk">
+    <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="1e-9"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+    <joint name="trunk_frame" type="fixed">
+        <origin xyz="-0.024000000000000760308 -2.4112656316077618612e-16 0.088190938812376745704"
+            rpy="-1.4062102177136726269e-16 -9.4252837597218562265e-17 7.8061435390716270015e-33"/>
+        <parent link="trunk_assembly"/>
+        <child link="trunk"/>
+        <axis xyz="0 0 0"/>
+    </joint>
+    <link name="hip_roll_assembly">
+        <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0.00079508052674500252592 -5.4654095758018436489e-06 -0.033060020136905926558" rpy="0 0 0"/>
+            <mass value="0.066480000000000011307"/>
+            <inertia ixx="2.444109845492547855e-05" ixy="2.3565814728086258817e-09" ixz="-3.8105868119089706468e-07"
+                iyy="2.8181841945864101625e-05" iyz="-7.500356521814841032e-09" izz="1.4268673550007182255e-05"/>
+        </inertial>
+    </link>
+    <link name="left_roll_to_pitch_assembly">
+    <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0.050804245437506750926 -0.0004110495852498661758 0.020470437421083804291" rpy="0 0 0"/>
+            <mass value="0.075160000000000004583"/>
+            <inertia ixx="2.523352224027183415e-05" ixy="1.2213346145563009055e-07" ixz="-5.9049889515451809488e-07"
+                iyy="4.1385485577274777581e-05" iyz="-1.0754428972190676818e-07" izz="2.8126993683182112372e-05"/>
+        </inertial>
+    </link>
+    <link name="knee_and_ankle_assembly">
+    <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0.0025336932086838202804 -0.039063625582319787266 0.01027755322184311336" rpy="0 0 0"/>
+            <mass value="0.12407000000000001361"/>
+            <inertia ixx="0.00021140643070753159928" ixy="-2.6870571086839353114e-05" ixz="3.819062660576335684e-06"
+                iyy="7.837594657857567548e-05" iyz="2.0800939013343858251e-05" izz="0.00022561934195592249063"/>
+        </inertial>
+    </link>
+    <link name="knee_and_ankle_assembly_2">
+        <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="5.0185935256881937527e-06 -0.057746501775911597554 0.018113576234400501769" rpy="0 0 0"/>
+            <mass value="0.072590000000000015623"/>
+            <inertia ixx="4.9957470488425599685e-05" ixy="1.0381659904820910224e-08" ixz="2.2517542781705774177e-09"
+                iyy="1.8727312047199995079e-05" iyz="8.8104946302390758656e-08" izz="4.2393204018240661618e-05"/>
+        </inertial>
+    </link>
+    <link name="foot_assembly">
+        <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0.011071805405810805634 -0.024660828914054352262 0.019062631505101717416" rpy="0 0 0"/>
+            <mass value="0.075240000000000015201"/>
+            <inertia ixx="1.874823489561183601e-05" ixy="1.5883913417291453815e-06" ixz="-6.5235393392551262897e-09"
+                iyy="6.744271101763149969e-05" iyz="5.6739084804844489083e-08" izz="6.0609999941114219447e-05"/>
+        </inertial>
+    </link>
+    <link name="left_foot">
+        <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="1e-9"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+    <joint name="left_foot_frame" type="fixed">
+        <origin xyz="0.00049999999999995187183 -0.036224999999999729638 0.019550000000000331002"
+            rpy="-1.570796326794896558 4.8789097652664912905e-18 2.353432088828639061e-23"/>
+        <parent link="foot_assembly"/>
+        <child link="left_foot"/>
+        <axis xyz="0 0 0"/>
+    </joint>
+    <joint name="left_ankle" type="revolute">
+        <origin xyz="-7.9103390504542403505e-16 -0.078649999999999428701 9.9999999999794697558e-05"
+            rpy="1.636340693842024721e-16 1.1379785959205303308e-15 -2.7755597583208935156e-17"/>
+        <parent link="knee_and_ankle_assembly_2"/>
+        <child link="foot_assembly"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-1.570796326794896558" upper="1.570796326794896558"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="left_knee" type="revolute">
+        <origin xyz="-2.9837243786801082024e-16 -0.078650000000000871991 9.99999999999751088e-05"
+            rpy="-2.6413758326899544516e-16 -7.0075679691128679348e-24 -2.4877517507049828295e-26"/>
+        <parent link="knee_and_ankle_assembly"/>
+        <child link="knee_and_ankle_assembly_2"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-1.570796326794896558" upper="1.570796326794896558"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="left_hip_pitch" type="revolute">
+        <origin xyz="0.074149999999999799405 -1.9529191631895148618e-17 0.035109999999999898235"
+            rpy="3.141592653589793116 1.570796326794896336 0"/>
+        <parent link="left_roll_to_pitch_assembly"/>
+        <child link="knee_and_ankle_assembly"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-1.2217304763960306069" upper="0.52359877559829881566"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="left_hip_roll" type="revolute">
+        <origin xyz="0.019050000000003588368 4.3576253716537394212e-15 -0.046015000000001519964"
+            rpy="-1.5707963267949396347 9.7936145200150713608e-14 1.5707963267946445374"/>
+        <parent link="hip_roll_assembly"/>
+        <child link="left_roll_to_pitch_assembly"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-0.43633231299858238339" upper="0.43633231299858238339"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="left_hip_yaw" type="revolute">
+        <origin xyz="-0.018999999999998434808 0.035000000000000974776 0.04594093881237738819"
+            rpy="-1.5205902553582758499e-16 -2.2037927038784495587e-14 -6.3658912806794774433e-27"/>
+        <parent link="trunk_assembly"/>
+        <child link="hip_roll_assembly"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-0.52359877559829881566" upper="0.52359877559829881566"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <link name="hip_roll_assembly_2">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0.00079508052675098059986 -5.4654095474601585033e-06 -0.033060020136905649002" rpy="0 0 0"/>
+            <mass value="0.066480000000000011307"/>
+            <inertia ixx="2.4441098454925180394e-05" ixy="2.3565814726417264766e-09" ixz="-3.8105868119080399694e-07"
+                iyy="2.8181841945863464656e-05" iyz="-7.5003565176413343386e-09" izz="1.426867355000682989e-05"/>
+        </inertial>
+    </link>
+    <link name="right_roll_to_pitch_assembly">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="-0.050804245559722807646 -0.00042074186984666347771 0.020470437477687338651" rpy="0 0 0"/>
+            <mass value="0.075160000000000004583"/>
+            <inertia ixx="2.523291747004815754e-05" ixy="-1.3052786017330530768e-07" ixz="5.9049873224166014734e-07"
+                iyy="4.1385487041400215765e-05" iyz="-9.134267596940087062e-08" izz="2.8126389586193940786e-05"/>
+        </inertial>
+    </link>
+    <link name="knee_and_ankle_assembly_3">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0.0025336932086842604665 0.039063625582319100316 0.010808979048309713678" rpy="0 0 0"/>
+            <mass value="0.12407000000000004136"/>
+            <inertia ixx="0.0002123629231784335031" ixy="2.687057108684057623e-05" ixz="3.9655981569111917442e-06"
+                iyy="7.9332439049479029419e-05" iyz="-2.1740666699998192402e-05" izz="0.00022561934195591986144"/>
+        </inertial>
+    </link>
+    <link name="knee_and_ankle_assembly_4">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="5.018593525814894635e-06 -0.057746501775911486531 0.01811357623440068218" rpy="0 0 0"/>
+            <mass value="0.072590000000000015623"/>
+            <inertia ixx="4.9957470488425796196e-05" ixy="1.0381659904749645305e-08" ixz="2.251754278111965881e-09"
+                iyy="1.8727312047200337281e-05" iyz="8.8104946302554447773e-08" izz="4.2393204018240532869e-05"/>
+        </inertial>
+    </link>
+    <link name="foot_assembly_2">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0.011071805405810937473 -0.024660828914054452876 0.019062631505101838847" rpy="0 0 0"/>
+            <mass value="0.075240000000000015201"/>
+            <inertia ixx="1.8748234895611910549e-05" ixy="1.5883913417292040386e-06" ixz="-6.5235393392665612345e-09"
+                iyy="6.7442711017631526795e-05" iyz="5.6739084804903357873e-08" izz="6.0609999941114300762e-05"/>
+        </inertial>
+    </link>
+    <link name="right_foot">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="1e-9"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+    <joint name="right_foot_frame" type="fixed">
+        <origin xyz="0.00050000000000022942759 -0.036224999999999812905 0.019550000000000553046"
+            rpy="-1.570796326794896558 -2.2055201956572090666e-25 -2.8950564132886956449e-25"/>
+        <parent link="foot_assembly_2"/>
+        <child link="right_foot"/>
+        <axis xyz="0 0 0"/>
+    </joint>
+    <joint name="right_ankle" type="revolute">
+        <origin xyz="1.3877787807814456755e-17 -0.078649999999999928302 0.00010000000000004449774"
+            rpy="-2.6413812280837946538e-16 -1.7764738567684265366e-22 4.6805027693161558698e-25"/>
+        <parent link="knee_and_ankle_assembly_4"/>
+        <child link="foot_assembly_2"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-1.570796326794896558" upper="1.570796326794896558"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="right_knee" type="revolute">
+        <origin xyz="1.3877787807814456755e-17 0.078649999999999137268 0.036999999999999574896"
+            rpy="3.141592653589793116 -5.3297228769912622595e-22 -2.2267995332275346432e-26"/>
+        <parent link="knee_and_ankle_assembly_3"/>
+        <child link="knee_and_ankle_assembly_4"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-1.570796326794896558" upper="1.570796326794896558"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="right_hip_pitch" type="revolute">
+        <origin xyz="-0.074149999999999771649 5.1732706660145844069e-16 0.035110000000000037013"
+            rpy="-6.1899281068357555747e-22 1.570796326794896336 0"/>
+        <parent link="right_roll_to_pitch_assembly"/>
+        <child link="knee_and_ankle_assembly_3"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-0.52359877559829881566" upper="1.2217304763960306069"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="right_hip_roll" type="revolute">
+        <origin xyz="0.019050000000008570494 4.0564773762241657096e-14 -0.046015000000004170622"
+            rpy="-1.5707963267947786523 -8.9077711856609251111e-14 1.5707963267946440933"/>
+        <parent link="hip_roll_assembly_2"/>
+        <child link="right_roll_to_pitch_assembly"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-0.43633231299858238339" upper="0.43633231299858238339"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="right_hip_yaw" type="revolute">
+        <origin xyz="-0.018999999999998431338 -0.03500000000000151601 0.045940938812377415945"
+            rpy="-5.7327222785292536251e-16 -2.1926904736366604217e-14 -2.7755575616618406396e-16"/>
+        <parent link="trunk_assembly"/>
+        <child link="hip_roll_assembly_2"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-0.52359877559829881566" upper="0.52359877559829881566"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <link name="neck_pitch_assembly">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="-5.6313726505350619096e-06 0.049296760188244546919 0.018178555579869751929" rpy="0 0 0"/>
+            <mass value="0.066180000000000016591"/>
+            <inertia ixx="3.494563815217761768e-05" ixy="8.7563261020025733394e-09" ixz="-2.1559156609461426653e-09"
+                iyy="1.7023145118232476758e-05" iyz="-1.8518807640006497821e-08" izz="2.8004252155145411722e-05"/>
+        </inertial>
+    </link>
+    <link name="head_pitch_to_yaw">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="-0.0076624665903661749386 0.026014958700652707213 0.018668069848403360395" rpy="0 0 0"/>
+            <mass value="0.016937787992336000853"/>
+            <inertia ixx="9.4303589355219918504e-06" ixy="1.3519527882998983493e-06" ixz="3.0589894259326036064e-08"
+                iyy="4.6476284415361806667e-06" iyz="-8.4280232933014221602e-08" izz="8.0291501280952315596e-06"/>
+        </inertial>
+    </link>
+    <link name="neck_yaw_assembly">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0.0041290688015580027589 3.9574458978396336408e-06 -0.02228283984063029674" rpy="0 0 0"/>
+            <mass value="0.091809888579250376051"/>
+            <inertia ixx="3.117063633968958136e-05" ixy="4.2942915561538148644e-09" ixz="-4.4125133978803822204e-06"
+                iyy="6.9493543438959394292e-05" iyz="-3.8202750251564124417e-09" izz="7.0402479889611211316e-05"/>
+        </inertial>
+    </link>
+    <link name="head_assembly">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0.0076177852948042497697 0.00018097970253179974606 0.024257508476548592796" rpy="0 0 0"/>
+            <mass value="0.35258298534369525434"/>
+            <inertia ixx="0.0020638573779904641203" ixy="-1.384822104706252886e-06" ixz="9.1037277340196031718e-05"
+                iyy="0.0014412682765872035506" iyz="-2.9145451671849062868e-06" izz="0.00091677314815290841116"/>
+        </inertial>
+    </link>
+    <link name="head">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="1e-9"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+    <joint name="head_frame" type="fixed">
+        <origin xyz="0.04244999999999957141 2.135878279796443735e-17 0.035950000000000377487"
+            rpy="-0 1.570796326794896558 0"/>
+        <parent link="head_assembly"/>
+        <child link="head"/>
+        <axis xyz="0 0 0"/>
+    </joint>
+    <link name="left_antenna_holder">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="-0.0049398548214985120441 0.0081303220914736799158 -0.0023337426173884851487" rpy="0 0 0"/>
+            <mass value="0.00421628909577088061"/>
+            <inertia ixx="3.5881972229367448444e-06" ixy="-1.693372333235333673e-07" ixz="1.548170588123017984e-09"
+                iyy="2.5430131672962936659e-07" iyz="3.9979038225548418641e-08" izz="3.8079123149071354266e-06"/>
+        </inertial>
+    </link>
+    <joint name="left_antenna" type="fixed">
+        <origin xyz="0.00070406945503187490232 0.060662837687359048855 0.1164348532954449511"
+            rpy="-3.1415926535897802374 1.3045791727887245948 1.3234423712230847237"/>
+        <parent link="head_assembly"/>
+        <child link="left_antenna_holder"/>
+        <axis xyz="0 0 1"/>
+        <!-- <limit effort="100" velocity="100" lower="-1.570796326794896558" upper="1.570796326794896558"/>
+        <joint_properties friction="0.0"/> -->
+    </joint>
+    <link name="right_antenna_holder">
+            <visual>
+        <geometry>
+            <sphere radius="0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+        </visual>
+        <inertial>
+            <origin xyz="-0.0049398571608862441862 -0.0082621254299192394693 -0.0023337411215750059924" rpy="0 0 0"/>
+            <mass value="0.0042162869849506796893"/>
+            <inertia ixx="3.6498064950645643793e-06" ixy="1.720822854603261103e-07" ixz="1.5481440054410580238e-09"
+                iyy="2.5430123930068678528e-07" iyz="-4.0627217574810365425e-08" izz="3.8695215401713807762e-06"/>
+        </inertial>
+    </link>
+    <joint name="right_antenna" type="fixed">
+        <origin xyz="0.00070406945503675988363 -0.060662837687358986405 0.11643485329544003837"
+            rpy="-3.1415926535897802374 1.3045791727887252609 -1.3234423712230598547"/>
+        <parent link="head_assembly"/>
+        <child link="right_antenna_holder"/>
+        <axis xyz="0 0 1"/>
+        <!-- <limit effort="100" velocity="100" lower="-1.570796326794896558" upper="1.570796326794896558"/>
+        <joint_properties friction="0.0"/> -->
+    </joint>
+    <joint name="head_roll" type="revolute">
+        <origin xyz="0.040950000000000000289 -4.2214766838438722019e-16 -0.019149999999999833822"
+            rpy="1.2411687278497551329e-14 -1.5707963267948830133 0"/>
+        <parent link="neck_yaw_assembly"/>
+        <child link="head_assembly"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-0.52359877559829881566" upper="0.52359877559829881566"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="head_yaw" type="revolute">
+        <origin xyz="-9.9746599868666407929e-18 0.056999999999999967359 0.019050000000000014838"
+            rpy="-1.570796326794896558 -1.3706437208012195828e-25 6.1232339958582419871e-17"/>
+        <parent link="head_pitch_to_yaw"/>
+        <child link="neck_yaw_assembly"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-2.7925268031909271649" upper="2.7925268031909271649"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="head_pitch" type="revolute">
+        <origin xyz="-5.42101086242752217e-17 0.066000000000000086375 -1.0408340855860842566e-17"
+            rpy="-1.9479487599482720301e-16 -1.1423136863502905442e-16 1.7347234747146296461e-18"/>
+        <parent link="neck_pitch_assembly"/>
+        <child link="head_pitch_to_yaw"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-0.785398163397448279" upper="0.785398163397448279"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+    <joint name="neck_pitch" type="revolute">
+        <origin xyz="0.00099999999999899474856 0.019150000000000326483 0.090000938812376224396"
+            rpy="1.57079632679489678 -2.2204460492503130808e-14 6.1232449680326617825e-17"/>
+        <parent link="trunk_assembly"/>
+        <child link="neck_pitch_assembly"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="100" velocity="100" lower="-0.34906585039886589561" upper="1.1344640137963142301"/>
+        <joint_properties friction="0.0"/>
+    </joint>
+</robot>

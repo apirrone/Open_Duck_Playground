@@ -1,0 +1,103 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    // old obs 2025_03_24_204216_151388160
+    // new new obs 2025_04_03_191304_118947840
+    // Old obs new 2025_04_03_220558_151388160
+    // Old obs new reward 2025_04_03_224803_151388160
+    // new obs exclude position new reward 2025_04_03_231056_151388160
+    // new obs include position new reward higher cov 2025_04_03_233247_151388160
+    
+
+    // new... 2025_04_03_235444_151388160
+    // axis angle 2025_04_04_003306_151388160
+
+    // axis angle, cutting obs 2025_04_04_085501_151388160
+    
+    // Joint accel reg, joint setpoints 2025_04_04_092309_151388160
+    // Update the critic to contain non noisy states. Using all linvel now. 2025_04_04_094519_151388160
+    // reduce stand still: 2025_04_04_103159_151388160
+
+    // Fixed references for imitation and fixed quaternion differences. Added position reward. 2025_04_05_102027_151388160
+    // Remove pos weight. 2025_04_05_105429_151388160
+
+    // Remove command reward
+    // 2025_04_05_111908_151388160
+
+    // Actually fixed the references now.
+    //2025_04_05_124655_151388160
+
+    // Added pos back in, but it might be wrong
+    // 2025_04_05_130804_151388160
+
+    // Testing out pose which is corrected every period
+    // 2025_04_06_133323_151388160
+
+    // Testing 10 x training time
+    // 2025_04_06_151934_1000079360
+
+    // Adding back in command tracking
+    // 2025_04_06_163159_151388160
+
+    // Testing out no Y clipping
+    // 2025_04_06_165249_151388160
+
+    // Good: Only X velocity and lower the weight. Can't step left
+    // 2025_04_06_200404_151388160
+
+    // Added Y clipping back. This sucks lol.
+    // 2025_04_06_202932_151388160
+
+    // Good: Only x velocity and lower the weight trained longer. Can't step left
+    // 295: 2025_04_06_210505_321454080
+
+    // Got rid of stand still
+    // 260: 2025_04_06_213720_86507520
+
+    // Trying action acceleration
+    // 2025_04_06_220303_140574720
+
+    // Worse lateral both directions: Reduced torque and action rate regularization.
+    // 2025_04_06_222007_129761280
+
+    // Increase exponential scaling for torso penalty and increased weight.
+    // 2025_04_06_234212_140574720
+
+    // Adding in angular vel penalty back in. This is bad.
+    // 2025_04_07_004656_140574720
+
+    // Trying to increase yaw vel penalty in imitation. This is really good!
+    // 2025_04_07_011221_140574720
+
+    // Trying out higher walking height
+    // 2025_04_07_095029_140574720
+
+    // Trying out path frame
+    // 2025_04_07_145122_129761280
+
+    // No stand still
+    // 2025_04_08_020200_151388160
+
+    // penalize torso back to paper
+    // 2025_04_08_083345_140574720
+    
+
+    // TODO: check phasing. Could be that we need a 90 degree offseet for walking forward, going left, and turning right?
+    // TODO: If we reset initial orientation each cycle, then yaw will always suffer. Need to figure out path frame.
+
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: mujoco_infer.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "-o", "/home/ANT.AMAZON.COM/njkong/open_duck_fork/Open_Duck_Playground/checkpoints/BEST_WALK_ONNX_2.onnx",
+                "--urdf_model_path", "/home/ANT.AMAZON.COM/njkong/open_duck_fork/Open_Duck_Playground/playground/open_duck_mini_v2/urdfs/open_duck_mini_v2.urdf",
+            ]
+        }
+    ]
+}

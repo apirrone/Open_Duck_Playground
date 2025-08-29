@@ -49,6 +49,10 @@ class MJInferBase:
             self.get_joint_addr_from_name(n) for n in self.actuator_names
         ]
 
+        self.actuator_name_to_idx_map = {
+            n: self.get_joint_addr_from_name(n) for n in self.actuator_names
+        }
+
         self.backlash_joint_ids = [
             self.get_joint_id_from_name(n) for n in self.backlash_joint_names
         ]
