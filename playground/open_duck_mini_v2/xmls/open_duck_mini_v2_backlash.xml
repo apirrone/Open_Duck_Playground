@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <!-- Generated using onshape-to-robot -->
 <!-- Onshape document_id: 64074dfcfa379b37d8a47762 -->
-<mujoco model="open_duck_mini_v2">
+<mujoco 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/julien-blanchon/mujoco-schema/refs/heads/main/mujoco_schema.xsd"
+  model="open_duck_mini_v2">
 
   <option iterations="1" ls_iterations="5">
     <flag eulerdamp="disable"/>
