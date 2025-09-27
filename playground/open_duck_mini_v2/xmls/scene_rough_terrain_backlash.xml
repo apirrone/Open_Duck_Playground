@@ -1,4 +1,7 @@
-<mujoco model="Open Duck Mini V2 rough terrain scene">
+<mujoco 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/julien-blanchon/mujoco-schema/refs/heads/main/mujoco_schema.xsd" 
+  model="Open Duck Mini V2 rough terrain scene">
   <!-- <include file="open_duck_mini_v2_no_head.xml"/> -->
   <include file="open_duck_mini_v2_backlash.xml"/>
 

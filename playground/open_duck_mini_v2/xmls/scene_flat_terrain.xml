@@ -1,4 +1,8 @@
-<mujoco model="scene">
+<mujoco
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/julien-blanchon/mujoco-schema/refs/heads/main/mujoco_schema.xsd" 
+    model="scene"
+    >
     <include file="open_duck_mini_v2.xml"/>
 
     <visual>
